@@ -1,143 +1,202 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🐤 小鸡手抄 - 抽卡社群版</title>
+  <title>🐤 小雞手抄</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Ma+Shan+Zheng&family=Long+Cang&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#FFB800', secondary: '#FF6B35' }
+        }
+      }
+    }
+  </script>
   <style>
-    * { font-family: 'Noto Sans SC', sans-serif; }
-    .title-impact { font-family: 'Long Cang', cursive !important; font-size: 3.5rem !important; }
-    .font-cc { font-family: 'Ma Shan Zheng', 'ZCOOL KuaiLe', cursive !important; }
+    * { font-family: 'Noto Sans TC', sans-serif; }
+    .font-cc { font-family: 'Ma Shan Zheng', cursive; }
     .hide { display: none !important; }
-    
-    /* 卡牌品質視覺 */
-    .rarity-gold { background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c); border: 4px solid #ffd700; color: #5c4412; }
-    .rarity-red { background: linear-gradient(135deg, #ff416c, #ff4b2b); border: 4px solid #8b0000; color: white; }
-    .rarity-pink { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); border: 4px solid #ff85a1; color: #d63384; }
-    .rarity-gray { background: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%); border: 4px solid #bdc3c7; color: #495057; }
-    
-    .card-shine { position: relative; overflow: hidden; }
-    .card-shine::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent); transform: rotate(45deg); animation: shine 3s infinite; }
-    @keyframes shine { 0% { transform: translateX(-100%) rotate(45deg); } 100% { transform: translateX(100%) rotate(45deg); } }
-
-    .chat-container { height: 400px; overflow-y: auto; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-thumb { background: #FFB800; border-radius: 10px; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-thumb { background: #FFB800; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-orange-50/30 text-gray-800 min-h-screen">
+<body class="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50">
 
-<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 bg-gray-800/90 text-white px-6 py-3 rounded-full z-[100] shadow-2xl transition-all"></div>
+<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-xl z-50"></div>
 
-<header class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-lg sticky top-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-    <div class="flex items-center gap-3">
-      <h1 class="title-impact cursor-pointer" onclick="showPage('home')">小鸡手抄</h1>
-      <div id="userStats" class="hide flex gap-3 ml-4 font-cc text-sm">
-        <span class="bg-white/20 px-3 py-1 rounded-full">🪙 <span id="coinVal">0</span></span>
-        <span class="bg-white/20 px-3 py-1 rounded-full">🎁 <span id="boxVal">0</span></span>
+<!-- Header -->
+<header class="bg-gradient-to-r from-yellow-400 to-orange-400 shadow-lg">
+  <div class="max-w-6xl mx-auto px-4 py-6">
+    <div class="flex items-center justify-between">
+      <h1 class="text-4xl font-bold text-white font-cc">
+        <span class="text-5xl">🐤</span> 小雞手抄
+      </h1>
+      <div class="flex gap-2">
+        <button onclick="showPage('home')" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">首頁</button>
+        <button onclick="showPage('admin')" id="btnAdmin" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">管理</button>
+        <button onclick="logout()" id="btnLogout" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">登出</button>
+        <button onclick="signIn()" id="btnLogin" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">登入</button>
       </div>
     </div>
-    <nav class="flex gap-4 font-cc">
-      <button onclick="showPage('home')" class="hover:text-yellow-200">社区</button>
-      <button onclick="showPage('market')" class="hover:text-yellow-200">商城</button>
-      <button onclick="showPage('players')" class="hover:text-yellow-200">市场</button>
-      <button onclick="showPage('collection')" class="hover:text-yellow-200">背包</button>
-      <button id="btnLogin" onclick="signIn()" class="bg-white text-orange-500 px-4 py-1 rounded-lg font-bold">登入</button>
-      <button id="btnAdmin" onclick="showPage('admin')" class="hide hover:text-red-200">管理</button>
-    </nav>
   </div>
 </header>
 
-<main class="max-w-7xl mx-auto px-4 py-6">
+<main class="max-w-6xl mx-auto px-4 py-8">
 
+  <!-- 歡迎橫幅 -->
+  <div id="welcomeBox" class="hide bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 rounded-2xl p-6 mb-6 text-white text-center">
+    <h2 class="text-2xl font-bold font-cc">🎉 歡迎回來，<span id="welcomeName"></span>！</h2>
+  </div>
+
+  <!-- 初次設定彈窗 -->
+  <div id="setupModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4">
+      <div class="text-center mb-6">
+        <div class="text-6xl mb-4">👋</div>
+        <h3 class="text-2xl font-bold font-cc">歡迎加入小雞手抄！</h3>
+        <p class="text-gray-600 font-cc">請先設定你的資料</p>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-cc mb-2">暱稱 *</label>
+          <input type="text" id="setupName" placeholder="你想要粉絲怎麼叫你？" class="w-full px-4 py-3 border rounded-xl font-cc text-lg">
+        </div>
+        <div>
+          <label class="block text-gray-700 font-cc mb-2">IG 帳號 *</label>
+          <input type="text" id="setupIG" placeholder="你的 IG 帳號" class="w-full px-4 py-3 border rounded-xl font-cc text-lg">
+        </div>
+      </div>
+      <button onclick="completeSetup()" class="w-full mt-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 rounded-xl font-cc text-xl">完成設定</button>
+    </div>
+  </div>
+
+  <!-- 首頁 -->
   <div id="pageHome">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- 左側：聊天 -->
       <div class="lg:col-span-2 space-y-6">
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-yellow-100 flex items-center justify-between">
-          <div>
-            <h3 class="text-xl font-bold font-cc">🎁 幸运抽奖盒</h3>
-            <p class="text-gray-400 text-sm font-cc">目前拥有 <span id="boxCount" class="text-orange-500 font-bold">0</span> 個</p>
-          </div>
-          <button onclick="openBox()" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold px-8 py-3 rounded-2xl shadow-lg active:scale-95 transition-all">立即开盒</button>
+        
+        <!-- 登入提示 -->
+        <div id="loginBox" class="bg-white rounded-2xl shadow-lg p-8 text-center">
+          <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center text-5xl">💬</div>
+          <h2 class="text-2xl font-bold font-cc mb-2">歡迎來到小雞手抄</h2>
+          <p class="text-gray-600 font-cc mb-4">登入後即可參與聊天互動</p>
+          <button onclick="signIn()" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 px-8 rounded-xl font-cc text-lg">使用 Google 登入</button>
         </div>
 
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="bg-gray-50 p-4 border-b font-bold font-cc flex items-center gap-2">💬 即时群聊</div>
-          <div id="chatBox" class="chat-container p-4 space-y-4"></div>
-          <form onsubmit="sendMsg(event)" class="p-4 bg-gray-50 border-t flex gap-2">
-            <input type="text" id="msgInput" placeholder="说点什么..." class="flex-1 px-4 py-2 border rounded-xl outline-none" disabled>
-            <button type="submit" class="bg-yellow-400 px-6 rounded-xl font-bold">发送</button>
+        <!-- 聊天區 -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
+            <h2 class="text-white font-bold text-xl font-cc">💬 即時聊天</h2>
+          </div>
+          <div id="chatBox" class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
+          <form onsubmit="sendMsg(event)" class="p-4 border-t bg-white">
+            <div class="flex gap-2">
+              <input type="text" id="msgInput" placeholder="輸入訊息..." class="flex-1 px-4 py-2 border rounded-xl font-cc" disabled>
+              <button type="submit" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 rounded-xl">傳送</button>
+            </div>
           </form>
         </div>
 
-        <div id="postSection" class="hide bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="bg-orange-50 p-4 font-bold font-cc text-orange-700">📝 粉丝投稿</div>
+        <!-- 投稿區 -->
+        <div id="postBox" class="hide bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="bg-yellow-50 border-b border-yellow-200 p-4">
+            <p class="text-yellow-700 font-cc">⚠️ 投稿前請先同意協作者邀請</p>
+          </div>
+          <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
+            <h2 class="text-white font-bold text-xl font-cc">📝 粉絲投稿</h2>
+          </div>
           <form onsubmit="submitPost(event)" class="p-6 space-y-4">
-            <textarea id="postContent" rows="3" class="w-full p-4 border border-orange-100 rounded-2xl outline-none" placeholder="分享你的心情..."></textarea>
-            <button type="submit" class="w-full bg-orange-500 text-white font-bold py-3 rounded-2xl">提交投稿</button>
+            <div>
+              <label class="block font-cc mb-2">IG 帳號 *</label>
+              <input type="text" id="postIG" class="w-full px-4 py-2 border rounded-xl font-cc" required>
+            </div>
+            <div>
+              <label class="block font-cc mb-2">投稿內容 *</label>
+              <textarea id="postContent" rows="4" class="w-full px-4 py-2 border rounded-xl font-cc" placeholder="至少 10 個字" required></textarea>
+            </div>
+            <button type="submit" class="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 rounded-xl font-cc text-lg">送出投稿</button>
           </form>
         </div>
       </div>
 
+      <!-- 右側：排行榜 -->
       <div class="space-y-6">
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="bg-yellow-400 p-4 text-white font-bold text-center font-cc">🏆 活跃贡献榜</div>
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
+            <h2 class="text-white font-bold text-xl font-cc">🏆 粉絲排行榜</h2>
+          </div>
           <div id="rankBox" class="p-4 space-y-3"></div>
         </div>
+
+        <!-- 用戶資訊 -->
+        <div id="userBox" class="hide bg-white rounded-2xl shadow-lg p-6">
+          <div class="flex items-center gap-4 mb-4">
+            <img id="userImg" src="" class="w-16 h-16 rounded-full border-4 border-yellow-400">
+            <div>
+              <h3 id="userName" class="text-xl font-bold font-cc"></h3>
+              <span id="userTitle" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-sm font-cc"></span>
+            </div>
+          </div>
+          <div class="text-center font-cc">
+            <p>📊 <strong id="userPoints">0</strong> 積分</p>
+            <button onclick="showProfile()" class="mt-3 bg-gray-100 px-4 py-2 rounded-lg font-cc">編輯資料</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div id="pageMarket" class="hide">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-bold font-cc">官方卡片商店</h2>
-      <p class="text-gray-400 font-cc">購買基础灰色與粉色卡片</p>
+  <!-- 管理頁面 -->
+  <div id="pageAdmin" class="hide">
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <div class="bg-gray-800 p-4">
+        <h2 class="text-white font-bold text-xl font-cc">⚙️ 管理員系統</h2>
+      </div>
+      
+      <div class="flex border-b">
+        <button onclick="adminTab('msgs')" id="tabMsgs" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500">訊息</button>
+        <button onclick="adminTab('users')" id="tabUsers" class="px-6 py-3 font-cc text-gray-500">用戶</button>
+        <button onclick="adminTab('posts')" id="tabPosts" class="px-6 py-3 font-cc text-gray-500">投稿</button>
+      </div>
+
+      <div id="adminMsgs" class="p-4 space-y-3"></div>
+      <div id="adminUsers" class="hide p-4 space-y-3"></div>
+      <div id="adminPosts" class="hide p-4 space-y-3"></div>
     </div>
-    <div class="flex gap-4 mb-8 justify-center font-cc">
-      <input type="text" id="marketSearch" oninput="renderMarket()" placeholder="搜索卡片名..." class="px-5 py-2 border rounded-full outline-none w-64">
-      <select id="marketFilter" onchange="renderMarket()" class="px-5 py-2 border rounded-full">
-        <option value="all">所有品质</option>
-        <option value="pink">粉色品质</option>
-        <option value="gray">灰色品质</option>
-      </select>
-    </div>
-    <div id="marketList" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
   </div>
-
-  <div id="pagePlayers" class="hide">
-    <h2 class="text-3xl font-bold font-cc mb-10 text-center italic underline decoration-yellow-400">玩家二手交易市场</h2>
-    <div id="playerMarketList" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-  </div>
-
-  <div id="pageCollection" class="hide">
-    <h2 class="text-3xl font-bold font-cc mb-10 text-center">我的小鸡收藏盒</h2>
-    <div id="myCards" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
-  </div>
-
-  <div id="pageAdmin" class="hide bg-white rounded-3xl p-6 shadow-xl">
-    <h2 class="text-2xl font-bold mb-6">⚙️ 后台管理中心</h2>
-    <div id="adminArea"></div>
-  </div>
-
 </main>
 
-<div id="rewardModal" class="hide fixed inset-0 bg-black/90 flex items-center justify-center z-[200]">
-  <div class="text-center flex flex-col items-center">
-    <div id="rewardContent" class="mb-10 transform scale-125"></div>
-    <button onclick="closeReward()" class="bg-white text-black px-12 py-3 rounded-full font-bold shadow-xl font-cc">太棒了！</button>
+<!-- 編輯資料彈窗 -->
+<div id="profileModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
+    <h3 class="text-xl font-bold font-cc mb-4">編輯個人資料</h3>
+    <div class="space-y-4">
+      <div>
+        <label class="block font-cc mb-2">暱稱</label>
+        <input type="text" id="editName" class="w-full px-4 py-2 border rounded-xl font-cc">
+      </div>
+      <div>
+        <label class="block font-cc mb-2">IG 帳號</label>
+        <input type="text" id="editIG" class="w-full px-4 py-2 border rounded-xl font-cc">
+      </div>
+    </div>
+    <div class="flex gap-2 mt-6">
+      <button onclick="saveProfile()" class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white py-2 rounded-xl font-cc">儲存</button>
+      <button onclick="closeProfile()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">取消</button>
+    </div>
   </div>
 </div>
 
 <script>
-// Firebase 初始化
+// Firebase 設定
 firebase.initializeApp({
   apiKey: "AIzaSyC9ARCgaoXfLFRVQb3djEhxN7ephFTlZ-U",
   authDomain: "chicken-33a60.firebaseapp.com",
@@ -147,286 +206,379 @@ firebase.initializeApp({
   appId: "1:646431742714:web:47d9a7f456843a6b9bc743"
 });
 
-const db = firebase.firestore();
 const auth = firebase.auth();
-let me = null, meData = null;
+const db = firebase.firestore();
 
-// 卡片範本資料庫 (50張佔位)
-const CARD_TEMPLATES = [
-  ...Array(5).fill().map((_, i) => ({ id: `g${i}`, name: `黄金圣鸡 ${i+1}`, rarity: 'gold', price: 0, img: '🥇' })),
-  ...Array(10).fill().map((_, i) => ({ id: `r${i}`, name: `赤炎斗鸡 ${i+1}`, rarity: 'red', price: 0, img: '🔥' })),
-  ...Array(15).fill().map((_, i) => ({ id: `p${i}`, name: `浪漫粉鸡 ${i+1}`, rarity: 'pink', price: 100, img: '🌸' })),
-  ...Array(20).fill().map((_, i) => ({ id: `s${i}`, name: `平凡灰鸡 ${i+1}`, rarity: 'gray', price: 20, img: '🥚' }))
-];
+let me = null;
+let meData = null;
+let unsubMsg = null;
 
-function toast(m) { 
-  const t = document.getElementById('toast'); t.textContent = m; t.classList.remove('hide');
-  setTimeout(() => t.classList.add('hide'), 2000);
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.remove('hide');
+  t.style.opacity = '1';
+  setTimeout(() => t.style.opacity = '0', 2000);
 }
 
-function showPage(p) {
-  ['home', 'market', 'collection', 'players', 'admin'].forEach(x => document.getElementById('page'+x.charAt(0).toUpperCase()+x.slice(1)).classList.add('hide'));
-  document.getElementById('page'+p.charAt(0).toUpperCase()+p.slice(1)).classList.remove('hide');
-  if(p === 'market') renderMarket();
-  if(p === 'collection') renderCollection();
-  if(p === 'players') renderPlayerMarket();
+// 登入
+async function signIn() {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await auth.signInWithPopup(provider);
+  } catch (e) {
+    toast('登入失敗');
+  }
 }
 
-async function signIn() { await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
-function logout() { auth.signOut(); location.reload(); }
+// 登出
+async function logout() {
+  await auth.signOut();
+}
 
+// 認證監聽
 auth.onAuthStateChanged(async (user) => {
   me = user;
+  
   if (user) {
     const ref = db.collection('users').doc(user.uid);
     const snap = await ref.get();
+    
     if (snap.exists) {
       meData = snap.data();
     } else {
-      meData = { displayName: user.displayName, coins: 200, boxes: 3, cards: [], points: 0, isAdmin: false };
+      meData = {
+        displayName: user.displayName || '粉絲',
+        email: user.email,
+        photoURL: user.photoURL,
+        title: '新進粉絲',
+        igAccount: '',
+        points: 0,
+        isAdmin: false
+      };
       await ref.set(meData);
     }
-    updateUI();
-    document.getElementById('postSection').classList.remove('hide');
+    
+    // 顯示用戶資訊
+    document.getElementById('loginBox').classList.add('hide');
+    document.getElementById('userBox').classList.remove('hide');
+    document.getElementById('postBox').classList.remove('hide');
+    document.getElementById('welcomeBox').classList.remove('hide');
+    document.getElementById('welcomeName').textContent = meData.displayName;
+    document.getElementById('userImg').src = meData.photoURL || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>';
+    document.getElementById('userName').textContent = meData.displayName;
+    document.getElementById('userTitle').textContent = meData.title;
+    document.getElementById('userPoints').textContent = meData.points || 0;
+    document.getElementById('postIG').value = meData.igAccount || '';
     document.getElementById('msgInput').disabled = false;
     document.getElementById('btnLogin').classList.add('hide');
-    if (meData.isAdmin) document.getElementById('btnAdmin').classList.remove('hide');
+    document.getElementById('btnLogout').classList.remove('hide');
+    
+    if (meData.isAdmin) {
+      document.getElementById('btnAdmin').classList.remove('hide');
+    }
+    
+    // 檢查是否需要設定
+    if (!meData.igAccount) {
+      document.getElementById('setupModal').classList.remove('hide');
+      document.getElementById('setupName').value = meData.displayName;
+    }
+    
+    toast('登入成功！');
+  } else {
+    meData = null;
+    document.getElementById('loginBox').classList.remove('hide');
+    document.getElementById('userBox').classList.add('hide');
+    document.getElementById('postBox').classList.add('hide');
+    document.getElementById('welcomeBox').classList.add('hide');
+    document.getElementById('setupModal').classList.add('hide');
+    document.getElementById('btnLogin').classList.remove('hide');
+    document.getElementById('btnLogout').classList.add('hide');
+    document.getElementById('btnAdmin').classList.add('hide');
+    document.getElementById('msgInput').disabled = true;
+    
+    if (unsubMsg) unsubMsg();
   }
-  loadChat(); loadRank();
+  
+  loadChat();
+  loadRank();
 });
 
-function updateUI() {
-  document.getElementById('userStats').classList.remove('hide');
-  document.getElementById('coinVal').textContent = meData.coins;
-  document.getElementById('boxVal').textContent = meData.boxes;
-  document.getElementById('boxCount').textContent = meData.boxes;
-}
-
-// 核心功能：渲染卡牌 (帶圖案與編號)
-function createCardElement(card, actionBtn = '') {
-  const isSpecial = (card.rarity === 'gold' || card.rarity === 'red');
-  return `
-    <div class="card-item w-full aspect-[3/4] rounded-2xl p-4 shadow-xl transition-all hover:-translate-y-2 ${isSpecial ? 'card-shine' : ''} rarity-${card.rarity} flex flex-col">
-      <div class="flex justify-between items-center text-[10px] font-bold opacity-80">
-        <span>LV.1</span>
-        <span class="bg-black/20 px-2 rounded-full">${card.rarity.toUpperCase()}</span>
-      </div>
-      <div class="flex-1 flex flex-col items-center justify-center py-2">
-        <div class="text-6xl mb-2 filter drop-shadow-md">${card.img || '🐥'}</div>
-        <h4 class="font-bold font-cc text-lg">${card.name}</h4>
-      </div>
-      <div class="border-t border-black/10 pt-2 text-center">
-        <div class="text-[9px] font-mono opacity-60 mb-2">SERIAL: ${card.serial}</div>
-        ${actionBtn}
-      </div>
-    </div>
-  `;
-}
-
-// 抽獎開盒
-async function openBox() {
-  if (meData.boxes <= 0) { toast('抽奖盒不足！'); return; }
-  meData.boxes -= 1;
-  const rand = Math.random();
-  let reward = null;
-
-  if (rand < 0.25) { // 25% 獲取金幣
-    const amt = Math.floor(Math.random() * 100) + 50;
-    meData.coins += amt;
-    reward = { type: 'coin', val: amt };
-  } else { // 75% 獲取卡片
-    const rr = Math.random();
-    let rarity = 'gray';
-    if (rr < 0.05) rarity = 'gold';
-    else if (rr < 0.15) rarity = 'red';
-    else if (rr < 0.45) rarity = 'pink';
-    
-    const pool = CARD_TEMPLATES.filter(c => c.rarity === rarity);
-    const base = pool[Math.floor(Math.random() * pool.length)];
-    // 序號：年份+隨機4位
-    const serial = `SN-${new Date().getFullYear()}-${Math.floor(Math.random()*9000)+1000}`;
-    const newCard = { ...base, serial, ownerId: me.uid };
-    meData.cards.push(newCard);
-    reward = { type: 'card', val: newCard };
-  }
+// 完成設定
+async function completeSetup() {
+  const name = document.getElementById('setupName').value.trim();
+  const ig = document.getElementById('setupIG').value.trim();
   
-  await db.collection('users').doc(me.uid).set(meData);
-  updateUI();
+  if (!name || name.length < 2) { toast('暱稱需至少2字'); return; }
+  if (!ig) { toast('請填IG帳號'); return; }
   
-  const rc = document.getElementById('rewardContent');
-  if (reward.type === 'coin') {
-    rc.innerHTML = `<div class="text-7xl">🪙</div><div class="text-white text-2xl font-cc mt-4">获得代币 ${reward.val}！</div>`;
-  } else {
-    rc.innerHTML = createCardElement(reward.val);
-  }
-  document.getElementById('rewardModal').classList.remove('hide');
-}
-
-function closeReward() { document.getElementById('rewardModal').classList.add('hide'); }
-
-// 渲染背包與上架功能
-function renderCollection() {
-  const box = document.getElementById('myCards');
-  if (!meData.cards.length) { box.innerHTML = `<p class="col-span-full text-center py-10 text-gray-400 font-cc">背包空空如也...</p>`; return; }
-  box.innerHTML = meData.cards.map((c, i) => 
-    createCardElement(c, `<button onclick="listCard(${i})" class="w-full bg-black/10 hover:bg-black/20 text-[10px] py-1 rounded font-bold">上架市场</button>`)
-  ).join('');
-}
-
-async function listCard(idx) {
-  const p = prompt('设置出售代币价格:');
-  if (!p || isNaN(p) || p <= 0) return;
-  const card = meData.cards.splice(idx, 1)[0];
-  await db.collection('player_market').add({
-    ...card,
-    listingPrice: parseInt(p),
-    sellerName: meData.displayName,
-    sellerId: me.uid,
-    time: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  await db.collection('users').doc(me.uid).set(meData);
-  renderCollection();
-  toast('上架成功！');
-}
-
-// 渲染玩家市場
-async function renderPlayerMarket() {
-  const snap = await db.collection('player_market').orderBy('time', 'desc').get();
-  const box = document.getElementById('playerMarketList');
-  box.innerHTML = '';
-  snap.forEach(doc => {
-    const c = doc.data();
-    box.innerHTML += `
-      <div class="space-y-2">
-        <div class="text-[10px] text-gray-400 font-cc truncate">卖者: ${c.sellerName}</div>
-        ${createCardElement(c, `<button onclick="buyFromPlayer('${doc.id}')" class="w-full bg-orange-500 text-white text-[10px] py-1 rounded font-bold italic font-cc">🪙 ${c.listingPrice} 购买</button>`)}
-      </div>
-    `;
-  });
-}
-
-async function buyFromPlayer(docId) {
-  const ref = db.collection('player_market').doc(docId);
-  const snap = await ref.get();
-  const card = snap.data();
-  if (card.sellerId === me.uid) { toast('不能买自己的卡'); return; }
-  if (meData.coins < card.listingPrice) { toast('代币不足'); return; }
-
-  meData.coins -= card.listingPrice;
-  meData.cards.push(card);
-  await db.collection('users').doc(me.uid).set(meData);
-
-  // 給賣家錢
-  const sRef = db.collection('users').doc(card.sellerId);
-  await db.runTransaction(async (t) => {
-    const sSnap = await t.get(sRef);
-    if (sSnap.exists) {
-      t.update(sRef, { coins: sSnap.data().coins + card.listingPrice });
-    }
-    t.delete(ref);
-  });
+  await db.collection('users').doc(me.uid).update({ displayName: name, igAccount: ig });
+  meData.displayName = name;
+  meData.igAccount = ig;
   
-  updateUI();
-  toast('购买成功！');
-  showPage('collection');
+  document.getElementById('userName').textContent = name;
+  document.getElementById('welcomeName').textContent = name;
+  document.getElementById('postIG').value = ig;
+  document.getElementById('setupModal').classList.add('hide');
+  
+  toast('設定完成！');
 }
 
-// 聊天室功能
+// 發送訊息
 async function sendMsg(e) {
   e.preventDefault();
-  const i = document.getElementById('msgInput');
-  const txt = i.value.trim();
-  if (!txt) return;
+  if (!me || !meData) return;
+  
+  const content = document.getElementById('msgInput').value.trim();
+  if (!content) return;
+  
   await db.collection('messages').add({
-    uid: me.uid, name: meData.displayName, content: txt, time: Date.now()
+    userId: me.uid,
+    userName: meData.displayName,
+    userAvatar: meData.photoURL,
+    content,
+    likes: 0,
+    time: firebase.firestore.FieldValue.serverTimestamp()
   });
-  i.value = '';
+  
+  await db.collection('users').doc(me.uid).update({
+    points: firebase.firestore.FieldValue.increment(1)
+  });
+  
+  document.getElementById('msgInput').value = '';
 }
 
+// 載入聊天
 function loadChat() {
-  db.collection('messages').orderBy('time', 'desc').limit(30).onSnapshot(snap => {
-    const box = document.getElementById('chatBox');
+  if (unsubMsg) unsubMsg();
+  
+  unsubMsg = db.collection('messages')
+    .orderBy('time', 'asc')
+    .onSnapshot(snap => {
+      const box = document.getElementById('chatBox');
+      box.innerHTML = '';
+      
+      snap.forEach(doc => {
+        const m = doc.data();
+        const isMe = m.userId === me?.uid;
+        const time = m.time?.toDate()?.toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'}) || '';
+        
+        box.innerHTML += `
+          <div class="flex gap-3 p-3 rounded-xl ${isMe ? 'bg-yellow-50' : 'bg-white'}">
+            <img src="${m.userAvatar || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>'}" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center gap-2">
+                <span class="font-bold font-cc text-sm">${m.userName}</span>
+                <span class="text-xs text-gray-400">${time}</span>
+              </div>
+              <p class="font-cc">${m.content}</p>
+            </div>
+          </div>
+        `;
+      });
+      
+      box.scrollTop = box.scrollHeight;
+    });
+}
+
+// 載入排行榜
+function loadRank() {
+  db.collection('users')
+    .orderBy('points', 'desc')
+    .limit(10)
+    .onSnapshot(snap => {
+      const box = document.getElementById('rankBox');
+      box.innerHTML = '';
+      let rank = 1;
+      
+      snap.forEach(doc => {
+        const u = doc.data();
+        if (u.points <= 0) return;
+        
+        const icon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🏆';
+        const title = rank === 1 ? '冠軍' : rank === 2 ? '亞軍' : rank === 3 ? '季軍' : '';
+        const bg = rank === 1 ? 'from-yellow-400 to-orange-400 text-white' : 'bg-gray-100';
+        
+        box.innerHTML += `
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r ${bg}">
+            <span class="text-2xl">${icon}</span>
+            <img src="${u.photoURL || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>'}" class="w-10 h-10 rounded-full">
+            <div class="flex-1 font-cc">
+              <span class="font-bold">${u.displayName}</span>
+              ${title ? `<br><span class="text-sm opacity-80">${title}粉絲</span>` : ''}
+            </div>
+            <div class="text-right font-cc">
+              <span class="font-bold">${u.points}</span>分
+            </div>
+          </div>
+        `;
+        rank++;
+      });
+      
+      if (box.innerHTML === '') {
+        box.innerHTML = '<p class="text-center text-gray-500 font-cc py-8">還沒有人上榜，快去聊天吧！</p>';
+      }
+    });
+}
+
+// 頁面切換
+function showPage(page) {
+  document.getElementById('pageHome').classList.add('hide');
+  document.getElementById('pageAdmin').classList.add('hide');
+  document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.remove('hide');
+  
+  if (page === 'admin') loadAdmin();
+}
+
+// 管理員標籤
+function adminTab(tab) {
+  ['Msgs', 'Users', 'Posts'].forEach(t => {
+    document.getElementById('admin' + t).classList.add('hide');
+    document.getElementById('tab' + t).classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+    document.getElementById('tab' + t).classList.add('text-gray-500');
+  });
+  document.getElementById('admin' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hide');
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('text-gray-500');
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+}
+
+// 載入管理員資料
+function loadAdmin() {
+  db.collection('messages').orderBy('time', 'desc').get().then(snap => {
+    const box = document.getElementById('adminMsgs');
     box.innerHTML = '';
-    snap.docs.reverse().forEach(doc => {
+    snap.forEach(doc => {
       const m = doc.data();
-      const isMe = m.uid === me?.uid;
       box.innerHTML += `
-        <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
-          <div class="${isMe ? 'bg-yellow-400 text-white' : 'bg-gray-100 text-gray-700'} px-4 py-2 rounded-2xl max-w-[80%] shadow-sm">
-            <p class="text-[9px] opacity-60">${m.name}</p>
-            <p class="text-sm">${m.content}</p>
+        <div class="p-3 bg-gray-50 rounded-xl flex justify-between items-center">
+          <div>
+            <span class="font-bold font-cc">${m.userName}</span>
+            <p class="font-cc">${m.content}</p>
+          </div>
+          <button onclick="delMsg('${doc.id}')" class="text-red-500">刪除</button>
+        </div>
+      `;
+    });
+  });
+  
+  db.collection('users').get().then(snap => {
+    const box = document.getElementById('adminUsers');
+    box.innerHTML = '';
+    snap.forEach(doc => {
+      const u = doc.data();
+      box.innerHTML += `
+        <div class="p-3 bg-gray-50 rounded-xl flex justify-between items-center">
+          <div>
+            <span class="font-bold font-cc">${u.displayName}</span>
+            <span class="text-sm text-gray-500 ml-2">${u.points}分</span>
+          </div>
+          <input type="number" value="${u.points}" onchange="setPoints('${doc.id}', this.value)" class="w-20 px-2 py-1 border rounded font-cc">
+        </div>
+      `;
+    });
+  });
+  
+  db.collection('submissions').where('status', '==', 'pending').get().then(snap => {
+    const box = document.getElementById('adminPosts');
+    box.innerHTML = '';
+    if (snap.empty) {
+      box.innerHTML = '<p class="text-center text-gray-500 font-cc py-4">暫無待審核投稿</p>';
+      return;
+    }
+    snap.forEach(doc => {
+      const p = doc.data();
+      box.innerHTML += `
+        <div class="p-4 bg-gray-50 rounded-xl">
+          <div class="flex justify-between mb-2">
+            <span class="font-bold font-cc">${p.userName}</span>
+            <span class="text-gray-500">@${p.igAccount}</span>
+          </div>
+          <p class="font-cc mb-3">${p.content}</p>
+          <div class="flex gap-2">
+            <button onclick="apprPost('${doc.id}')" class="flex-1 bg-green-500 text-white py-2 rounded font-cc">核准</button>
+            <button onclick="rejectPost('${doc.id}')" class="flex-1 bg-red-500 text-white py-2 rounded font-cc">拒絕</button>
           </div>
         </div>
       `;
     });
-    box.scrollTop = box.scrollHeight;
   });
 }
 
-// 排行榜
-function loadRank() {
-  db.collection('users').orderBy('points', 'desc').limit(5).onSnapshot(snap => {
-    const box = document.getElementById('rankBox');
-    box.innerHTML = '';
-    let i = 1;
-    snap.forEach(doc => {
-      const u = doc.data();
-      box.innerHTML += `
-        <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-xl">
-          <span class="font-bold text-yellow-600">#${i++}</span>
-          <span class="flex-1 font-cc text-sm">${u.displayName}</span>
-          <span class="text-xs font-bold text-gray-400">${u.points} PTS</span>
-        </div>
-      `;
-    });
-  });
+async function delMsg(id) {
+  await db.collection('messages').doc(id).delete();
+  loadAdmin();
+}
+
+async function setPoints(id, pts) {
+  await db.collection('users').doc(id).update({ points: parseInt(pts) || 0 });
+}
+
+async function apprPost(id) {
+  await db.collection('submissions').doc(id).update({ status: 'approved' });
+  loadAdmin();
+}
+
+async function rejectPost(id) {
+  await db.collection('submissions').doc(id).update({ status: 'rejected' });
+  loadAdmin();
 }
 
 // 投稿
 async function submitPost(e) {
   e.preventDefault();
-  const c = document.getElementById('postContent').value.trim();
-  if (c.length < 5) { toast('多写一点吧'); return; }
-  await db.collection('posts').add({
-    uid: me.uid, name: meData.displayName, content: c, time: Date.now(), status: 'pending'
-  });
-  document.getElementById('postContent').value = '';
-  toast('投稿已送出，请静候审核');
-}
-
-// 商城渲染
-function renderMarket() {
-  const search = document.getElementById('marketSearch').value.toLowerCase();
-  const filter = document.getElementById('marketFilter').value;
-  const list = document.getElementById('marketList');
+  if (!me || !meData) return;
   
-  const items = CARD_TEMPLATES.filter(c => 
-    (c.rarity === 'gray' || c.rarity === 'pink') &&
-    c.name.includes(search) &&
-    (filter === 'all' || c.rarity === filter)
-  );
-
-  list.innerHTML = items.map(c => `
-    <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center">
-      <div class="text-4xl mb-2">${c.img}</div>
-      <h4 class="font-bold font-cc">${c.name}</h4>
-      <div class="text-yellow-500 font-bold mb-3 italic">🪙 ${c.price}</div>
-      <button onclick="buyStore('${c.id}')" class="w-full bg-gray-900 text-white py-2 rounded-xl text-xs font-bold">购买卡包</button>
-    </div>
-  `).join('');
+  const ig = document.getElementById('postIG').value.trim();
+  const content = document.getElementById('postContent').value.trim();
+  
+  if (!ig) { toast('請填IG帳號'); return; }
+  if (content.length < 10) { toast('內容需至少10字'); return; }
+  
+  await db.collection('submissions').add({
+    userId: me.uid,
+    userName: meData.displayName,
+    igAccount: ig,
+    content,
+    status: 'pending',
+    time: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  
+  document.getElementById('postContent').value = '';
+  toast('投稿成功！');
 }
 
-async function buyStore(tid) {
-  const base = CARD_TEMPLATES.find(c => c.id === tid);
-  if (meData.coins < base.price) { toast('代币不足'); return; }
-  meData.coins -= base.price;
-  const serial = `M-${Math.floor(Math.random()*90000)+10000}`;
-  meData.cards.push({ ...base, serial, ownerId: me.uid });
-  await db.collection('users').doc(me.uid).set(meData);
-  updateUI();
-  toast('购买成功！已存入背包');
+// 個人資料
+function showProfile() {
+  document.getElementById('editName').value = meData.displayName;
+  document.getElementById('editIG').value = meData.igAccount || '';
+  document.getElementById('profileModal').classList.remove('hide');
 }
 
+function closeProfile() {
+  document.getElementById('profileModal').classList.add('hide');
+}
+
+async function saveProfile() {
+  const name = document.getElementById('editName').value.trim();
+  const ig = document.getElementById('editIG').value.trim();
+  
+  if (!name || name.length < 2) { toast('暱稱需至少2字'); return; }
+  
+  await db.collection('users').doc(me.uid).update({ displayName: name, igAccount: ig });
+  meData.displayName = name;
+  meData.igAccount = ig;
+  
+  document.getElementById('userName').textContent = name;
+  document.getElementById('welcomeName').textContent = name;
+  document.getElementById('userTitle').textContent = meData.title;
+  closeProfile();
+  toast('已更新');
+}
+
+// 初始載入
+loadChat();
+loadRank();
 </script>
+
 </body>
 </html>
