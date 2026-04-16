@@ -194,38 +194,38 @@
         
         <!-- 標籤導航 -->
         <div class="flex border-b overflow-x-auto">
-          <button onclick="showAdminTab('messages')" id="tabMessages" class="flex items-center gap-2 px-4 py-3 font-medium text-yellow-500 border-b-2 border-yellow-500">
+          <button onclick="showAdminTab('messages')" id="tabMessages" class="flex items-center gap-2 px-4 py-3 font-medium text-yellow-500 border-b-2 border-yellow-500 font-calligraphy">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
             訊息管理
           </button>
-          <button onclick="showAdminTab('users')" id="tabUsers" class="flex items-center gap-2 px-4 py-3 font-medium text-gray-500 hover:text-gray-700">
+          <button onclick="showAdminTab('users')" id="tabUsers" class="flex items-center gap-2 px-4 py-3 font-medium text-gray-500 hover:text-gray-700 font-calligraphy">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             用戶管理
           </button>
-          <button onclick="showAdminTab('submissions')" id="tabSubmissions" class="flex items-center gap-2 px-4 py-3 font-medium text-gray-500 hover:text-gray-700">
+          <button onclick="showAdminTab('submissions')" id="tabSubmissions" class="flex items-center gap-2 px-4 py-3 font-medium text-gray-500 hover:text-gray-700 font-calligraphy">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             投稿審核
           </button>
-          <button onclick="showAdminTab('settings')" id="tabSettings" class="flex items-center gap-2 px-4 py-3 font-medium text-gray-500 hover:text-gray-700">
+          <button onclick="showAdminTab('settings')" id="tabSettings" class="flex items-center gap-2 px-4 py-3 font-medium text-gray-500 hover:text-gray-700 font-calligraphy">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
             UI 設定
           </button>
         </div>
 
         <!-- 訊息管理 -->
-        <div id="adminMessages" class="p-4 space-y-3"></div>
+        <div id="adminMessages" class="p-4 space-y-3 font-calligraphy"></div>
 
         <!-- 用戶管理 -->
-        <div id="adminUsers" class="hide p-4 space-y-3"></div>
+        <div id="adminUsers" class="hide p-4 space-y-3 font-calligraphy"></div>
 
         <!-- 投稿審核 -->
-        <div id="adminSubmissions" class="hide p-4 space-y-3"></div>
+        <div id="adminSubmissions" class="hide p-4 space-y-3 font-calligraphy"></div>
 
         <!-- UI 設定 -->
         <div id="adminSettings" class="hide p-4 space-y-4">
-          <h3 class="font-bold text-lg">公告訊息</h3>
-          <textarea id="announcementInput" placeholder="輸入公告內容..." rows="3" class="w-full px-4 py-2 border rounded-xl"></textarea>
-          <button onclick="saveSettings()" class="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 rounded-xl">儲存設定</button>
+          <h3 class="font-bold text-lg font-calligraphy">公告訊息</h3>
+          <textarea id="announcementInput" placeholder="輸入公告內容..." rows="3" class="w-full px-4 py-2 border rounded-xl font-calligraphy"></textarea>
+          <button onclick="saveSettings()" class="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 rounded-xl font-calligraphy">儲存設定</button>
         </div>
       </div>
     </div>
@@ -234,20 +234,20 @@
   <!-- 編輯資料 Modal -->
   <div id="profileModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-      <h3 class="text-xl font-bold mb-4">編輯個人資料</h3>
+      <h3 class="text-xl font-bold mb-4 font-calligraphy">編輯個人資料</h3>
       <div class="space-y-4">
         <div>
-          <label class="block text-gray-700 font-medium mb-2">暱稱</label>
-          <input type="text" id="editName" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <label class="block text-gray-700 font-medium mb-2 font-calligraphy">暱稱</label>
+          <input type="text" id="editName" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 font-calligraphy">
         </div>
         <div>
-          <label class="block text-gray-700 font-medium mb-2">IG 帳號</label>
-          <input type="text" id="editIG" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          <label class="block text-gray-700 font-medium mb-2 font-calligraphy">IG 帳號</label>
+          <input type="text" id="editIG" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 font-calligraphy">
         </div>
       </div>
       <div class="flex gap-2 mt-6">
-        <button onclick="saveProfile()" class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-2 rounded-xl">儲存</button>
-        <button onclick="closeProfileModal()" class="flex-1 bg-gray-200 text-gray-700 font-bold py-2 rounded-xl">取消</button>
+        <button onclick="saveProfile()" class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-2 rounded-xl font-calligraphy">儲存</button>
+        <button onclick="closeProfileModal()" class="flex-1 bg-gray-200 text-gray-700 font-bold py-2 rounded-xl font-calligraphy">取消</button>
       </div>
     </div>
   </div>
@@ -262,12 +262,12 @@
       </div>
       <div class="space-y-4">
         <div>
-          <label class="block text-gray-700 font-medium mb-2">暱稱 <span class="text-red-500">*</span></label>
-          <input type="text" id="newUserName" placeholder="你想要粉絲怎麼叫你？" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 text-lg">
+          <label class="block text-gray-700 font-medium mb-2 font-calligraphy">暱稱 <span class="text-red-500">*</span></label>
+          <input type="text" id="newUserName" placeholder="你想要粉絲怎麼叫你？" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 text-lg font-calligraphy">
         </div>
         <div>
-          <label class="block text-gray-700 font-medium mb-2">IG 帳號 <span class="text-red-500">*</span></label>
-          <input type="text" id="newUserIG" placeholder="你的 IG 帳號" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 text-lg">
+          <label class="block text-gray-700 font-medium mb-2 font-calligraphy">IG 帳號 <span class="text-red-500">*</span></label>
+          <input type="text" id="newUserIG" placeholder="你的 IG 帳號" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-400 text-lg font-calligraphy">
         </div>
       </div>
       <button onclick="completeNewUserSetup()" class="w-full mt-6 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg font-calligraphy text-xl">
@@ -363,11 +363,16 @@
       if (user) {
         currentUser = user;
         await loadUserData(user);
+        
+        // 隱藏登入區，顯示用戶區
         document.getElementById('loginSection').classList.add('hide');
         document.getElementById('userSection').classList.remove('hide');
         document.getElementById('welcomeBanner').classList.remove('hide');
         document.getElementById('submissionSection').classList.remove('hide');
         document.getElementById('chatInput').disabled = false;
+        
+        // 更新用戶資訊
+        updateUserUI();
         document.getElementById('welcomeName').textContent = currentUserData?.displayName || '粉絲';
         
         if (currentUserData?.isAdmin) {
@@ -377,11 +382,11 @@
         loadMessages();
         loadLeaderboard();
         
-        // 檢查是否為新用戶（未設定暱稱或 IG）
-        if (!currentUserData?.igAccount || currentUserData.displayName === '匿名粉絲') {
+        // 檢查是否為新用戶 - 每次登入都檢查 IG 是否填寫
+        if (!currentUserData?.igAccount || !currentUserData.igAccount.trim()) {
           document.getElementById('newUserModal').classList.remove('hide');
           document.getElementById('newUserName').value = currentUserData?.displayName || '';
-          document.getElementById('newUserIG').value = currentUserData?.igAccount || '';
+          document.getElementById('newUserIG').value = '';
         }
         
         showToast('✅ 登入成功！');
