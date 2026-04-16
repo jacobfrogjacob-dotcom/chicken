@@ -272,26 +272,39 @@
     // ========== Google 登入 ==========
     let isLoggingIn = false;
     async function signInWithGoogle() {
-      if (isLoggingIn) return;
+      if (isLoggingIn) {
+        showToast('登入中，請稍候...');
+        return;
+      }
+      
       isLoggingIn = true;
+      const btn = event.target.closest('button');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '登入中...';
+      btn.disabled = true;
       
       const provider = new firebase.auth.GoogleAuthProvider();
-      provider.setCustomParameters({ prompt: 'select_account' });
       
       try {
-        await auth.signInWithRedirect(provider);
+        const result = await auth.signInWithPopup(provider);
+        if (result.user) {
+          showToast('✅ 登入成功！');
+        }
       } catch (error) {
-        showToast('登入失敗：' + error.message);
+        console.error('登入錯誤:', error);
+        if (error.code === 'auth/cancelled-popup-request') {
+          showToast('請等待上一個視窗關閉');
+        } else if (error.code === 'auth/popup-blocked') {
+          showToast('瀏覽器阻擋了彈出視窗，請允許彈出視窗');
+        } else {
+          showToast('登入失敗');
+        }
+      } finally {
         isLoggingIn = false;
+        btn.innerHTML = originalText;
+        btn.disabled = false;
       }
     }
-    
-    // 監聽 redirect 結果
-    auth.getRedirectResult().then((result) => {
-      isLoggingIn = false;
-    }).catch((error) => {
-      isLoggingIn = false;
-    });
 
     // ========== 登出 ==========
     async function logout() {
