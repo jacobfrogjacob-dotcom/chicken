@@ -270,14 +270,28 @@
     }
 
     // ========== Google 登入 ==========
+    let isLoggingIn = false;
     async function signInWithGoogle() {
+      if (isLoggingIn) return;
+      isLoggingIn = true;
+      
       const provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      
       try {
-        await auth.signInWithPopup(provider);
+        await auth.signInWithRedirect(provider);
       } catch (error) {
         showToast('登入失敗：' + error.message);
+        isLoggingIn = false;
       }
     }
+    
+    // 監聽 redirect 結果
+    auth.getRedirectResult().then((result) => {
+      isLoggingIn = false;
+    }).catch((error) => {
+      isLoggingIn = false;
+    });
 
     // ========== 登出 ==========
     async function logout() {
