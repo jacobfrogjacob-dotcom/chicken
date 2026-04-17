@@ -43,12 +43,13 @@
     .card-glow-pink { box-shadow: 0 0 20px #FF69B4, 0 0 40px #FF1493; }
     .card-glow-gray { box-shadow: 0 0 10px #888; }
     .mini-card { transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
-    .mini-card:hover { transform: scale(1.08); }
-    .big-card-img { width: 80px !important; height: 80px !important; }
-    .card-result-img { width: 150px !important; height: 150px !important; }
+    .mini-card:hover { transform: scale(1.05); }
+    .big-card-img { width: 120px !important; height: 120px !important; }
+    .card-result-img { width: 200px !important; height: 200px !important; }
     .card-modal-content { max-height: 70vh; overflow-y: auto; }
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
-    .card-rank-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.5rem; }
+    .card-item { padding: 1.5rem !important; }
+    .card-item-img { width: 120px !important; height: 120px !important; }
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50">
@@ -307,7 +308,6 @@
 </div>
 
 <!-- 卡牌背包弹窗 -->
-<!-- 卡牌背包弹窗 -->
 <div id="cardBagModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
     <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 flex justify-between items-center">
@@ -316,10 +316,10 @@
     </div>
     <div class="flex border-b flex-wrap">
       <button onclick="cardBagTab('all')" id="cardBagTabAll" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">全部</button>
-      <button onclick="cardBagTab('gold')" id="cardBagTabGold" class="px-6 py-3 font-cc text-gray-500 text-lg">👑 金(8)</button>
-      <button onclick="cardBagTab('red')" id="cardBagTabRed" class="px-6 py-3 font-cc text-gray-500 text-lg">🔥 红(8)</button>
-      <button onclick="cardBagTab('pink')" id="cardBagTabPink" class="px-6 py-3 font-cc text-gray-500 text-lg">🌸 粉(8)</button>
-      <button onclick="cardBagTab('gray')" id="cardBagTabGray" class="px-6 py-3 font-cc text-gray-500 text-lg">⬜ 灰(8)</button>
+      <button onclick="cardBagTab('gold')" id="cardBagTabGold" class="px-6 py-3 font-cc text-gray-500 text-lg">👑 金</button>
+      <button onclick="cardBagTab('red')" id="cardBagTabRed" class="px-6 py-3 font-cc text-gray-500 text-lg">🔥 红</button>
+      <button onclick="cardBagTab('pink')" id="cardBagTabPink" class="px-6 py-3 font-cc text-gray-500 text-lg">🌸 粉</button>
+      <button onclick="cardBagTab('gray')" id="cardBagTabGray" class="px-6 py-3 font-cc text-gray-500 text-lg">⬜ 灰</button>
       <button onclick="openSynthModal()" class="px-6 py-3 font-cc text-purple-500 text-lg">🔮 合成</button>
     </div>
     <div id="cardBagList" class="flex-1 overflow-y-auto p-6 card-grid"></div>
@@ -370,27 +370,6 @@
     </div>
   </div>
 </div>
-    <div class="flex border-b">
-      <button onclick="cardBagTab('all')" id="cardBagTabAll" class="flex-1 px-4 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500">全部</button>
-      <button onclick="cardBagTab('gold')" id="cardBagTabGold" class="flex-1 px-4 py-3 font-cc text-gray-500">金</button>
-      <button onclick="cardBagTab('red')" id="cardBagTabRed" class="flex-1 px-4 py-3 font-cc text-gray-500">红</button>
-      <button onclick="cardBagTab('pink')" id="cardBagTabPink" class="flex-1 px-4 py-3 font-cc text-gray-500">粉</button>
-      <button onclick="cardBagTab('gray')" id="cardBagTabGray" class="flex-1 px-4 py-3 font-cc text-gray-500">灰</button>
-    </div>
-    <div id="cardBagList" class="flex-1 overflow-y-auto p-4 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
-  </div>
-</div>
-
-<!-- 卡牌詳情彈窗 -->
-<div id="cardDetailModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden">
-    <div id="cardDetailContent" class="p-6"></div>
-    <div class="p-4 border-t flex gap-2">
-      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-white py-2 rounded-xl font-cc">上架出售</button>
-      <button onclick="closeCardDetail()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">关闭</button>
-    </div>
-  </div>
-</div>
 
 <!-- 编辑资料弹窗 -->
 <div id="profileModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -409,6 +388,37 @@
     <div class="flex gap-2 mt-6">
       <button onclick="saveProfile()" class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white py-2 rounded-xl font-cc text-lg">储存</button>
       <button onclick="closeProfile()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc text-lg">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 美化确认对话框 -->
+<div id="customConfirmModal" class="hide fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4">
+  <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl transform transition-all">
+    <div class="text-center">
+      <div id="confirmIcon" class="text-6xl mb-4">❓</div>
+      <h3 id="confirmTitle" class="text-2xl font-bold font-cc mb-2">确认操作</h3>
+      <p id="confirmMessage" class="text-gray-600 font-cc text-lg mb-6"></p>
+    </div>
+    <div class="flex gap-3">
+      <button id="confirmCancelBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-cc text-lg transition-all">取消</button>
+      <button id="confirmOkBtn" class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 美化输入对话框 -->
+<div id="customPromptModal" class="hide fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4">
+  <div class="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl">
+    <div class="text-center mb-4">
+      <div id="promptIcon" class="text-6xl mb-4">💬</div>
+      <h3 id="promptTitle" class="text-2xl font-bold font-cc mb-2">请输入</h3>
+      <p id="promptMessage" class="text-gray-600 font-cc text-lg"></p>
+    </div>
+    <input type="text" id="promptInput" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-lg focus:border-yellow-400 focus:outline-none transition-all mb-4">
+    <div class="flex gap-3">
+      <button onclick="closePromptModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-cc text-lg transition-all">取消</button>
+      <button onclick="submitPrompt()" class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
     </div>
   </div>
 </div>
@@ -442,6 +452,59 @@ function toast(msg) {
   t.classList.remove('hide');
   t.style.opacity = '1';
   setTimeout(() => t.style.opacity = '0', 2500);
+}
+
+// 美化确认对话框
+let confirmCallback = null;
+function showConfirm(title, message, icon = '❓', okText = '确定') {
+  return new Promise((resolve) => {
+    document.getElementById('confirmTitle').textContent = title;
+    document.getElementById('confirmMessage').textContent = message;
+    document.getElementById('confirmIcon').textContent = icon;
+    document.getElementById('confirmOkBtn').textContent = okText;
+    document.getElementById('customConfirmModal').classList.remove('hide');
+    confirmCallback = resolve;
+  });
+}
+
+document.getElementById('confirmOkBtn').onclick = () => {
+  document.getElementById('customConfirmModal').classList.add('hide');
+  if (confirmCallback) confirmCallback(true);
+};
+
+document.getElementById('confirmCancelBtn').onclick = () => {
+  document.getElementById('customConfirmModal').classList.add('hide');
+  if (confirmCallback) confirmCallback(false);
+};
+
+// 美化输入对话框
+let promptCallback = null;
+let promptDefault = '';
+function showPrompt(title, message, icon = '💬', defaultValue = '') {
+  return new Promise((resolve) => {
+    document.getElementById('promptTitle').textContent = title;
+    document.getElementById('promptMessage').textContent = message;
+    document.getElementById('promptIcon').textContent = icon;
+    document.getElementById('promptInput').value = defaultValue;
+    document.getElementById('customPromptModal').classList.remove('hide');
+    document.getElementById('promptInput').focus();
+    promptCallback = resolve;
+  });
+}
+
+function submitPrompt() {
+  const value = document.getElementById('promptInput').value;
+  document.getElementById('customPromptModal').classList.add('hide');
+  if (promptCallback) promptCallback(value);
+}
+
+document.getElementById('promptInput').onkeypress = (e) => {
+  if (e.key === 'Enter') submitPrompt();
+};
+
+function closePromptModal() {
+  document.getElementById('customPromptModal').classList.add('hide');
+  if (promptCallback) promptCallback(null);
 }
 
 function fmtPts(n) {
@@ -646,7 +709,7 @@ function loadChat() {
 
 // 回复
 async function replyMsg(id) {
-  const reply = prompt('输入回复：');
+  const reply = await showPrompt('回复讯息', '请输入回复内容：', '💬');
   if (!reply) return;
   await db.collection('messages').doc(id).update({ reply });
   toast('已回复');
@@ -659,7 +722,8 @@ async function pinMsg(id, isPinned) {
 
 // 删除
 async function delMsg(id) {
-  if (!confirm('确定删除？')) return;
+  const ok = await showConfirm('删除讯息', '确定要删除这条讯息吗？', '🗑️', '删除');
+  if (!ok) return;
   await db.collection('messages').doc(id).delete();
 }
 
@@ -1515,6 +1579,9 @@ async function doSynth() {
     return;
   }
   
+  const ok = await showConfirm('确认合成', '确定要使用这3张卡牌进行合成吗？合成失败将失去所有卡牌！', '🔮', '开始合成');
+  if (!ok) return;
+  
   const qualities = synthSelectedCards.map(c => c.quality);
   const allSame = qualities.every(q => q === qualities[0]);
   const qualityOrder = { gray: 0, pink: 1, red: 2, gold: 3 };
@@ -1541,7 +1608,7 @@ async function doSynth() {
     const stats = generateCardStats(resultQuality);
     const types = shuffleArray([...CARD_TYPES]).slice(0, Math.floor(Math.random() * 3) + 3);
     
-    await db.collection('cards').add({
+    const cardRef = await db.collection('cards').add({
       ownerId: me.uid,
       ownerName: meData.displayName,
       templateIdx,
@@ -1558,18 +1625,28 @@ async function doSynth() {
       await db.collection('cards').doc(card.id).delete();
     }
     
+    const newCard = {
+      id: cardRef.id,
+      templateIdx,
+      quality: resultQuality,
+      name: cardName.name,
+      desc: cardName.desc,
+      types,
+      lv: 1,
+      ...stats
+    };
+    
+    synthSelectedCards = [];
+    closeSynthModal();
+    showCardResult(newCard);
     toast(`🎉 合成成功！获得${CARD_QUALITIES[resultQuality].name}品质卡牌！`);
   } else {
     for (const card of synthSelectedCards) {
       await db.collection('cards').doc(card.id).delete();
     }
+    synthSelectedCards = [];
+    closeSynthModal();
     toast('💨 合成失败，卡牌消失了...');
-  }
-  
-  synthSelectedCards = [];
-  closeSynthModal();
-  if (success) {
-    loadCardBag('all');
   }
 }
 
@@ -1583,7 +1660,7 @@ function openSynthWithCard() {
 
 async function sellCard() {
   if (!selectedCardForSale) return;
-  const price = prompt('请输入出售价格（金币）：', '100');
+  const price = await showPrompt('上架出售', '请输入出售价格（金币）：', '💰', '100');
   if (!price || isNaN(parseInt(price))) return;
   
   await db.collection('marketplace').add({
@@ -1817,7 +1894,13 @@ async function drawCardFromShop(type) {
     return;
   }
   
-  if (!confirm(`确定花费 ${cost} 金币进行${type === 'single' ? '单抽' : '十连抽'}？`)) return;
+  const ok = await showConfirm(
+    type === 'single' ? '单抽卡牌' : '十连抽礼盒',
+    `确定花费 ${cost} 金币进行${type === 'single' ? '单抽' : '十连抽'}？`,
+    type === 'single' ? '🎲' : '🎁',
+    '开始抽卡'
+  );
+  if (!ok) return;
   
   await db.collection('users').doc(me.uid).update({
     coins: firebase.firestore.FieldValue.increment(-cost)
@@ -1890,7 +1973,8 @@ async function buyOfficialItem(itemId, price, name) {
     toast('金币不足！');
     return;
   }
-  if (!confirm(`确定花费 ${price} 金币购买「${name}」？`)) return;
+  const ok = await showConfirm('购买确认', `确定花费 ${price} 金币购买「${name}」？`, '🛒', '立即购买');
+  if (!ok) return;
   
   await db.collection('users').doc(me.uid).update({
     coins: firebase.firestore.FieldValue.increment(-price),
@@ -1955,7 +2039,7 @@ function loadMarket() {
 }
 
 async function bidItem(itemId, currentPrice) {
-  const bid = prompt(`当前价格 ${currentPrice}，请输入你的出价（需高于当前价格）：`);
+  const bid = await showPrompt('出价竞拍', `当前价格 ${currentPrice}，请输入你的出价（需高于当前价格）：`, '🏷️', String(currentPrice + 10));
   if (!bid) return;
   const bidNum = parseInt(bid);
   if (isNaN(bidNum) || bidNum <= currentPrice) {
@@ -1981,7 +2065,8 @@ async function buyNowItem(itemId, price, name, sellerId, type, cardId) {
     toast('金币不足！');
     return;
   }
-  if (!confirm(`确定花费 ${price} 金币购买「${name}」？`)) return;
+  const ok = await showConfirm('购买确认', `确定花费 ${price} 金币购买「${name}」？`, '🛒', '立即购买');
+  if (!ok) return;
   
   await db.collection('users').doc(me.uid).update({
     coins: firebase.firestore.FieldValue.increment(-price)
@@ -2072,7 +2157,7 @@ async function giftItem(index) {
   const inv = meData.inventory || [];
   if (index >= inv.length) return;
   const item = inv[index];
-  const target = prompt('请输入对方的昵称：');
+  const target = await showPrompt('送礼', '请输入对方的昵称：', '🎁');
   if (!target) return;
   
   const snap = await db.collection('users').where('displayName', '==', target).limit(1).get();
@@ -2361,10 +2446,10 @@ function loadAdminCards() {
       <h3 class="font-bold font-cc text-lg mb-3">📜 所有玩家卡牌</h3>
       <div class="flex flex-wrap gap-2 mb-4">
         <button onclick="filterAdminCards('all')" class="admin-card-filter px-4 py-1 rounded-full bg-yellow-400 text-white font-cc text-sm" data-filter="all">全部</button>
-        <button onclick="filterAdminCards('gold')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="gold">金(8)</button>
-        <button onclick="filterAdminCards('red')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="red">红(8)</button>
-        <button onclick="filterAdminCards('pink')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="pink">粉(8)</button>
-        <button onclick="filterAdminCards('gray')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="gray">灰(8)</button>
+        <button onclick="filterAdminCards('gold')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="gold">👑 金</button>
+        <button onclick="filterAdminCards('red')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="red">🔥 红</button>
+        <button onclick="filterAdminCards('pink')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="pink">🌸 粉</button>
+        <button onclick="filterAdminCards('gray')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="gray">⬜ 灰</button>
       </div>
       <div id="adminCardList" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
     </div>
@@ -2464,7 +2549,8 @@ async function createCustomCard() {
 }
 
 async function deleteCard(cardId) {
-  if (!confirm('确定删除这张卡牌？')) return;
+  const ok = await showConfirm('删除卡牌', '确定要删除这张卡牌吗？', '🗑️', '删除');
+  if (!ok) return;
   await db.collection('cards').doc(cardId).delete();
   toast('卡牌已删除');
   filterAdminCards(currentCardFilter);
@@ -2519,7 +2605,8 @@ async function changeMarketStatus(id, status) {
 }
 
 async function delMarketItem(id) {
-  if (!confirm('确定删除此商品？')) return;
+  const ok = await showConfirm('删除商品', '确定要删除此商品吗？', '🗑️', '删除');
+  if (!ok) return;
   await db.collection('marketplace').doc(id).delete();
   toast('已删除');
   loadAdminMarket();
