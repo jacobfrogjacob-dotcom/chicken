@@ -182,18 +182,22 @@
         <h2 class="text-white font-bold text-2xl font-cc">⚙️ 管理员系统</h2>
       </div>
       
-      <div class="flex border-b">
+      <div class="flex border-b flex-wrap">
         <button onclick="adminTab('msgs')" id="tabMsgs" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">讯息</button>
         <button onclick="adminTab('users')" id="tabUsers" class="px-6 py-3 font-cc text-gray-500 text-lg">用户</button>
+        <button onclick="adminTab('coins')" id="tabCoins" class="px-6 py-3 font-cc text-gray-500 text-lg">💰 金币</button>
         <button onclick="adminTab('posts')" id="tabPosts" class="px-6 py-3 font-cc text-gray-500 text-lg">投稿</button>
-        <button onclick="adminTab('shop')" id="tabShop" class="px-6 py-3 font-cc text-gray-500 text-lg">商店</button>
+        <button onclick="adminTab('shop')" id="tabShop" class="px-6 py-3 font-cc text-gray-500 text-lg">官方商店</button>
+        <button onclick="adminTab('market')" id="tabMarket" class="px-6 py-3 font-cc text-gray-500 text-lg">玩家市集</button>
         <button onclick="adminTab('wheel')" id="tabWheel" class="px-6 py-3 font-cc text-gray-500 text-lg">轮盘</button>
       </div>
 
       <div id="adminMsgs" class="p-4 space-y-3"></div>
       <div id="adminUsers" class="hide p-4 space-y-3"></div>
+      <div id="adminCoins" class="hide p-4 space-y-3"></div>
       <div id="adminPosts" class="hide p-4 space-y-3"></div>
       <div id="adminShop" class="hide p-4 space-y-3"></div>
+      <div id="adminMarket" class="hide p-4 space-y-3"></div>
       <div id="adminWheel" class="hide p-4 space-y-3"></div>
     </div>
   </div>
@@ -205,15 +209,17 @@
         <h2 class="text-white font-bold text-2xl font-cc">🛒 商店</h2>
       </div>
       
-      <div class="flex border-b">
+      <div class="flex border-b flex-wrap">
         <button onclick="shopTab('official')" id="shopTabOfficial" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">官方商店</button>
         <button onclick="shopTab('market')" id="shopTabMarket" class="px-6 py-3 font-cc text-gray-500 text-lg">玩家市集</button>
         <button onclick="shopTab('my')" id="shopTabMy" class="px-6 py-3 font-cc text-gray-500 text-lg">我的物品</button>
+        <button onclick="shopTab('apply')" id="shopTabApply" class="px-6 py-3 font-cc text-gray-500 text-lg">申请上架</button>
       </div>
 
       <div id="shopOfficial" class="p-4 space-y-3"></div>
       <div id="shopMarket" class="hide p-4 space-y-3"></div>
       <div id="shopMy" class="hide p-4 space-y-3"></div>
+      <div id="shopApply" class="hide p-4 space-y-3"></div>
     </div>
   </div>
 
@@ -848,10 +854,13 @@ function showPage(page) {
 
 // 管理员
 function adminTab(tab) {
-  ['Msgs', 'Users', 'Posts', 'Shop', 'Wheel'].forEach(t => {
+  ['Msgs', 'Users', 'Coins', 'Posts', 'Shop', 'Market', 'Wheel'].forEach(t => {
     document.getElementById('admin' + t).classList.add('hide');
-    document.getElementById('tab' + t).classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
-    document.getElementById('tab' + t).classList.add('text-gray-500');
+    const tabEl = document.getElementById('tab' + t);
+    if (tabEl) {
+      tabEl.classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+      tabEl.classList.add('text-gray-500');
+    }
   });
   document.getElementById('admin' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hide');
   const tabEl = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
@@ -861,7 +870,9 @@ function adminTab(tab) {
   }
   
   if (tab === 'shop') loadAdminShop();
+  if (tab === 'market') loadAdminMarket();
   if (tab === 'wheel') loadAdminWheel();
+  if (tab === 'coins') loadAdminCoins();
 }
 
 // ============ 轮盘系统 ============
@@ -1005,14 +1016,107 @@ async function showWheelResult(prize) {
 
 // ============ 商店系统 ============
 function shopTab(tab) {
-  ['Official', 'Market', 'My'].forEach(t => {
-    document.getElementById('shop' + t).classList.add('hide');
-    document.getElementById('shopTab' + t).classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
-    document.getElementById('shopTab' + t).classList.add('text-gray-500');
+  ['Official', 'Market', 'My', 'Apply'].forEach(t => {
+    const el = document.getElementById('shop' + t);
+    const tabEl = document.getElementById('shopTab' + t);
+    if (el) el.classList.add('hide');
+    if (tabEl) {
+      tabEl.classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+      tabEl.classList.add('text-gray-500');
+    }
   });
-  document.getElementById('shop' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hide');
-  document.getElementById('shopTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('text-gray-500');
-  document.getElementById('shopTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+  const showEl = document.getElementById('shop' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (showEl) showEl.classList.remove('hide');
+  const showTabEl = document.getElementById('shopTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
+  if (showTabEl) {
+    showTabEl.classList.remove('text-gray-500');
+    showTabEl.classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+  }
+  
+  if (tab === 'apply') loadShopApply();
+}
+
+function loadShopApply() {
+  const box = document.getElementById('shopApply');
+  box.innerHTML = `
+    <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl mb-4">
+      <h3 class="font-bold font-cc text-lg mb-2">📝 申请上架官方商店</h3>
+      <p class="text-gray-500 text-sm font-cc">提交你的创意物品，管理审核通过后将上架官方商店</p>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="block font-cc mb-2">物品名称 *</label>
+        <input type="text" id="applyName" class="w-full px-4 py-2 border rounded-xl text-lg" placeholder="例如：超级称号卡">
+      </div>
+      <div>
+        <label class="block font-cc mb-2">物品描述</label>
+        <textarea id="applyDesc" class="w-full px-4 py-2 border rounded-xl text-lg" rows="2" placeholder="简单描述物品功能"></textarea>
+      </div>
+      <div class="flex gap-4">
+        <div class="flex-1">
+          <label class="block font-cc mb-2">建议价格（金币）</label>
+          <input type="number" id="applyPrice" class="w-full px-4 py-2 border rounded-xl text-lg" placeholder="500">
+        </div>
+        <div class="w-24">
+          <label class="block font-cc mb-2">图标</label>
+          <input type="text" id="applyEmoji" class="w-full px-4 py-2 border rounded-xl text-center text-2xl" placeholder="🎁" maxlength="2">
+        </div>
+      </div>
+      <button onclick="submitShopApply()" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 rounded-xl font-cc text-lg">提交申请</button>
+    </div>
+    <div id="applyStatus" class="mt-4"></div>
+  `;
+  
+  loadMyApplys();
+}
+
+async function submitShopApply() {
+  const name = document.getElementById('applyName').value.trim();
+  const desc = document.getElementById('applyDesc').value.trim();
+  const price = parseInt(document.getElementById('applyPrice').value) || 500;
+  const emoji = document.getElementById('applyEmoji').value.trim() || '🎁';
+  
+  if (!name) { toast('请填写物品名称'); return; }
+  
+  await db.collection('shopApplies').add({
+    name, desc, price, emoji,
+    userId: me.uid,
+    userName: meData.displayName,
+    status: 'pending',
+    time: Date.now()
+  });
+  
+  toast('申请已提交！');
+  document.getElementById('applyName').value = '';
+  document.getElementById('applyDesc').value = '';
+  document.getElementById('applyPrice').value = '';
+  loadMyApplys();
+}
+
+function loadMyApplys() {
+  const box = document.getElementById('applyStatus');
+  db.collection('shopApplies').where('userId', '==', me?.uid).orderBy('time', 'desc').get().then(snap => {
+    if (snap.empty) {
+      box.innerHTML = '';
+      return;
+    }
+    box.innerHTML = '<h4 class="font-bold font-cc mb-2">我的申请记录</h4>';
+    snap.forEach(doc => {
+      const a = doc.data();
+      const statusColor = a.status === 'approved' ? 'bg-green-100 text-green-700' : a.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700';
+      const statusText = a.status === 'approved' ? '已通过' : a.status === 'rejected' ? '已拒绝' : '审核中';
+      box.innerHTML += `
+        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+          <span class="text-2xl">${a.emoji}</span>
+          <div class="flex-1">
+            <span class="font-cc">${a.name}</span>
+            <span class="ml-2 text-gray-500 text-sm font-cc">${a.price} 💰</span>
+          </div>
+          <span class="${statusColor} px-3 py-1 rounded-full text-sm font-cc">${statusText}</span>
+        </div>
+      `;
+    });
+  });
 }
 
 function loadOfficialShop() {
@@ -1223,36 +1327,92 @@ async function giftItem(index) {
 
 // ============ 管理员商店管理 ============
 function loadAdminShop() {
-  db.collection('shopItems').get().then(snap => {
-    const box = document.getElementById('adminShop');
-    box.innerHTML = `
-      <div class="mb-4 p-4 bg-yellow-50 rounded-xl">
-        <h3 class="font-bold font-cc">添加官方商品</h3>
-        <div class="flex gap-2 mt-2">
-          <input type="text" id="shopName" placeholder="物品名称" class="flex-1 px-3 py-2 border rounded">
-          <input type="text" id="shopEmoji" placeholder="表情" class="w-16 px-3 py-2 border rounded">
-          <input type="number" id="shopPrice" placeholder="价格" class="w-24 px-3 py-2 border rounded">
-          <button onclick="addShopItem()" class="bg-green-500 text-white px-4 py-2 rounded font-cc">添加</button>
-        </div>
-      </div>
-    `;
-    
-    snap.forEach(doc => {
-      const item = doc.data();
-      box.innerHTML += `
-        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-          <span class="text-2xl">${item.emoji || '🎁'}</span>
-          <div class="flex-1">
-            <span class="font-cc">${item.name}</span>
-            <span class="ml-2 text-orange-500 font-cc">${item.price} 💰</span>
+  db.collection('shopApplies').where('status', '==', 'pending').get().then(applySnap => {
+    db.collection('shopItems').get().then(snap => {
+      const box = document.getElementById('adminShop');
+      box.innerHTML = `
+        <div class="p-4 bg-yellow-50 rounded-xl mb-4">
+          <h3 class="font-bold font-cc mb-3">➕ 添加官方商品</h3>
+          <div class="flex gap-2 mt-2">
+            <input type="text" id="shopName" placeholder="物品名称" class="flex-1 px-3 py-2 border rounded">
+            <input type="text" id="shopEmoji" placeholder="表情" class="w-16 px-3 py-2 border rounded">
+            <input type="number" id="shopPrice" placeholder="价格" class="w-24 px-3 py-2 border rounded">
+            <button onclick="addShopItem()" class="bg-green-500 text-white px-4 py-2 rounded font-cc">添加</button>
           </div>
-          <button onclick="toggleShopItem('${doc.id}', '${item.status}')" class="${item.status === 'active' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'} px-3 py-1 rounded text-sm font-cc">
-            ${item.status === 'active' ? '下架' : '上架'}
-          </button>
         </div>
       `;
+      
+      if (!applySnap.empty) {
+        box.innerHTML += `
+          <div class="p-4 bg-blue-50 rounded-xl mb-4">
+            <h3 class="font-bold font-cc mb-3">📋 待审核申请 (${applySnap.size})</h3>
+            <div class="space-y-3">
+        `;
+        applySnap.forEach(doc => {
+          const a = doc.data();
+          box.innerHTML += `
+            <div class="flex items-center gap-4 p-3 bg-white rounded-xl">
+              <span class="text-3xl">${a.emoji}</span>
+              <div class="flex-1">
+                <span class="font-bold font-cc">${a.name}</span>
+                <div class="text-sm text-gray-500 font-cc">${a.userName} | 建议价格：${a.price} 💰</div>
+                ${a.desc ? `<div class="text-sm text-gray-400 font-cc">${a.desc}</div>` : ''}
+              </div>
+              <div class="flex gap-2">
+                <button onclick="approveApply('${doc.id}', '${a.name}', '${a.emoji}', ${a.price})" class="bg-green-500 text-white px-4 py-2 rounded font-cc text-sm">通过</button>
+                <button onclick="rejectApply('${doc.id}')" class="bg-red-500 text-white px-4 py-2 rounded font-cc text-sm">拒绝</button>
+              </div>
+            </div>
+          `;
+        });
+        box.innerHTML += '</div>';
+      }
+      
+      box.innerHTML += `<h3 class="font-bold font-cc mb-3">📦 现有商品</h3>`;
+      
+      snap.forEach(doc => {
+        const item = doc.data();
+        box.innerHTML += `
+          <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
+            <span class="text-2xl">${item.emoji || '🎁'}</span>
+            <div class="flex-1">
+              <span class="font-cc">${item.name}</span>
+              <span class="ml-2 text-orange-500 font-cc">${item.price} 💰</span>
+              ${item.applicant ? `<span class="ml-2 text-sm text-gray-400 font-cc">by ${item.applicant}</span>` : ''}
+            </div>
+            <input type="number" id="price-${doc.id}" value="${item.price}" class="w-20 px-2 py-1 border rounded text-center">
+            <button onclick="updateShopPrice('${doc.id}')" class="bg-blue-500 text-white px-3 py-1 rounded font-cc text-sm">改价</button>
+            <button onclick="toggleShopItem('${doc.id}', '${item.status}')" class="${item.status === 'active' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'} px-3 py-1 rounded text-sm font-cc">
+              ${item.status === 'active' ? '下架' : '上架'}
+            </button>
+          </div>
+        `;
+      });
     });
   });
+}
+
+async function approveApply(id, name, emoji, price) {
+  await db.collection('shopItems').add({ 
+    name, emoji, price: price || 500, status: 'active', 
+    time: Date.now(), applicant: meData.displayName 
+  });
+  await db.collection('shopApplies').doc(id).update({ status: 'approved' });
+  toast('已通过！');
+  loadAdminShop();
+}
+
+async function rejectApply(id) {
+  await db.collection('shopApplies').doc(id).update({ status: 'rejected' });
+  toast('已拒绝');
+  loadAdminShop();
+}
+
+async function updateShopPrice(id) {
+  const newPrice = parseInt(document.getElementById('price-' + id).value);
+  if (!newPrice || newPrice <= 0) { toast('请输入有效价格'); return; }
+  await db.collection('shopItems').doc(id).update({ price: newPrice });
+  toast('价格已更新');
 }
 
 async function addShopItem() {
@@ -1269,6 +1429,168 @@ async function addShopItem() {
 async function toggleShopItem(id, status) {
   await db.collection('shopItems').doc(id).update({ status: status === 'active' ? 'inactive' : 'active' });
   loadAdminShop();
+}
+
+function loadAdminCoins() {
+  const box = document.getElementById('adminCoins');
+  box.innerHTML = `
+    <div class="p-4 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-xl mb-4">
+      <h3 class="font-bold font-cc text-lg mb-3">💰 发放金币</h3>
+      <div class="flex flex-wrap gap-3">
+        <select id="coinUser" class="flex-1 min-w-48 px-4 py-2 border rounded-xl">
+          <option value="">选择用户...</option>
+        </select>
+        <input type="number" id="coinAmount" placeholder="数量" class="w-32 px-4 py-2 border rounded-xl">
+        <button onclick="giveCoins()" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-6 py-2 rounded-xl font-cc">发放</button>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button onclick="quickCoin(100)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+100</button>
+        <button onclick="quickCoin(500)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+500</button>
+        <button onclick="quickCoin(1000)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+1K</button>
+        <button onclick="quickCoin(5000)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+5K</button>
+      </div>
+    </div>
+    <div id="coinList" class="space-y-2"></div>
+  `;
+  
+  db.collection('users').orderBy('displayName').get().then(snap => {
+    const select = document.getElementById('coinUser');
+    snap.forEach(doc => {
+      const u = doc.data();
+      const opt = document.createElement('option');
+      opt.value = doc.id;
+      opt.textContent = `${u.displayName} (${u.coins || 0} 💰)`;
+      select.appendChild(opt);
+    });
+  });
+  
+  loadCoinHistory();
+}
+
+async function quickCoin(amount) {
+  document.getElementById('coinAmount').value = amount;
+  giveCoins();
+}
+
+async function giveCoins() {
+  const userId = document.getElementById('coinUser').value;
+  const amount = parseInt(document.getElementById('coinAmount').value);
+  
+  if (!userId) { toast('请选择用户'); return; }
+  if (!amount || amount <= 0) { toast('请输入有效数量'); return; }
+  
+  await db.collection('users').doc(userId).update({
+    coins: firebase.firestore.FieldValue.increment(amount)
+  });
+  
+  const snap = await db.collection('users').doc(userId).get();
+  const userName = snap.data().displayName;
+  
+  await db.collection('coinHistory').add({
+    adminId: me.uid,
+    adminName: meData.displayName,
+    targetId: userId,
+    targetName: userName,
+    amount,
+    time: Date.now()
+  });
+  
+  document.getElementById('coinAmount').value = '';
+  toast(`已发放 ${amount} 金币给 ${userName}`);
+  loadCoinHistory();
+  loadCoinUserSelect();
+}
+
+function loadCoinUserSelect() {
+  const select = document.getElementById('coinUser');
+  if (!select) return;
+  select.innerHTML = '<option value="">选择用户...</option>';
+  db.collection('users').orderBy('displayName').get().then(snap => {
+    snap.forEach(doc => {
+      const u = doc.data();
+      const opt = document.createElement('option');
+      opt.value = doc.id;
+      opt.textContent = `${u.displayName} (${u.coins || 0} 💰)`;
+      select.appendChild(opt);
+    });
+  });
+}
+
+function loadCoinHistory() {
+  const box = document.getElementById('coinList');
+  db.collection('coinHistory').orderBy('time', 'desc').limit(20).get().then(snap => {
+    if (snap.empty) {
+      box.innerHTML = '<p class="text-center text-gray-400 py-4 font-cc">暂无记录</p>';
+      return;
+    }
+    box.innerHTML = '<h4 class="font-bold font-cc mb-2">发放记录</h4>';
+    snap.forEach(doc => {
+      const c = doc.data();
+      const date = new Date(c.time).toLocaleString('zh-TW');
+      box.innerHTML += `
+        <div class="flex items-center gap-3 p-2 bg-gray-50 rounded">
+          <span class="text-sm text-gray-500 flex-1">${date}</span>
+          <span class="font-cc">${c.adminName} → ${c.targetName}</span>
+          <span class="text-green-500 font-bold font-cc">+${c.amount}</span>
+        </div>
+      `;
+    });
+  });
+}
+
+function loadAdminMarket() {
+  const box = document.getElementById('adminMarket');
+  box.innerHTML = `
+    <div class="p-4 bg-purple-50 rounded-xl mb-4">
+      <h3 class="font-bold font-cc text-lg mb-2">🛒 玩家市集管理</h3>
+      <p class="text-gray-500 text-sm font-cc">管理所有玩家的上架商品</p>
+    </div>
+    <div id="adminMarketList" class="space-y-3"></div>
+  `;
+  
+  db.collection('marketplace').orderBy('time', 'desc').get().then(snap => {
+    const list = document.getElementById('adminMarketList');
+    if (snap.empty) {
+      list.innerHTML = '<p class="text-center text-gray-400 py-8 font-cc">暂无商品</p>';
+      return;
+    }
+    snap.forEach(doc => {
+      const item = doc.data();
+      list.innerHTML += `
+        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+          <span class="text-3xl">${item.emoji || '📦'}</span>
+          <div class="flex-1">
+            <span class="font-bold font-cc">${item.name}</span>
+            <span class="ml-2 text-purple-500 font-cc">${item.price} 💰</span>
+            <div class="text-sm text-gray-500 font-cc">卖家：${item.sellerName}</div>
+            ${item.highestBid ? `<div class="text-sm text-pink-500 font-cc">最高出价：${item.highestBid} (${item.highestBidder})</div>` : ''}
+            <div class="text-xs text-gray-400 font-cc">状态：${item.status}</div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <select onchange="changeMarketStatus('${doc.id}', this.value)" class="px-2 py-1 border rounded text-sm">
+              <option value="selling" ${item.status === 'selling' ? 'selected' : ''}>上架中</option>
+              <option value="inactive" ${item.status === 'inactive' ? 'selected' : ''}>下架</option>
+              <option value="sold">已售出</option>
+            </select>
+            <button onclick="delMarketItem('${doc.id}')" class="bg-red-100 text-red-600 px-3 py-1 rounded text-sm font-cc">删除</button>
+          </div>
+        </div>
+      `;
+    });
+  });
+}
+
+async function changeMarketStatus(id, status) {
+  await db.collection('marketplace').doc(id).update({ status });
+  toast('状态已更新');
+  loadAdminMarket();
+}
+
+async function delMarketItem(id) {
+  if (!confirm('确定删除此商品？')) return;
+  await db.collection('marketplace').doc(id).delete();
+  toast('已删除');
+  loadAdminMarket();
 }
 
 function loadAdminWheel() {
