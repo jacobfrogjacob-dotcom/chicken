@@ -39,6 +39,25 @@
       0% { transform: scale(0.5); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
+    .card-flip {
+      animation: cardFlip 0.8s ease-out;
+    }
+    @keyframes cardFlip {
+      0% { transform: rotateY(180deg) scale(0.5); opacity: 0; }
+      50% { transform: rotateY(90deg) scale(1.1); }
+      100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+    }
+    .card-glow-gold { box-shadow: 0 0 30px #FFD700, 0 0 60px #FFA500; }
+    .card-glow-red { box-shadow: 0 0 30px #FF4444, 0 0 60px #FF0000; }
+    .card-glow-pink { box-shadow: 0 0 20px #FF69B4, 0 0 40px #FF1493; }
+    .card-glow-gray { box-shadow: 0 0 10px #888; }
+    .mini-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .mini-card:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50">
@@ -258,13 +277,73 @@
         </button>
       </div>
 
-      <div id="wheelResult" class="hide mt-6 p-6 bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl text-center animate-bounce">
-        <p class="font-cc text-2xl mb-2">🎉 恭喜获得</p>
-        <p id="wheelPrize" class="font-bold text-4xl text-purple-600"></p>
+      <div id="wheelResult" class="hide mt-6">
+        <div class="relative p-6 bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 rounded-3xl text-center shadow-2xl border-4 border-yellow-300">
+          <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl animate-bounce">🎉</div>
+          <p class="font-cc text-2xl mt-2 text-gray-700">恭喜获得</p>
+          <p id="wheelPrize" class="font-bold text-4xl mt-2 bg-gradient-to-r from-yellow-500 via-pink-500 to-purple-500 text-transparent bg-clip-text"></p>
+          <p id="wheelPrizeSub" class="font-cc text-lg mt-2 text-gray-600"></p>
+          <button onclick="closeWheelResult()" class="mt-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-8 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+            太棒了！
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </main>
+
+<!-- 卡牌结果弹窗 -->
+<div id="cardResultModal" class="hide fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+  <div class="relative max-w-sm w-full">
+    <div id="cardReveal" class="relative" style="perspective: 1000px;">
+      <div id="cardFront" class="bg-gradient-to-br from-yellow-400 via-pink-400 to-purple-500 rounded-2xl p-6 shadow-2xl transform transition-all duration-700" style="transform-style: preserve-3d;">
+        <div class="text-center">
+          <div id="cardQualityBadge" class="inline-block px-4 py-1 rounded-full text-white font-bold mb-2">传奇</div>
+          <div id="cardRevealEmoji" class="text-8xl my-4 drop-shadow-lg">🐤</div>
+          <h3 id="cardRevealName" class="text-2xl font-bold text-white font-cc drop-shadow"></h3>
+          <div id="cardRevealStats" class="mt-4 flex justify-center gap-6 text-white">
+            <div><span class="text-2xl">⚔️</span><br><span id="cardRevealATK" class="font-bold">0</span></div>
+            <div><span class="text-2xl">🛡️</span><br><span id="cardRevealDEF" class="font-bold">0</span></div>
+            <div><span class="text-2xl">❤️</span><br><span id="cardRevealHP" class="font-bold">0</span></div>
+          </div>
+          <p id="cardRevealSerial" class="mt-2 text-white/60 text-sm font-cc">#000000</p>
+        </div>
+      </div>
+    </div>
+    <button onclick="closeCardResult()" class="mt-4 w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white py-3 rounded-xl font-cc text-xl shadow-lg hover:scale-105 transition-all">
+      收下卡牌
+    </button>
+  </div>
+</div>
+
+<!-- 卡牌背包弹窗 -->
+<div id="cardBagModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+    <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 flex justify-between items-center">
+      <h3 class="text-white font-bold text-2xl font-cc">🎴 我的卡牌</h3>
+      <button onclick="closeCardBag()" class="text-white text-2xl hover:scale-110 transition-all">✕</button>
+    </div>
+    <div class="flex border-b">
+      <button onclick="cardBagTab('all')" id="cardBagTabAll" class="flex-1 px-4 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500">全部</button>
+      <button onclick="cardBagTab('gold')" id="cardBagTabGold" class="flex-1 px-4 py-3 font-cc text-gray-500">金</button>
+      <button onclick="cardBagTab('red')" id="cardBagTabRed" class="flex-1 px-4 py-3 font-cc text-gray-500">红</button>
+      <button onclick="cardBagTab('pink')" id="cardBagTabPink" class="flex-1 px-4 py-3 font-cc text-gray-500">粉</button>
+      <button onclick="cardBagTab('gray')" id="cardBagTabGray" class="flex-1 px-4 py-3 font-cc text-gray-500">灰</button>
+    </div>
+    <div id="cardBagList" class="flex-1 overflow-y-auto p-4 grid grid-cols-2 md:grid-cols-3 gap-3"></div>
+  </div>
+</div>
+
+<!-- 卡牌詳情彈窗 -->
+<div id="cardDetailModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-sm w-full overflow-hidden">
+    <div id="cardDetailContent" class="p-6"></div>
+    <div class="p-4 border-t flex gap-2">
+      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-white py-2 rounded-xl font-cc">上架出售</button>
+      <button onclick="closeCardDetail()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">关闭</button>
+    </div>
+  </div>
+</div>
 
 <!-- 编辑资料弹窗 -->
 <div id="profileModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -982,16 +1061,19 @@ async function spinWheel() {
 async function showWheelResult(prize) {
   const resultBox = document.getElementById('wheelResult');
   const prizeText = document.getElementById('wheelPrize');
+  const prizeSub = document.getElementById('wheelPrizeSub');
   resultBox.classList.remove('hide');
   resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
   
   let displayLabel = prize.label;
+  let subText = '';
   if (prize.type === 'coins' && prize.value >= 1000) {
     displayLabel = `${prize.value / 1000}K 💰`;
   }
   prizeText.textContent = displayLabel;
   
   if (prize.type === 'coins' && prize.value > 0) {
+    subText = `+${prize.value} 金币已发放到你的账户`;
     await db.collection('users').doc(me.uid).update({
       coins: firebase.firestore.FieldValue.increment(prize.value)
     });
@@ -999,19 +1081,253 @@ async function showWheelResult(prize) {
     document.getElementById('userCoins').textContent = meData.coins;
     updateWheelCoins();
   } else if (prize.type === 'title') {
+    subText = `恭喜获得新称号！`;
     await db.collection('users').doc(me.uid).update({ title: prize.value });
     meData.title = prize.value;
     document.getElementById('userTitle').textContent = prize.value;
   } else if (prize.type === 'item') {
+    subText = `已放入你的背包`;
     const inv = meData.inventory || [];
     inv.push({ name: prize.value, time: Date.now() });
     await db.collection('users').doc(me.uid).update({ inventory: inv });
     meData.inventory = inv;
   }
+  prizeSub.textContent = subText;
+}
+
+function closeWheelResult() {
+  document.getElementById('wheelResult').classList.add('hide');
+}
+
+// ============ 卡牌系统 ============
+const CARD_QUALITIES = {
+  gold: { name: '金', weight: 1, color: 'from-yellow-400 via-amber-500 to-yellow-600', glow: 'card-glow-gold', bg: 'bg-gradient-to-br from-yellow-400 via-amber-300 to-yellow-500' },
+  red: { name: '红', weight: 5, color: 'from-red-400 via-rose-500 to-red-600', glow: 'card-glow-red', bg: 'bg-gradient-to-br from-red-400 via-rose-400 to-red-500' },
+  pink: { name: '粉', weight: 30, color: 'from-pink-300 via-pink-400 to-pink-500', glow: 'card-glow-pink', bg: 'bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500' },
+  gray: { name: '灰', weight: 64, color: 'from-gray-300 via-gray-400 to-gray-500', glow: 'card-glow-gray', bg: 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500' }
+};
+
+const CARD_NAMES = {
+  gold: ['🐔 黄金鸡王', '🐓 神圣凤凰鸡', '🦃 传说巨鸡', '🐣 宇宙创始鸡', '🦅 神圣金翅鸡', '🐔 至尊鸡皇', '🦃 无上神鸡', '🐤 万鸡之主'],
+  red: ['🐔 烈焰雄鸡', '🐓 狂暴战鸡', '🔥 火焰鸡神', '🦃 血红巨鸡', '🌋 熔岩战斗鸡', '🐔 嗜血狂鸡', '🦅 烈焰金翅鸡', '🐣 毁灭红鸡'],
+  pink: ['🐔 甜蜜小鸡', '🐓 萌萌粉鸡', '🌸 花瓣天使鸡', '🦋 蝴蝶仙子鸡', '🐰 软萌兔鸡', '🌈 彩虹乖乖鸡', '🐔 可爱棉花糖鸡', '🎀 粉红公主鸡'],
+  gray: ['🐔 普通小鸡', '🐣 刚出生鸡', '🥚 蛋壳鸡', '🐤 菜鸟新手鸡', '🍳 荷包蛋鸡', '🐔 野生土鸡', '🦃 普通小火鸡', '🐓 家养母鸡']
+};
+
+let selectedCardForSale = null;
+
+async function drawCard(source = 'shop') {
+  if (!me) { toast('请先登录'); return; }
   
-  setTimeout(() => {
-    resultBox.classList.add('hide');
-  }, 4000);
+  const quality = drawCardQuality(source);
+  const names = CARD_NAMES[quality];
+  const name = names[Math.floor(Math.random() * names.length)];
+  
+  const stats = generateCardStats(quality);
+  
+  const cardRef = await db.collection('cards').add({
+    ownerId: me.uid,
+    ownerName: meData.displayName,
+    quality,
+    name,
+    ...stats,
+    time: Date.now()
+  });
+  
+  return { id: cardRef.id, quality, name, ...stats };
+}
+
+function drawCardQuality(source) {
+  const rand = Math.random() * 100;
+  
+  if (source === 'pack') {
+    if (rand < 1) return 'gold';
+    if (rand < 6) return 'red';
+    if (rand < 35) return 'pink';
+    return 'gray';
+  } else {
+    if (rand < 35) return 'pink';
+    return 'gray';
+  }
+}
+
+function generateCardStats(quality) {
+  const base = { gold: 100, red: 70, pink: 40, gray: 20 }[quality];
+  const variance = { gold: 50, red: 30, pink: 20, gray: 10 }[quality];
+  
+  return {
+    atk: base + Math.floor(Math.random() * variance),
+    def: base + Math.floor(Math.random() * variance),
+    hp: base * 2 + Math.floor(Math.random() * variance * 2)
+  };
+}
+
+function showCardResult(card) {
+  const modal = document.getElementById('cardResultModal');
+  const front = document.getElementById('cardFront');
+  const badge = document.getElementById('cardQualityBadge');
+  const emoji = document.getElementById('cardRevealEmoji');
+  const cardName = document.getElementById('cardRevealName');
+  const atk = document.getElementById('cardRevealATK');
+  const def = document.getElementById('cardRevealDEF');
+  const hp = document.getElementById('cardRevealHP');
+  const serial = document.getElementById('cardRevealSerial');
+  
+  const q = CARD_QUALITIES[card.quality];
+  
+  front.className = `rounded-2xl p-6 shadow-2xl transform transition-all duration-700 card-flip ${q.glow}`;
+  front.style.background = `linear-gradient(135deg, ${q.color.split(' ')[0].replace('from-', '')} 0%, ${q.color.split(' ')[1].replace('via-', '')} 50%, ${q.color.split(' ')[2].replace('to-', '')} 100%)`;
+  front.style.background = `linear-gradient(135deg, ${getQualityGradient(card.quality)})`;
+  
+  badge.textContent = q.name + '品质';
+  badge.className = `inline-block px-4 py-1 rounded-full text-white font-bold mb-2 ${q.glow}`;
+  
+  const emojiMatch = card.name.match(/🐔|🐓|🐣|🐤|🦃|🐰|🦅|🥚|🍳|🔥|🌋|🦋|🌸|🌈|🎀/);
+  emoji.textContent = emojiMatch ? emojiMatch[0] : '🐤';
+  
+  cardName.textContent = card.name.replace(/^[🐔🐓🐣🐤🦃🐰🦅🥚🍳🔥🌋🦋🌸🌈🎀]\s*/, '');
+  atk.textContent = card.atk;
+  def.textContent = card.def;
+  hp.textContent = card.hp;
+  serial.textContent = `#${card.id.slice(-6).toUpperCase()}`;
+  
+  modal.classList.remove('hide');
+}
+
+function getQualityGradient(quality) {
+  const gradients = {
+    gold: '#FFD700, #FFA500, #FFD700',
+    red: '#FF4444, #FF0000, #FF4444',
+    pink: '#FF69B4, #FF1493, #FF69B4',
+    gray: '#A0A0A0, #808080, #A0A0A0'
+  };
+  return gradients[quality];
+}
+
+function closeCardResult() {
+  document.getElementById('cardResultModal').classList.add('hide');
+}
+
+async function openCardBag() {
+  const modal = document.getElementById('cardBagModal');
+  modal.classList.remove('hide');
+  cardBagTab('all');
+}
+
+function closeCardBag() {
+  document.getElementById('cardBagModal').classList.add('hide');
+}
+
+function cardBagTab(filter) {
+  ['Gold', 'Red', 'Pink', 'Gray', 'All'].forEach(q => {
+    const tab = document.getElementById('cardBagTab' + q);
+    if (tab) {
+      tab.classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+      tab.classList.add('text-gray-500');
+    }
+  });
+  const activeTab = document.getElementById('cardBagTab' + filter.charAt(0).toUpperCase() + filter.slice(1));
+  if (activeTab) {
+    activeTab.classList.remove('text-gray-500');
+    activeTab.classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+  }
+  
+  loadCardBag(filter);
+}
+
+async function loadCardBag(filter) {
+  const box = document.getElementById('cardBagList');
+  let query = db.collection('cards').where('ownerId', '==', me?.uid);
+  
+  const snap = await query.get();
+  let cards = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  
+  if (filter !== 'all') {
+    cards = cards.filter(c => c.quality === filter);
+  }
+  
+  if (cards.length === 0) {
+    box.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8 font-cc">还没有卡牌，去抽卡吧！</p>';
+    return;
+  }
+  
+  cards.sort((a, b) => {
+    const order = { gold: 0, red: 1, pink: 2, gray: 3 };
+    return order[a.quality] - order[b.quality];
+  });
+  
+  box.innerHTML = cards.map(card => {
+    const q = CARD_QUALITIES[card.quality];
+    const emojiMatch = card.name.match(/🐔|🐓|🐣|🐤|🦃|🐰|🦅|🥚|🍳|🔥|🌋|🦋|🌸|🌈|🎀/);
+    return `
+      <div class="mini-card p-3 rounded-xl ${q.bg} text-white text-center" onclick="showCardDetail('${card.id}')">
+        <div class="text-4xl mb-1">${emojiMatch ? emojiMatch[0] : '🐤'}</div>
+        <div class="text-sm font-bold truncate">${card.name.replace(/^[🐔🐓🐣🐤🦃🐰🦅🥚🍳🔥🌋🦋🌸🌈🎀]\s*/, '')}</div>
+        <div class="flex justify-center gap-2 text-xs mt-1">
+          <span>⚔️${card.atk}</span>
+          <span>🛡️${card.def}</span>
+          <span>❤️${card.hp}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function showCardDetail(cardId) {
+  const snap = await db.collection('cards').doc(cardId).get();
+  if (!snap.exists) return;
+  const card = { id: snap.id, ...snap.data() };
+  const q = CARD_QUALITIES[card.quality];
+  
+  selectedCardForSale = card;
+  
+  const content = document.getElementById('cardDetailContent');
+  content.innerHTML = `
+    <div class="text-center p-6 rounded-2xl ${q.bg} text-white">
+      <div class="text-6xl mb-2">🐤</div>
+      <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-sm font-bold">${q.name}品质</span>
+      <h3 class="text-2xl font-bold mt-2">${card.name}</h3>
+      <div class="flex justify-center gap-6 mt-4">
+        <div><span class="text-3xl">⚔️</span><br><span class="font-bold text-xl">${card.atk}</span></div>
+        <div><span class="text-3xl">🛡️</span><br><span class="font-bold text-xl">${card.def}</span></div>
+        <div><span class="text-3xl">❤️</span><br><span class="font-bold text-xl">${card.hp}</span></div>
+      </div>
+      <p class="mt-2 text-sm opacity-70">编号：#${card.id.slice(-6).toUpperCase()}</p>
+    </div>
+    <p class="text-center text-gray-500 text-sm mt-4 font-cc">持有者：${card.ownerName}</p>
+  `;
+  
+  document.getElementById('cardDetailModal').classList.remove('hide');
+}
+
+function closeCardDetail() {
+  document.getElementById('cardDetailModal').classList.add('hide');
+  selectedCardForSale = null;
+}
+
+async function sellCard() {
+  if (!selectedCardForSale) return;
+  const price = prompt('请输入出售价格（金币）：', '100');
+  if (!price || isNaN(parseInt(price))) return;
+  
+  await db.collection('marketplace').add({
+    name: selectedCardForSale.name,
+    emoji: '🎴',
+    price: parseInt(price),
+    type: 'card',
+    cardId: selectedCardForSale.id,
+    sellerId: me.uid,
+    sellerName: meData.displayName,
+    quality: selectedCardForSale.quality,
+    atk: selectedCardForSale.atk,
+    def: selectedCardForSale.def,
+    hp: selectedCardForSale.hp,
+    time: Date.now(),
+    status: 'selling'
+  });
+  
+  toast('已上架到玩家市集！');
+  closeCardDetail();
 }
 
 // ============ 商店系统 ============
@@ -1120,17 +1436,68 @@ function loadMyApplys() {
 }
 
 function loadOfficialShop() {
+  const box = document.getElementById('shopOfficial');
+  
+  box.innerHTML = `
+    <!-- 卡牌区 -->
+    <div class="mb-6">
+      <h3 class="font-bold text-xl font-cc mb-4 flex items-center gap-2">
+        <span class="text-2xl">🎴</span> 鸡哥卡牌
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 单抽 -->
+        <div class="p-4 bg-gradient-to-br from-pink-100 to-purple-100 rounded-xl">
+          <div class="text-center">
+            <div class="text-5xl mb-2">🎴</div>
+            <h4 class="font-bold text-lg font-cc">单抽卡牌</h4>
+            <p class="text-sm text-gray-500 font-cc mb-2">有机会获得粉/灰色品质卡牌</p>
+            <p class="text-2xl font-bold text-pink-500 font-cc">50 💰</p>
+            <div class="flex justify-center gap-2 mt-2">
+              <button onclick="drawCardFromShop('single')" class="bg-gradient-to-r from-pink-400 to-purple-400 text-white px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+                🎲 抽卡
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- 十连 -->
+        <div class="p-4 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl">
+          <div class="text-center">
+            <div class="text-5xl mb-2">🎁</div>
+            <h4 class="font-bold text-lg font-cc">鸡哥礼盒</h4>
+            <p class="text-sm text-gray-500 font-cc mb-2">保底1张粉色以上卡牌！</p>
+            <p class="text-2xl font-bold text-orange-500 font-cc">400 💰</p>
+            <div class="flex justify-center gap-2 mt-2">
+              <button onclick="drawCardFromShop('ten')" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+                🎁 十连抽
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <button onclick="openCardBag()" class="bg-gray-100 px-6 py-2 rounded-full font-cc text-lg hover:bg-gray-200 transition-all">
+          🎴 我的卡牌背包 (${meData.cardCount || 0})
+        </button>
+      </div>
+    </div>
+
+    <!-- 商品区 -->
+    <h3 class="font-bold text-xl font-cc mb-4 flex items-center gap-2">
+      <span class="text-2xl">🛒</span> 其他商品
+    </h3>
+    <div id="shopItemsList"></div>
+  `;
+  
   db.collection('shopItems').where('status', '==', 'active').get().then(snap => {
-    const box = document.getElementById('shopOfficial');
+    const listBox = document.getElementById('shopItemsList');
     if (snap.empty) {
-      box.innerHTML = '<p class="text-center text-gray-500 py-8 font-cc text-lg">官方商店暂无商品</p>';
+      listBox.innerHTML = '<p class="text-center text-gray-400 py-4 font-cc">暂无其他商品</p>';
       return;
     }
-    box.innerHTML = '';
     snap.forEach(doc => {
       const item = doc.data();
-      box.innerHTML += `
-        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
+      listBox.innerHTML += `
+        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl mb-3">
           <div class="text-4xl">${item.emoji || '🎁'}</div>
           <div class="flex-1">
             <h3 class="font-bold text-lg font-cc">${item.name}</h3>
@@ -1144,6 +1511,87 @@ function loadOfficialShop() {
       `;
     });
   });
+  
+  loadMyCardCount();
+}
+
+async function loadMyCardCount() {
+  const snap = await db.collection('cards').where('ownerId', '==', me?.uid).get();
+  meData.cardCount = snap.size;
+}
+
+async function drawCardFromShop(type) {
+  const cost = type === 'single' ? 50 : 400;
+  const count = type === 'single' ? 1 : 10;
+  
+  if ((meData.coins || 0) < cost) {
+    toast('金币不足！');
+    return;
+  }
+  
+  if (!confirm(`确定花费 ${cost} 金币进行${type === 'single' ? '单抽' : '十连抽'}？`)) return;
+  
+  await db.collection('users').doc(me.uid).update({
+    coins: firebase.firestore.FieldValue.increment(-cost)
+  });
+  meData.coins -= cost;
+  document.getElementById('userCoins').textContent = meData.coins;
+  updateWheelCoins();
+  
+  if (type === 'single') {
+    const card = await drawCard('shop');
+    showCardResult(card);
+  } else {
+    const cards = [];
+    for (let i = 0; i < count; i++) {
+      const card = await drawCard('pack');
+      cards.push(card);
+    }
+    showTenDrawResult(cards);
+  }
+}
+
+function showTenDrawResult(cards) {
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4';
+  modal.id = 'tenDrawModal';
+  
+  const pinkOrBetter = cards.filter(c => c.quality === 'pink' || c.quality === 'red' || c.quality === 'gold').length;
+  
+  modal.innerHTML = `
+    <div class="bg-white rounded-2xl max-w-md w-full max-h-[80vh] overflow-hidden">
+      <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 text-center">
+        <h3 class="text-white font-bold text-2xl font-cc">🎁 十连抽结果</h3>
+        <p class="text-white/80 font-cc">保底 ${pinkOrBetter >= 1 ? '✅ 已触发' : '❌ 未触发'}</p>
+      </div>
+      <div class="p-4 overflow-y-auto max-h-[60vh]">
+        <div class="grid grid-cols-5 gap-2">
+          ${cards.map((card, i) => {
+            const q = CARD_QUALITIES[card.quality];
+            return `
+              <div class="text-center p-2 rounded-lg ${q.bg} text-white cursor-pointer hover:scale-110 transition-all" onclick="showCardDetail('${card.id}')">
+                <div class="text-2xl">${card.name.match(/🐔|🐓|🐣|🐤|🦃|🐰|🦅|🥚|🍳|🔥|🌋|🦋|🌸|🌈|🎀/)?.[0] || '🐤'}</div>
+                <div class="text-xs font-bold">${q.name}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div class="mt-4 text-center">
+          <p class="font-cc text-gray-500">金:${cards.filter(c=>c.quality==='gold').length} 红:${cards.filter(c=>c.quality==='red').length} 粉:${cards.filter(c=>c.quality==='pink').length} 灰:${cards.filter(c=>c.quality==='gray').length}</p>
+        </div>
+      </div>
+      <div class="p-4 border-t">
+        <button onclick="closeTenDraw()" class="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white py-3 rounded-xl font-cc text-lg">收下所有卡牌</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+}
+
+function closeTenDraw() {
+  const modal = document.getElementById('tenDrawModal');
+  if (modal) modal.remove();
 }
 
 async function buyOfficialItem(itemId, price, name) {
@@ -1176,19 +1624,37 @@ function loadMarket() {
     snap.forEach(doc => {
       const item = doc.data();
       const isOwner = item.sellerId === me?.uid;
+      
+      let cardInfo = '';
+      if (item.type === 'card') {
+        const q = CARD_QUALITIES[item.quality] || {};
+        cardInfo = `
+          <div class="flex gap-2 text-xs">
+            <span class="px-2 py-0.5 rounded bg-white/50">⚔️${item.atk}</span>
+            <span class="px-2 py-0.5 rounded bg-white/50">🛡️${item.def}</span>
+            <span class="px-2 py-0.5 rounded bg-white/50">❤️${item.hp}</span>
+          </div>
+        `;
+      }
+      
       box.innerHTML += `
-        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl">
-          <div class="text-4xl">${item.emoji || '📦'}</div>
+        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl ${item.type === 'card' ? 'border-2 border-' + item.quality : ''}">
+          <div class="text-4xl">${item.type === 'card' ? '🎴' : (item.emoji || '📦')}</div>
           <div class="flex-1 min-w-0">
             <h3 class="font-bold text-lg font-cc truncate">${item.name}</h3>
             <p class="text-gray-500 text-sm font-cc">卖家：${item.sellerName}</p>
+            ${cardInfo}
             ${item.highestBid ? `<p class="text-purple-500 text-sm font-cc">当前最高出价：${item.highestBid} 💰</p>` : ''}
           </div>
           <div class="text-right flex-shrink-0">
             <p class="font-bold text-lg text-orange-500">${item.price} 💰</p>
             ${isOwner ? '<span class="text-sm text-gray-400">你的商品</span>' : `
-              <button onclick="bidItem('${doc.id}', ${item.price})" class="mt-2 bg-purple-500 text-white px-4 py-2 rounded-lg font-cc text-sm">出价</button>
-              <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}')" class="mt-1 bg-green-500 text-white px-4 py-2 rounded-lg font-cc text-sm">直接购买</button>
+              ${item.type === 'card' ? `
+                <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}', 'card', '${item.cardId}')" class="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg font-cc text-sm">直接购买</button>
+              ` : `
+                <button onclick="bidItem('${doc.id}', ${item.price})" class="mt-2 bg-purple-500 text-white px-4 py-2 rounded-lg font-cc text-sm">出价</button>
+                <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}')" class="mt-1 bg-green-500 text-white px-4 py-2 rounded-lg font-cc text-sm">直接购买</button>
+              `}
             `}
           </div>
         </div>
@@ -1218,7 +1684,7 @@ async function bidItem(itemId, currentPrice) {
   loadMarket();
 }
 
-async function buyNowItem(itemId, price, name, sellerId) {
+async function buyNowItem(itemId, price, name, sellerId, type, cardId) {
   if (sellerId === me?.uid) { toast('不能购买自己的商品'); return; }
   if ((meData.coins || 0) < price) {
     toast('金币不足！');
@@ -1232,6 +1698,14 @@ async function buyNowItem(itemId, price, name, sellerId) {
   await db.collection('users').doc(sellerId).update({
     coins: firebase.firestore.FieldValue.increment(price)
   });
+  
+  if (type === 'card' && cardId) {
+    await db.collection('cards').doc(cardId).update({
+      ownerId: me.uid,
+      ownerName: meData.displayName
+    });
+  }
+  
   await db.collection('marketplace').doc(itemId).update({
     status: 'sold',
     buyerId: me.uid,
