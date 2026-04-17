@@ -25,6 +25,20 @@
     .hide { display: none !important; }
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-thumb { background: #FFB800; border-radius: 4px; }
+    #wheelContainer {
+      overflow: hidden;
+    }
+    #wheelContainer > div {
+      position: absolute;
+      inset: 0;
+    }
+    #wheelResult {
+      animation: popIn 0.5s ease-out;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50">
@@ -206,29 +220,41 @@
   <!-- 抽奖页面 -->
   <div id="pageWheel" class="hide">
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden p-6">
-      <div class="bg-gradient-to-r from-purple-400 to-pink-400 p-4 rounded-2xl mb-6">
-        <h2 class="text-white font-bold text-2xl font-cc text-center">🎰 幸运轮盘</h2>
-      </div>
-      
       <div class="text-center mb-6">
-        <p class="font-cc text-xl">💰 你的金币：<strong id="wheelCoins">0</strong></p>
-        <p class="font-cc text-gray-500">每次抽奖需 <strong>100</strong> 金币</p>
+        <h2 class="text-3xl font-bold font-cc bg-gradient-to-r from-purple-500 to-pink-500 text-transparent bg-clip-text">🎰 幸运轮盘</h2>
+        <p class="font-cc text-xl mt-2">💰 你的金币：<strong id="wheelCoins">0</strong></p>
+        <p class="font-cc text-gray-500">每次抽奖需 <strong class="text-purple-500">100</strong> 金币</p>
       </div>
 
       <div class="flex justify-center mb-8">
         <div class="relative">
-          <div id="wheelPointer" class="absolute -top-4 left-1/2 -translate-x-1/2 text-4xl z-10">🔻</div>
-          <canvas id="wheelCanvas" width="300" height="300" class="rounded-full border-8 border-yellow-400"></canvas>
+          <div id="wheelPointer" class="absolute -top-6 left-1/2 -translate-x-1/2 text-5xl z-20 drop-shadow-lg" style="filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));">🔻</div>
+          <div id="wheelContainer" class="relative w-72 h-72 rounded-full shadow-2xl" style="background: conic-gradient(#FF6B6B 0deg 45deg, #4ECDC4 45deg 90deg, #45B7D1 90deg 135deg, #96CEB4 135deg 180deg, #FFEAA7 180deg 225deg, #DDA0DD 225deg 270deg, #98D8C8 270deg 315deg, #F7DC6F 315deg 360deg); border: 8px solid #FFB800;">
+            <div id="wheelLabels" class="absolute inset-0">
+              <div class="absolute inset-0 flex flex-wrap content-start justify-center" style="transform: rotate(0deg);">
+                <div class="absolute top-2 left-1/2 -translate-x-1/2 -translate-y-1/2" style="transform: rotate(22.5deg);">
+                  <span class="text-xs font-bold text-white drop-shadow">50💰</span>
+                </div>
+              </div>
+            </div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full shadow-lg flex items-center justify-center text-3xl border-4 border-white">
+                🎯
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="text-center">
-        <button onclick="spinWheel()" id="btnSpin" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 px-12 rounded-2xl font-cc text-2xl disabled:opacity-50">开始抽奖！</button>
+        <button onclick="spinWheel()" id="btnSpin" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-white font-bold py-4 px-12 rounded-full font-cc text-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:transform-none disabled:hover:scale-100">
+          🎲 开始抽奖！
+        </button>
       </div>
 
-      <div id="wheelResult" class="hide mt-6 p-6 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-2xl text-center">
-        <p class="font-cc text-3xl mb-2">🎉 恭喜获得</p>
-        <p id="wheelPrize" class="font-bold text-4xl"></p>
+      <div id="wheelResult" class="hide mt-6 p-6 bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl text-center animate-bounce">
+        <p class="font-cc text-2xl mb-2">🎉 恭喜获得</p>
+        <p id="wheelPrize" class="font-bold text-4xl text-purple-600"></p>
       </div>
     </div>
   </div>
@@ -840,54 +866,51 @@ function adminTab(tab) {
 
 // ============ 轮盘系统 ============
 const WHEEL_ITEMS = [
-  { label: '50 金币', weight: 30, type: 'coins', value: 50 },
-  { label: '100 金币', weight: 25, type: 'coins', value: 100 },
-  { label: '200 金币', weight: 15, type: 'coins', value: 200 },
+  { label: '50💰', weight: 30, type: 'coins', value: 50 },
+  { label: '100💰', weight: 25, type: 'coins', value: 100 },
+  { label: '200💰', weight: 15, type: 'coins', value: 200 },
   { label: '谢谢参与', weight: 15, type: 'none', value: 0 },
   { label: '稀有称号', weight: 5, type: 'title', value: '幸运星' },
-  { label: '神秘礼物', weight: 5, type: 'item', value: '神秘礼盒' },
-  { label: '500 金币', weight: 4, type: 'coins', value: 500 },
-  { label: '终极大奖', weight: 1, type: 'coins', value: 2000 }
+  { label: '神秘礼盒', weight: 5, type: 'item', value: '神秘礼盒' },
+  { label: '500💰', weight: 4, type: 'coins', value: 500 },
+  { label: '2000💰', weight: 1, type: 'coins', value: 2000 }
 ];
 
+let currentRotation = 0;
+
 function initWheel() {
-  const canvas = document.getElementById('wheelCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  const container = document.getElementById('wheelContainer');
+  if (!container) return;
+  
   const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'];
-  const sliceAngle = 2 * Math.PI / WHEEL_ITEMS.length;
+  const sliceAngle = 360 / WHEEL_ITEMS.length;
   
-  ctx.clearRect(0, 0, 300, 300);
-  WHEEL_ITEMS.forEach((item, i) => {
-    ctx.beginPath();
-    ctx.moveTo(150, 150);
-    ctx.arc(150, 150, 140, i * sliceAngle, (i + 1) * sliceAngle);
-    ctx.fillStyle = colors[i % colors.length];
-    ctx.fill();
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    ctx.save();
-    ctx.translate(150, 150);
-    ctx.rotate(i * sliceAngle + sliceAngle / 2);
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#333';
-    ctx.font = 'bold 12px "Noto Sans SC"';
-    ctx.fillText(item.label, 130, 5);
-    ctx.restore();
-  });
+  container.style.background = `conic-gradient(${WHEEL_ITEMS.map((item, i) => 
+    `${colors[i]} ${i * sliceAngle}deg ${(i + 1) * sliceAngle}deg`
+  ).join(', ')})`;
   
-  ctx.beginPath();
-  ctx.arc(150, 150, 20, 0, 2 * Math.PI);
-  ctx.fillStyle = '#FFB800';
-  ctx.fill();
+  container.innerHTML = WHEEL_ITEMS.map((item, i) => `
+    <div class="absolute inset-0 flex items-center justify-center" style="transform: rotate(${i * sliceAngle + sliceAngle / 2}deg);">
+      <div class="absolute top-4 text-white text-sm font-bold drop-shadow-lg" style="transform: rotate(-${i * sliceAngle + sliceAngle / 2}deg);">
+        ${item.label}
+      </div>
+    </div>
+  `).join('') + `
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="w-14 h-14 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full shadow-lg flex items-center justify-center text-2xl border-4 border-white z-10">
+        🎯
+      </div>
+    </div>
+  `;
+  
+  container.style.transform = 'rotate(0deg)';
+  container.style.transition = 'none';
 }
 
 function updateWheelCoins() {
   document.getElementById('wheelCoins').textContent = meData.coins || 0;
   const btn = document.getElementById('btnSpin');
-  btn.disabled = (meData.coins || 0) < SPIN_COST;
+  if (btn) btn.disabled = (meData.coins || 0) < SPIN_COST;
 }
 
 function getRandomPrize() {
@@ -907,9 +930,15 @@ async function spinWheel() {
     return;
   }
   
+  if (!me) {
+    toast('请先登录！');
+    return;
+  }
+  
   isSpinning = true;
   const btn = document.getElementById('btnSpin');
   btn.disabled = true;
+  btn.textContent = '🎡 抽奖中...';
   
   await db.collection('users').doc(me.uid).update({
     coins: firebase.firestore.FieldValue.increment(-SPIN_COST)
@@ -919,66 +948,37 @@ async function spinWheel() {
   document.getElementById('userCoins').textContent = meData.coins;
   
   const prize = getRandomPrize();
-  const canvas = document.getElementById('wheelCanvas');
-  const ctx = canvas.getContext('2d');
-  const sliceAngle = 2 * Math.PI / WHEEL_ITEMS.length;
+  const sliceAngle = 360 / WHEEL_ITEMS.length;
   const prizeIndex = WHEEL_ITEMS.indexOf(prize);
-  const targetAngle = -prizeIndex * sliceAngle - sliceAngle / 2 - Math.PI / 2;
+  const targetAngle = prizeIndex * sliceAngle + sliceAngle / 2;
   
-  const totalRotation = 5 * 2 * Math.PI + targetAngle;
-  const duration = 4000;
-  const startTime = Date.now();
+  const container = document.getElementById('wheelContainer');
+  const extraSpins = 5 * 360;
+  const newRotation = currentRotation + extraSpins + targetAngle;
   
-  function animate() {
-    const elapsed = Date.now() - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 4);
-    const currentAngle = totalRotation * eased;
-    
-    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'];
-    ctx.clearRect(0, 0, 300, 300);
-    
-    WHEEL_ITEMS.forEach((item, i) => {
-      ctx.save();
-      ctx.translate(150, 150);
-      ctx.rotate(currentAngle + i * sliceAngle);
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, 140, 0, sliceAngle);
-      ctx.fillStyle = colors[i % colors.length];
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-      ctx.textAlign = 'right';
-      ctx.fillStyle = '#333';
-      ctx.font = 'bold 12px "Noto Sans SC"';
-      ctx.fillText(item.label, 130, 5);
-      ctx.restore();
-    });
-    
-    ctx.beginPath();
-    ctx.arc(150, 150, 20, 0, 2 * Math.PI);
-    ctx.fillStyle = '#FFB800';
-    ctx.fill();
-    
-    if (progress < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      isSpinning = false;
-      btn.disabled = (meData.coins || 0) < SPIN_COST;
-      showWheelResult(prize);
-    }
-  }
+  container.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+  container.style.transform = `rotate(${newRotation}deg)`;
+  currentRotation = newRotation;
   
-  animate();
+  setTimeout(() => {
+    isSpinning = false;
+    btn.textContent = '🎲 开始抽奖！';
+    btn.disabled = (meData.coins || 0) < SPIN_COST;
+    showWheelResult(prize);
+  }, 4100);
 }
 
 async function showWheelResult(prize) {
   const resultBox = document.getElementById('wheelResult');
   const prizeText = document.getElementById('wheelPrize');
   resultBox.classList.remove('hide');
-  prizeText.textContent = prize.label;
+  resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  
+  let displayLabel = prize.label;
+  if (prize.type === 'coins' && prize.value >= 1000) {
+    displayLabel = `${prize.value / 1000}K 💰`;
+  }
+  prizeText.textContent = displayLabel;
   
   if (prize.type === 'coins' && prize.value > 0) {
     await db.collection('users').doc(me.uid).update({
@@ -987,21 +987,20 @@ async function showWheelResult(prize) {
     meData.coins += prize.value;
     document.getElementById('userCoins').textContent = meData.coins;
     updateWheelCoins();
-    toast(`获得 ${prize.value} 金币！`);
   } else if (prize.type === 'title') {
     await db.collection('users').doc(me.uid).update({ title: prize.value });
     meData.title = prize.value;
     document.getElementById('userTitle').textContent = prize.value;
-    toast(`获得称号：${prize.value}`);
   } else if (prize.type === 'item') {
     const inv = meData.inventory || [];
     inv.push({ name: prize.value, time: Date.now() });
     await db.collection('users').doc(me.uid).update({ inventory: inv });
     meData.inventory = inv;
-    toast(`获得物品：${prize.value}`);
-  } else {
-    toast('谢谢参与，再接再厉！');
   }
+  
+  setTimeout(() => {
+    resultBox.classList.add('hide');
+  }, 4000);
 }
 
 // ============ 商店系统 ============
