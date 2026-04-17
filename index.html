@@ -20,28 +20,19 @@
   </script>
   <style>
     body { font-family: 'Ma Shan Zheng', 'Noto Sans SC', cursive; }
-    .font-cc { font-family: 'Ma Shan Zheng', cursive; }
+    .font-cc { font-family: 'Ma Shan Zheng', cursive; font-size: 1.2em !important; }
     input, textarea { font-family: 'Noto Sans SC', sans-serif !important; }
     .hide { display: none !important; }
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-thumb { background: #FFB800; border-radius: 4px; }
-    #wheelContainer {
-      overflow: hidden;
-    }
-    #wheelContainer > div {
-      position: absolute;
-      inset: 0;
-    }
-    #wheelResult {
-      animation: popIn 0.5s ease-out;
-    }
+    #wheelContainer { overflow: hidden; }
+    #wheelContainer > div { position: absolute; inset: 0; }
+    #wheelResult { animation: popIn 0.5s ease-out; }
     @keyframes popIn {
       0% { transform: scale(0.5); opacity: 0; }
       100% { transform: scale(1); opacity: 1; }
     }
-    .card-flip {
-      animation: cardFlip 0.8s ease-out;
-    }
+    .card-flip { animation: cardFlip 0.8s ease-out; }
     @keyframes cardFlip {
       0% { transform: rotateY(180deg) scale(0.5); opacity: 0; }
       50% { transform: rotateY(90deg) scale(1.1); }
@@ -51,13 +42,13 @@
     .card-glow-red { box-shadow: 0 0 30px #FF4444, 0 0 60px #FF0000; }
     .card-glow-pink { box-shadow: 0 0 20px #FF69B4, 0 0 40px #FF1493; }
     .card-glow-gray { box-shadow: 0 0 10px #888; }
-    .mini-card {
-      transition: transform 0.2s, box-shadow 0.2s;
-      cursor: pointer;
-    }
-    .mini-card:hover {
-      transform: scale(1.05);
-    }
+    .mini-card { transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+    .mini-card:hover { transform: scale(1.08); }
+    .big-card-img { width: 80px !important; height: 80px !important; }
+    .card-result-img { width: 150px !important; height: 150px !important; }
+    .card-modal-content { max-height: 70vh; overflow-y: auto; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
+    .card-rank-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; }
   </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50">
@@ -316,12 +307,69 @@
 </div>
 
 <!-- 卡牌背包弹窗 -->
+<!-- 卡牌背包弹窗 -->
 <div id="cardBagModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+  <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
     <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 flex justify-between items-center">
-      <h3 class="text-white font-bold text-2xl font-cc">🎴 我的卡牌</h3>
+      <h3 class="text-white font-bold text-2xl font-cc">🎴 我的卡牌背包</h3>
       <button onclick="closeCardBag()" class="text-white text-2xl hover:scale-110 transition-all">✕</button>
     </div>
+    <div class="flex border-b flex-wrap">
+      <button onclick="cardBagTab('all')" id="cardBagTabAll" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">全部</button>
+      <button onclick="cardBagTab('gold')" id="cardBagTabGold" class="px-6 py-3 font-cc text-gray-500 text-lg">👑 金(8)</button>
+      <button onclick="cardBagTab('red')" id="cardBagTabRed" class="px-6 py-3 font-cc text-gray-500 text-lg">🔥 红(8)</button>
+      <button onclick="cardBagTab('pink')" id="cardBagTabPink" class="px-6 py-3 font-cc text-gray-500 text-lg">🌸 粉(8)</button>
+      <button onclick="cardBagTab('gray')" id="cardBagTabGray" class="px-6 py-3 font-cc text-gray-500 text-lg">⬜ 灰(8)</button>
+      <button onclick="openSynthModal()" class="px-6 py-3 font-cc text-purple-500 text-lg">🔮 合成</button>
+    </div>
+    <div id="cardBagList" class="flex-1 overflow-y-auto p-6 card-grid"></div>
+  </div>
+</div>
+
+<!-- 卡牌详情弹窗 -->
+<div id="cardDetailModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden">
+    <div id="cardDetailContent" class="p-6"></div>
+    <div class="p-4 border-t flex gap-2">
+      <button onclick="openSynthWithCard()" class="flex-1 bg-purple-500 text-white py-2 rounded-xl font-cc">🔮 合成</button>
+      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-white py-2 rounded-xl font-cc">💰 上架</button>
+      <button onclick="closeCardDetail()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">关闭</button>
+    </div>
+  </div>
+</div>
+
+<!-- 合成弹窗 -->
+<div id="synthModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+    <div class="bg-gradient-to-r from-purple-400 to-pink-400 p-4 flex justify-between items-center">
+      <h3 class="text-white font-bold text-2xl font-cc">🔮 卡牌合成系统</h3>
+      <button onclick="closeSynthModal()" class="text-white text-2xl hover:scale-110 transition-all">✕</button>
+    </div>
+    <div class="p-4 card-modal-content">
+      <div class="bg-purple-50 p-4 rounded-xl mb-4">
+        <p class="font-cc text-center text-lg">🎯 合成规则：选择 <strong>3张</strong> 同品质卡牌，有机会合成更高品质卡牌！</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div>
+          <h4 class="font-bold font-cc text-center mb-2">选择卡牌</h4>
+          <div id="synthSelectList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+        </div>
+        <div class="flex items-center justify-center">
+          <div class="text-6xl">→</div>
+        </div>
+        <div>
+          <h4 class="font-bold font-cc text-center mb-2">合成预览</h4>
+          <div id="synthPreview" class="p-4 bg-gray-100 rounded-xl text-center">
+            <p class="font-cc text-gray-500">选择3张卡牌</p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <button onclick="doSynth()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-8 rounded-xl font-cc text-xl">🔮 开始合成</button>
+      </div>
+    </div>
+  </div>
+</div>
     <div class="flex border-b">
       <button onclick="cardBagTab('all')" id="cardBagTabAll" class="flex-1 px-4 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500">全部</button>
       <button onclick="cardBagTab('gold')" id="cardBagTabGold" class="flex-1 px-4 py-3 font-cc text-gray-500">金</button>
@@ -1284,7 +1332,7 @@ async function loadCardBag(filter) {
   }
   
   if (cards.length === 0) {
-    box.innerHTML = '<p class="col-span-full text-center text-gray-400 py-8 font-cc">还没有卡牌，去抽卡吧！</p>';
+    box.innerHTML = '<p class="col-span-full text-center text-gray-400 py-12 text-xl font-cc">还没有卡牌，去抽卡吧！</p>';
     return;
   }
   
@@ -1293,19 +1341,21 @@ async function loadCardBag(filter) {
     return order[a.quality] - order[b.quality];
   });
   
+  const qualityIcons = { gold: '👑', red: '🔥', pink: '🌸', gray: '⬜' };
+  
   box.innerHTML = cards.map(card => {
     const q = CARD_QUALITIES[card.quality];
-    const totalPower = (card.atk || 0) + (card.def || 0) + (card.hp || 0) + (card.speed || 0);
     return `
-      <div class="mini-card p-3 rounded-xl ${q.bg} text-white text-center relative" onclick="showCardDetail('${card.id}')">
-        <div class="absolute top-1 right-1 bg-black/30 px-1 rounded text-xs">${q.name}</div>
-        <img src="cards/${card.templateIdx}.png" class="w-16 h-16 mx-auto object-contain">
-        <div class="text-sm font-bold truncate mt-1">${card.name}</div>
-        <div class="flex justify-center gap-1 text-xs mt-1">
+      <div class="mini-card p-4 rounded-2xl ${q.bg} text-white text-center relative cursor-pointer hover:scale-105 transition-all shadow-lg" onclick="showCardDetail('${card.id}')">
+        <div class="absolute top-2 right-2 bg-black/40 px-2 py-1 rounded-full text-sm font-bold">${qualityIcons[card.quality]}${q.name}</div>
+        <img src="cards/${card.templateIdx}.png" class="big-card-img mx-auto object-contain my-3">
+        <div class="text-lg font-bold truncate">${card.name}</div>
+        <div class="flex justify-center gap-3 text-sm mt-2">
           <span>⚔️${card.atk}</span>
           <span>🛡️${card.def}</span>
           <span>❤️${card.hp}</span>
         </div>
+        <div class="text-xs mt-1 opacity-80">#${card.id.slice(-6).toUpperCase()}</div>
       </div>
     `;
   }).join('');
@@ -1319,27 +1369,34 @@ async function showCardDetail(cardId) {
   
   selectedCardForSale = card;
   
-  const typeLabels = { atk: '⚔️攻击', def: '🛡️防御', hp: '❤️生命', speed: '💨速度', lucky: '🍀幸运', crit: '💥暴击', dodge: '👻闪避', regen: '💚回复' };
-  let statsHtml = '<div class="flex justify-center gap-4 flex-wrap">';
+  let statsHtml = '<div class="flex justify-center gap-4 flex-wrap mt-4">';
   (card.types || ['atk', 'def', 'hp']).forEach(type => {
     if (card[type] !== undefined) {
+      const icons = { atk: '⚔️', def: '🛡️', hp: '❤️', speed: '💨', lucky: '🍀', crit: '💥', dodge: '👻', regen: '💚' };
+      const names = { atk: '攻击', def: '防御', hp: '生命', speed: '速度', lucky: '幸运', crit: '暴击', dodge: '闪避', regen: '回复' };
       const value = card[type] * (card.lv || 1);
-      statsHtml += `<div><span class="text-2xl">${typeLabels[type]?.match(/[⚔️🛡️❤️💨🍀💥👻💚]/)?.[0] || '📊'}</span><br><span class="font-bold text-xl">${value}</span></div>`;
+      statsHtml += `
+        <div class="bg-white/20 px-4 py-2 rounded-xl">
+          <div class="text-2xl">${icons[type]}</div>
+          <div class="text-xs opacity-80">${names[type]}</div>
+          <div class="font-bold text-xl">${value}</div>
+        </div>
+      `;
     }
   });
   statsHtml += '</div>';
   
   const content = document.getElementById('cardDetailContent');
   content.innerHTML = `
-    <div class="text-center p-4 rounded-2xl ${q.bg} text-white">
-      <img src="cards/${card.templateIdx}.png" class="w-32 h-32 mx-auto object-contain drop-shadow-lg">
-      <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-sm font-bold mt-2">${q.name}品质</span>
-      <h3 class="text-2xl font-bold mt-2">${card.name}</h3>
-      <p class="text-sm opacity-80 mt-1">${card.desc || ''}</p>
+    <div class="text-center p-6 rounded-2xl ${q.bg} text-white shadow-xl">
+      <img src="cards/${card.templateIdx}.png" class="card-result-img mx-auto object-contain drop-shadow-2xl my-4">
+      <div class="inline-block px-4 py-2 rounded-full bg-black/30 text-xl font-bold">${q.name}品质</div>
+      <h3 class="text-3xl font-bold mt-3">${card.name}</h3>
+      <p class="text-lg opacity-90 mt-2">${card.desc || ''}</p>
       ${statsHtml}
-      <p class="mt-2 text-sm opacity-70">编号：#${card.id.slice(-6).toUpperCase()}</p>
+      <p class="mt-4 text-sm opacity-70">编号：#${card.id.slice(-6).toUpperCase()}</p>
     </div>
-    <p class="text-center text-gray-500 text-sm mt-4 font-cc">持有者：${card.ownerName}</p>
+    <p class="text-center text-gray-500 text-lg mt-4 font-cc">持有者：${card.ownerName}</p>
   `;
   
   document.getElementById('cardDetailModal').classList.remove('hide');
@@ -1348,6 +1405,180 @@ async function showCardDetail(cardId) {
 function closeCardDetail() {
   document.getElementById('cardDetailModal').classList.add('hide');
   selectedCardForSale = null;
+}
+
+let synthSelectedCards = [];
+
+async function openSynthModal() {
+  synthSelectedCards = [];
+  const modal = document.getElementById('synthModal');
+  modal.classList.remove('hide');
+  await loadSynthCards();
+  updateSynthPreview();
+}
+
+function closeSynthModal() {
+  document.getElementById('synthModal').classList.add('hide');
+  synthSelectedCards = [];
+}
+
+async function loadSynthCards() {
+  const box = document.getElementById('synthSelectList');
+  const snap = await db.collection('cards').where('ownerId', '==', me?.uid).get();
+  const cards = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  
+  if (cards.length === 0) {
+    box.innerHTML = '<p class="text-center text-gray-400 font-cc">没有卡牌可合成</p>';
+    return;
+  }
+  
+  const qualityIcons = { gold: '👑', red: '🔥', pink: '🌸', gray: '⬜' };
+  
+  box.innerHTML = cards.map(card => {
+    const q = CARD_QUALITIES[card.quality];
+    const isSelected = synthSelectedCards.some(c => c.id === card.id);
+    return `
+      <div class="p-2 rounded-lg ${q.bg} text-white cursor-pointer ${isSelected ? 'ring-2 ring-white' : ''}" onclick="toggleSynthCard('${card.id}')">
+        <div class="flex items-center gap-2">
+          <img src="cards/${card.templateIdx}.png" class="w-10 h-10 object-contain">
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-bold truncate">${card.name}</div>
+            <div class="text-xs">${qualityIcons[card.quality]}${q.name}</div>
+          </div>
+          ${isSelected ? '<span class="text-lg">✓</span>' : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleSynthCard(cardId) {
+  const idx = synthSelectedCards.findIndex(c => c.id === cardId);
+  if (idx >= 0) {
+    synthSelectedCards.splice(idx, 1);
+  } else if (synthSelectedCards.length < 3) {
+    db.collection('cards').doc(cardId).get().then(snap => {
+      synthSelectedCards.push({ id: snap.id, ...snap.data() });
+      updateSynthUI();
+    });
+  }
+  updateSynthUI();
+}
+
+function updateSynthUI() {
+  loadSynthCards();
+  updateSynthPreview();
+}
+
+function updateSynthPreview() {
+  const preview = document.getElementById('synthPreview');
+  if (synthSelectedCards.length !== 3) {
+    preview.innerHTML = `<p class="font-cc text-gray-500 text-lg">还需选择 ${3 - synthSelectedCards.length} 张</p>`;
+    return;
+  }
+  
+  const qualities = synthSelectedCards.map(c => c.quality);
+  const allSame = qualities.every(q => q === qualities[0]);
+  const qualityOrder = { gray: 0, pink: 1, red: 2, gold: 3 };
+  
+  let resultQuality, successRate;
+  if (allSame) {
+    const baseQ = qualities[0];
+    const baseLevel = qualityOrder[baseQ];
+    if (baseLevel >= 3) {
+      resultQuality = 'gold';
+      successRate = 10;
+    } else {
+      const nextQ = Object.entries(qualityOrder).find(([k, v]) => v === baseLevel + 1)?.[0] || 'gold';
+      resultQuality = nextQ;
+      successRate = 30 + baseLevel * 20;
+    }
+  } else {
+    resultQuality = 'gray';
+    successRate = 50;
+  }
+  
+  const q = CARD_QUALITIES[resultQuality];
+  preview.innerHTML = `
+    <div class="p-4 rounded-xl ${q.bg} text-white">
+      <div class="text-lg font-bold mb-2">合成结果预览</div>
+      <div class="text-4xl mb-2">${resultQuality === 'gold' ? '👑' : resultQuality === 'red' ? '🔥' : resultQuality === 'pink' ? '🌸' : '⬜'}</div>
+      <div class="font-bold text-xl">${q.name}品质</div>
+      <div class="mt-2 text-sm">成功率：${successRate}%</div>
+    </div>
+  `;
+}
+
+async function doSynth() {
+  if (synthSelectedCards.length !== 3) {
+    toast('请选择3张卡牌！');
+    return;
+  }
+  
+  const qualities = synthSelectedCards.map(c => c.quality);
+  const allSame = qualities.every(q => q === qualities[0]);
+  const qualityOrder = { gray: 0, pink: 1, red: 2, gold: 3 };
+  
+  let resultQuality;
+  if (allSame) {
+    const baseLevel = qualityOrder[qualities[0]];
+    if (baseLevel >= 3) {
+      resultQuality = 'gold';
+    } else {
+      resultQuality = Object.entries(qualityOrder).find(([k, v]) => v === baseLevel + 1)?.[0] || 'gold';
+    }
+  } else {
+    resultQuality = 'gray';
+  }
+  
+  const successRate = allSame ? (30 + qualityOrder[qualities[0]] * 20) : 50;
+  const roll = Math.random() * 100;
+  const success = roll < successRate;
+  
+  if (success) {
+    const templateIdx = Math.floor(Math.random() * 8) + 1;
+    const cardName = CARD_NAMES[templateIdx - 1];
+    const stats = generateCardStats(resultQuality);
+    const types = shuffleArray([...CARD_TYPES]).slice(0, Math.floor(Math.random() * 3) + 3);
+    
+    await db.collection('cards').add({
+      ownerId: me.uid,
+      ownerName: meData.displayName,
+      templateIdx,
+      quality: resultQuality,
+      name: cardName.name,
+      desc: cardName.desc,
+      types,
+      lv: 1,
+      ...stats,
+      time: Date.now()
+    });
+    
+    for (const card of synthSelectedCards) {
+      await db.collection('cards').doc(card.id).delete();
+    }
+    
+    toast(`🎉 合成成功！获得${CARD_QUALITIES[resultQuality].name}品质卡牌！`);
+  } else {
+    for (const card of synthSelectedCards) {
+      await db.collection('cards').doc(card.id).delete();
+    }
+    toast('💨 合成失败，卡牌消失了...');
+  }
+  
+  synthSelectedCards = [];
+  closeSynthModal();
+  if (success) {
+    loadCardBag('all');
+  }
+}
+
+function openSynthWithCard() {
+  if (selectedCardForSale) {
+    synthSelectedCards = [selectedCardForSale];
+  }
+  closeCardDetail();
+  openSynthModal();
 }
 
 async function sellCard() {
