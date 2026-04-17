@@ -1103,56 +1103,25 @@ function closeWheelResult() {
 
 // ============ 卡牌系统 ============
 const CARD_QUALITIES = {
-  gold: { name: '金', weight: 1, color: '#FFD700', glow: 'card-glow-gold', bg: 'bg-gradient-to-br from-yellow-400 via-amber-300 to-yellow-500' },
-  red: { name: '红', weight: 5, color: '#FF4444', glow: 'card-glow-red', bg: 'bg-gradient-to-br from-red-400 via-rose-400 to-red-500' },
-  pink: { name: '粉', weight: 30, color: '#FF69B4', glow: 'card-glow-pink', bg: 'bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500' },
-  gray: { name: '灰', weight: 64, color: '#A0A0A0', glow: 'card-glow-gray', bg: 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500' }
+  gold: { name: '金', color: '#FFD700', border: 'border-yellow-400', shadow: 'shadow-yellow-400', bg: 'bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-500' },
+  red: { name: '红', color: '#FF4444', border: 'border-red-400', shadow: 'shadow-red-400', bg: 'bg-gradient-to-br from-red-400 via-rose-500 to-red-600' },
+  pink: { name: '粉', color: '#FF69B4', border: 'border-pink-400', shadow: 'shadow-pink-400', bg: 'bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500' },
+  gray: { name: '灰', color: '#A0A0A0', border: 'border-gray-400', shadow: 'shadow-gray-400', bg: 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-500' }
 };
 
-const CARD_TEMPLATES = {
-  gray: [
-    { id: 1, name: '小鸡雏', desc: '刚孵化的小鸡，充满了生命力。' },
-    { id: 2, name: '毛茸茸', desc: '一身柔软的绒毛，可爱至极。' },
-    { id: 3, name: '小探险家', desc: '好奇心旺盛，喜欢探索新事物。' },
-    { id: 4, name: '普通村民', desc: '平凡但努力生活的鸡。' },
-    { id: 5, name: '勤劳小鸡', desc: '每天早起，勤奋觅食。' },
-    { id: 6, name: '打工人', desc: '为了生活努力工作的鸡。' },
-    { id: 7, name: '草根鸡', desc: '出身平凡但有梦想。' },
-    { id: 8, name: '小透明', desc: '存在感很低但不可或缺。' }
-  ],
-  pink: [
-    { id: 1, name: '樱花小鸡', desc: '如樱花般美丽动人的小鸡。' },
-    { id: 2, name: '甜蜜宝贝', desc: '甜蜜可爱，人见人爱。' },
-    { id: 3, name: '粉红公主', desc: '优雅高贵的小公主。' },
-    { id: 4, name: '彩虹天使', desc: '带来好运与希望的使者。' },
-    { id: 5, name: '花仙子', desc: '掌管花朵的精灵小鸡。' },
-    { id: 6, name: '萌萌哒', desc: '萌到融化你的心。' },
-    { id: 7, name: '棉花糖', desc: '甜甜软软的小天使。' },
-    { id: 8, name: '蝴蝶结女孩', desc: '戴着可爱蝴蝶结的时尚小鸡。' }
-  ],
-  red: [
-    { id: 1, name: '烈焰战士', desc: '掌控火焰力量的战斗鸡。' },
-    { id: 2, name: '狂暴战鸡', desc: '战斗时爆发出惊人力量。' },
-    { id: 3, name: '血红领主', desc: '血红羽毛的尊贵领主。' },
-    { id: 4, name: '熔岩巨兽', desc: '拥有熔岩般炽热的力量。' },
-    { id: 5, name: '嗜血狂魔', desc: '战场上令人闻风丧胆的存在。' },
-    { id: 6, name: '烈焰凤凰', desc: '浴火重生的神圣存在。' },
-    { id: 7, name: '毁灭使者', desc: '代表毁灭与重生的力量。' },
-    { id: 8, name: '红莲业火', desc: '燃烧一切邪恶的圣火。' }
-  ],
-  gold: [
-    { id: 1, name: '黄金鸡王', desc: '传说中统御鸡族的王者。' },
-    { id: 2, name: '神圣凤凰', desc: '拥有神圣之力的不死鸟。' },
-    { id: 3, name: '宇宙创始神', desc: '创造宇宙的至高存在。' },
-    { id: 4, name: '永恒至尊', desc: '超越时间的不朽传说。' },
-    { id: 5, name: '万鸡之主', desc: '所有鸡类的最高统治者。' },
-    { id: 6, name: '混沌起源', desc: '混沌中诞生的原初之鸡。' },
-    { id: 7, name: '天命之人', desc: '被命运选中的特殊存在。' },
-    { id: 8, name: '无敌神话', desc: '超越所有传说的终极神话！' }
-  ]
-};
+const CARD_NAMES = [
+  { name: '小鸡雏', desc: '刚孵化的小鸡，充满生命力' },
+  { name: '毛茸茸', desc: '一身柔软的绒毛，可爱至极' },
+  { name: '小探险家', desc: '好奇心旺盛，喜欢探索新事物' },
+  { name: '普通村民', desc: '平凡但努力生活的鸡' },
+  { name: '勤劳小鸡', desc: '每天早起，勤奋觅食' },
+  { name: '打工人', desc: '为了生活努力工作' },
+  { name: '草根鸡', desc: '出身平凡但有梦想' },
+  { name: '小透明', desc: '存在感低但不可或缺' }
+];
 
 const CARD_TYPES = ['atk', 'def', 'hp', 'speed', 'lucky', 'crit', 'dodge', 'regen'];
+const TYPE_NAMES = { atk: '攻击', def: '防御', hp: '生命', speed: '速度', lucky: '幸运', crit: '暴击', dodge: '闪避', regen: '回复' };
 
 let selectedCardForSale = null;
 
@@ -1160,27 +1129,27 @@ async function drawCard(source = 'shop') {
   if (!me) { toast('请先登录'); return; }
   
   const quality = drawCardQuality(source);
-  const templates = CARD_TEMPLATES[quality];
-  const template = templates[Math.floor(Math.random() * templates.length)];
+  const templateIdx = Math.floor(Math.random() * 8);
+  const cardName = CARD_NAMES[templateIdx];
   
   const stats = generateCardStats(quality);
-  const typeCount = Math.floor(Math.random() * 5) + 1;
+  const typeCount = Math.floor(Math.random() * 4) + 2;
   const types = shuffleArray([...CARD_TYPES]).slice(0, typeCount);
   
   const cardRef = await db.collection('cards').add({
     ownerId: me.uid,
     ownerName: meData.displayName,
-    templateId: template.id,
+    templateIdx: templateIdx + 1,
     quality,
-    name: template.name,
-    desc: template.desc,
+    name: cardName.name,
+    desc: cardName.desc,
     types,
     lv: 1,
     ...stats,
     time: Date.now()
   });
   
-  return { id: cardRef.id, templateId: template.id, quality, name: template.name, desc: template.desc, types, lv: 1, ...stats };
+  return { id: cardRef.id, templateIdx: templateIdx + 1, quality, name: cardName.name, desc: cardName.desc, types, lv: 1, ...stats };
 }
 
 function shuffleArray(array) {
@@ -1193,31 +1162,32 @@ function shuffleArray(array) {
 
 function drawCardQuality(source) {
   const rand = Math.random() * 100;
-  
   if (source === 'pack') {
     if (rand < 1) return 'gold';
     if (rand < 6) return 'red';
     if (rand < 35) return 'pink';
     return 'gray';
-  } else {
-    return rand < 0.35 ? 'pink' : 'gray';
   }
+  return rand < 0.35 ? 'pink' : 'gray';
 }
 
 function generateCardStats(quality) {
   const base = { gold: 150, red: 100, pink: 50, gray: 20 }[quality];
   const variance = { gold: 100, red: 50, pink: 30, gray: 15 }[quality];
-  
   return {
     atk: base + Math.floor(Math.random() * variance),
     def: base + Math.floor(Math.random() * variance),
-    hp: base * 3 + Math.floor(Math.random() * variance * 3),
-    speed: 10 + Math.floor(Math.random() * 50),
-    lucky: 5 + Math.floor(Math.random() * 30),
-    crit: 5 + Math.floor(Math.random() * 25),
-    dodge: 5 + Math.floor(Math.random() * 20),
-    regen: 1 + Math.floor(Math.random() * 10)
+    hp: base * 2 + Math.floor(Math.random() * variance * 2),
+    speed: 20 + Math.floor(Math.random() * 40),
+    lucky: 10 + Math.floor(Math.random() * 20),
+    crit: 5 + Math.floor(Math.random() * 15),
+    dodge: 5 + Math.floor(Math.random() * 15),
+    regen: 2 + Math.floor(Math.random() * 8)
   };
+}
+
+function getCardImgUrl(templateIdx) {
+  return `cards/${templateIdx}.png`;
 }
 
 function showCardResult(card) {
@@ -1225,44 +1195,42 @@ function showCardResult(card) {
   const front = document.getElementById('cardFront');
   const badge = document.getElementById('cardQualityBadge');
   const cardImg = document.getElementById('cardRevealImg');
-  const cardName = document.getElementById('cardRevealName');
-  const cardDesc = document.getElementById('cardRevealDesc');
+  const cardNameEl = document.getElementById('cardRevealName');
+  const cardDescEl = document.getElementById('cardRevealDesc');
   const cardStats = document.getElementById('cardRevealStats');
   const serial = document.getElementById('cardRevealSerial');
   
   const q = CARD_QUALITIES[card.quality];
   
-  front.className = `rounded-2xl shadow-2xl transform transition-all duration-700 card-flip ${q.glow}`;
+  front.className = `rounded-2xl shadow-2xl transform transition-all duration-700 card-flip ${q.border} border-4`;
   front.style.background = card.quality === 'gold' ? 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%)' :
                            card.quality === 'red' ? 'linear-gradient(135deg, #FF4444 0%, #CC0000 50%, #FF4444 100%)' :
                            card.quality === 'pink' ? 'linear-gradient(135deg, #FF69B4 0%, #FF1493 50%, #FF69B4 100%)' :
                            'linear-gradient(135deg, #A0A0A0 0%, #707070 50%, #A0A0A0 100%)';
   
   badge.textContent = q.name + '品质';
-  badge.className = `inline-block px-4 py-1 rounded-full text-white font-bold mb-2 ${q.glow}`;
-  badge.style.background = 'rgba(0,0,0,0.3)';
+  badge.className = `inline-block px-4 py-1 rounded-full text-white font-bold mb-2`;
+  badge.style.background = 'rgba(0,0,0,0.4)';
   
   if (cardImg) {
-    cardImg.src = `cards/${card.templateId}.png?v=${Date.now()}`;
-    cardImg.onerror = () => { 
-      cardImg.src = `https://via.placeholder.com/200x200/${q.color.replace('#','')}/ffffff?text=${encodeURIComponent(card.name)}`;
-    };
+    cardImg.src = `cards/${card.templateIdx}.png`;
+    cardImg.style.display = 'block';
   }
   
-  cardName.textContent = card.name;
-  cardName.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+  cardNameEl.textContent = card.name;
+  cardNameEl.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
   
-  if (cardDesc) {
-    cardDesc.textContent = card.desc;
-    cardDesc.style.textShadow = '1px 1px 2px rgba(0,0,0,0.5)';
+  if (cardDescEl) {
+    cardDescEl.textContent = card.desc;
+    cardDescEl.style.textShadow = '1px 1px 2px rgba(0,0,0,0.5)';
   }
   
-  const typeLabels = { atk: '⚔️攻击', def: '🛡️防御', hp: '❤️生命', speed: '💨速度', lucky: '🍀幸运', crit: '💥暴击', dodge: '👻闪避', regen: '💚回复' };
   let statsHtml = '<div class="flex justify-center gap-2 flex-wrap">';
   (card.types || ['atk', 'def', 'hp']).forEach(type => {
     if (card[type] !== undefined) {
+      const icons = { atk: '⚔️', def: '🛡️', hp: '❤️', speed: '💨', lucky: '🍀', crit: '💥', dodge: '👻', regen: '💚' };
       const value = card[type] * (card.lv || 1);
-      statsHtml += `<div class="bg-white/20 px-2 py-1 rounded text-sm text-white font-bold">${typeLabels[type] || type}: ${value}</div>`;
+      statsHtml += `<div class="bg-white/20 px-2 py-1 rounded text-sm text-white font-bold">${icons[type]}${TYPE_NAMES[type]}: ${value}</div>`;
     }
   });
   statsHtml += '</div>';
@@ -1331,7 +1299,7 @@ async function loadCardBag(filter) {
     return `
       <div class="mini-card p-3 rounded-xl ${q.bg} text-white text-center relative" onclick="showCardDetail('${card.id}')">
         <div class="absolute top-1 right-1 bg-black/30 px-1 rounded text-xs">${q.name}</div>
-        <img src="cards/${card.templateId}.png?v=${Date.now()}" class="w-16 h-16 mx-auto object-contain" onerror="this.src='https://via.placeholder.com/64x64/${q.color.replace('#','')}/ffffff?text=${encodeURIComponent(card.name)}'">
+        <img src="cards/${card.templateIdx}.png" class="w-16 h-16 mx-auto object-contain">
         <div class="text-sm font-bold truncate mt-1">${card.name}</div>
         <div class="flex justify-center gap-1 text-xs mt-1">
           <span>⚔️${card.atk}</span>
@@ -1364,7 +1332,7 @@ async function showCardDetail(cardId) {
   const content = document.getElementById('cardDetailContent');
   content.innerHTML = `
     <div class="text-center p-4 rounded-2xl ${q.bg} text-white">
-      <img src="cards/${card.templateId}.png" class="w-32 h-32 mx-auto object-contain drop-shadow-lg" onerror="this.style.display='none'">
+      <img src="cards/${card.templateIdx}.png" class="w-32 h-32 mx-auto object-contain drop-shadow-lg">
       <span class="inline-block px-3 py-1 rounded-full bg-white/20 text-sm font-bold mt-2">${q.name}品质</span>
       <h3 class="text-2xl font-bold mt-2">${card.name}</h3>
       <p class="text-sm opacity-80 mt-1">${card.desc || ''}</p>
@@ -1396,7 +1364,7 @@ async function sellCard() {
     sellerId: me.uid,
     sellerName: meData.displayName,
     quality: selectedCardForSale.quality,
-    templateId: selectedCardForSale.templateId,
+    templateIdx: selectedCardForSale.templateIdx,
     types: selectedCardForSale.types,
     lv: selectedCardForSale.lv || 1,
     atk: selectedCardForSale.atk,
@@ -1659,7 +1627,7 @@ function showTenDrawResult(cards) {
             const q = CARD_QUALITIES[card.quality];
             return `
               <div class="text-center p-2 rounded-lg ${q.bg} text-white cursor-pointer hover:scale-110 transition-all" onclick="showCardDetail('${card.id}')">
-                <img src="cards/${card.templateId}.png" class="w-12 h-12 mx-auto object-contain" onerror="this.style.display='none'">
+                <img src="cards/${card.templateIdx}.png" class="w-12 h-12 mx-auto object-contain">
                 <div class="text-xs font-bold mt-1">${q.name}</div>
               </div>
             `;
@@ -2108,29 +2076,20 @@ function loadAdminCards() {
   const box = document.getElementById('adminCards');
   
   let allTemplatesHtml = '';
-  ['gold', 'red', 'pink', 'gray'].forEach(quality => {
-    const q = CARD_QUALITIES[quality];
-    CARD_TEMPLATES[quality].forEach(t => {
-      allTemplatesHtml += `
-        <div class="flex items-center gap-3 p-2 bg-white/50 rounded">
-          <img src="cards/${t.id}.png" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
-          <div class="flex-1">
-            <span class="font-cc font-bold">${t.name}</span>
-            <span class="ml-2 text-xs" style="color: ${q.color}">${q.name}</span>
-          </div>
+  CARD_NAMES.forEach((t, i) => {
+    allTemplatesHtml += `
+      <div class="flex items-center gap-3 p-2 bg-white/50 rounded">
+        <img src="cards/${i+1}.png" class="w-10 h-10 object-contain">
+        <div class="flex-1">
+          <span class="font-cc font-bold">${t.name}</span>
         </div>
-      `;
-    });
+      </div>
+    `;
   });
   
   let templateOptions = '';
-  ['gold', 'red', 'pink', 'gray'].forEach(quality => {
-    const q = CARD_QUALITIES[quality];
-    templateOptions += `<optgroup label="${q.name}品质">`;
-    CARD_TEMPLATES[quality].forEach(t => {
-      templateOptions += `<option value="${quality}|${t.id}">${t.name}</option>`;
-    });
-    templateOptions += `</optgroup>`;
+  CARD_NAMES.forEach((t, i) => {
+    templateOptions += `<option value="${i+1}">${t.name}</option>`;
   });
   
   box.innerHTML = `
@@ -2141,6 +2100,12 @@ function loadAdminCards() {
         <div class="space-y-3">
           <select id="customCardTemplate" class="w-full px-3 py-2 border rounded-xl">
             ${templateOptions}
+          </select>
+          <select id="customCardQuality" class="w-full px-3 py-2 border rounded-xl">
+            <option value="gray">灰品质</option>
+            <option value="pink">粉品质</option>
+            <option value="red">红品质</option>
+            <option value="gold">金品质</option>
           </select>
           <div class="flex gap-2">
             <select id="customCardUser" class="flex-1 px-3 py-2 border rounded-xl">
@@ -2222,7 +2187,7 @@ function filterAdminCards(filter) {
             <span class="text-xs bg-black/20 px-2 rounded">${q.name}</span>
             <button onclick="deleteCard('${card.id}')" class="text-xs bg-red-500 px-2 rounded hover:bg-red-600">删除</button>
           </div>
-          <img src="cards/${card.templateId}.png" class="w-16 h-16 mx-auto object-contain my-2" onerror="this.style.display='none'">
+          <img src="cards/${card.templateIdx}.png" class="w-16 h-16 mx-auto object-contain my-2">
           <div class="text-sm font-bold truncate">${card.name}</div>
           <div class="text-xs mt-1">持有: ${card.ownerName}</div>
           <div class="flex justify-center gap-1 text-xs mt-1">
@@ -2239,24 +2204,24 @@ function filterAdminCards(filter) {
 async function createCustomCard() {
   if (!meData?.isAdmin) { toast('只有管理员可以创建'); return; }
   
-  const selected = document.getElementById('customCardTemplate').value;
-  const [quality, templateId] = selected.split('|');
+  const quality = document.getElementById('customCardQuality').value;
+  const templateIdx = parseInt(document.getElementById('customCardTemplate').value);
   const targetUserId = document.getElementById('customCardUser').value || me.uid;
   
-  const template = CARD_TEMPLATES[quality].find(t => t.id === parseInt(templateId));
-  if (!template) { toast('模板不存在'); return; }
+  const cardName = CARD_NAMES[templateIdx - 1];
+  if (!cardName) { toast('模板不存在'); return; }
   
   const stats = generateCardStats(quality);
-  const typeCount = Math.floor(Math.random() * 5) + 1;
+  const typeCount = Math.floor(Math.random() * 4) + 2;
   const types = shuffleArray([...CARD_TYPES]).slice(0, typeCount);
   
   await db.collection('cards').add({
     ownerId: targetUserId,
     ownerName: targetUserId === me.uid ? meData.displayName : (await db.collection('users').doc(targetUserId).get()).data().displayName,
-    templateId: template.id,
+    templateIdx,
     quality,
-    name: template.name,
-    desc: template.desc,
+    name: cardName.name,
+    desc: cardName.desc,
     types,
     lv: 1,
     ...stats,
