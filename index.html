@@ -87,10 +87,10 @@
 
   <!-- 欢迎弹窗 -->
   <div id="welcomeModal" class="hide fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-<div class="bg-white rounded-3xl p-8 w-full max-w-sm text-center shadow-xl" style="border: 2px solid #2d2d2d;">
-      <h2 class="text-4xl font-bold mb-4" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">🎉 欢迎回来</h2>
-      <p class="text-xl mb-4" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">和小鸡一起玩吧～</p>
-      <button onclick="closeWelcomeModal()" class="mt-2 px-8 py-3 rounded-xl text-xl font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive; border: 2px solid #2d2d2d;">开始玩！</button>
+    <div class="bg-white rounded-3xl p-8 w-full max-w-sm text-center shadow-xl" style="border: 2px solid #2d2d2d;">
+      <h2 class="text-4xl font-bold mb-4" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">欢迎回来</h2>
+      <p class="text-xl mb-4" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">和小鸡一起玩吧</p>
+      <button onclick="closeWelcomeModal()" class="mt-2 px-8 py-3 rounded-xl text-xl font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive; border: 2px solid #2d2d2d;">开始玩</button>
     </div>
   </div>
 
@@ -572,14 +572,9 @@ function fmtPts(n) {
 }
 
 // 登录
-// 登录
 async function signIn() {
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
-  } catch (e) {
-    toast('登录失败');
-  }
+  const provider = new firebase.auth.GoogleAuthProvider();
+  await auth.signInWithRedirect(provider);
 }
 
 // 登出
@@ -624,10 +619,9 @@ auth.onAuthStateChanged(async (user) => {
     document.getElementById('userBox').classList.remove('hide');
     document.getElementById('postBox').classList.remove('hide');
     document.getElementById('welcomeModal').classList.remove('hide');
-    document.getElementById('welcomeName').textContent = meData.displayName;
     document.getElementById('userImg').src = meData.photoURL || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>';
     document.getElementById('userName').textContent = meData.displayName;
-    document.getElementById('userTitle').textContent = meData.title;
+    document.getElementById('userTitle').textContent = meData.title || '';
     document.getElementById('userPoints').textContent = fmtPts(meData.points || 0);
     document.getElementById('userCoins').textContent = meData.coins || 0;
     document.getElementById('postIG').value = meData.igAccount || '';
