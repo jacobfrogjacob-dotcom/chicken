@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +10,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { paper: '#f5f0e6', ink: '#2d2d2d' }
-        }
-      }
-    }
+    tailwind.config = { theme: { extend: { colors: { paper: '#f5f0e6', ink: '#2d2d2d' } } } }
   </script>
   <style>
     body { font-family: 'Noto Sans SC', sans-serif; background-color: #f5f0e6; }
@@ -24,568 +18,163 @@
     .hide { display: none !important; }
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-thumb { background: #8b4513; border-radius: 4px; }
-    .paper-bg { background-color: #f5f0e6; border: 2px solid #2d2d2d; }
-    .ink-text { color: #2d2d2d; }
-    .ink-border { border: 2px solid #2d2d2d; }
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+    .paper { background-color: #f5f0e6; border: 2px solid #2d2d2d; }
+    .ink { color: #2d2d2d; }
+    .border-ink { border: 2px solid #2d2d2d; }
+    .card-gold { background: linear-gradient(135deg, #ffd700, #ffb800); }
+    .card-red { background: linear-gradient(135deg, #ff4444, #cc0000); }
+    .card-pink { background: linear-gradient(135deg, #ff69b4, #ff1493); }
+    .card-gray { background: linear-gradient(135deg, #999, #666); }
   </style>
   <script>
-    function toSim(s) {
-      if(!s)return''; return s.replace(/來/g,'来').replace(/說/g,'说').replace(/為/g,'为').replace(/與/g,'与').replace(/這/g,'这').replace(/裡/g,'里').replace(/問/g,'问').replace(/時/g,'时').replace(/國/g,'国').replace(/學/g,'学').replace(/愛/g,'爱').replace(/後/g,'后').replace(/從/g,'从').replace(/會/g,'会').replace(/長/g,'长').replace(/開/g,'开').replace(/門/g,'门').replace(/關/g,'关').replace(/種/g,'种').replace(/樣/g,'样').replace(/點/g,'点').replace(/號/g,'号').replace(/嗎/g,'吗').replace(/誰/g,'什么').replace(/沒有/g,'没有').replace(/這個/g,'这个').replace(/那個/g,'那个').replace(/已經/g,'已经').replace(/可以/g,'可以').replace(/因為/g,'因为').replace(/所以/g,'所以').replace(/通過/g,'通过').replace(/選擇/g,'选择').replace(/進行/g,'进行').replace(/開始/g,'开始').replace(/讓/g,'让').replace(/請/g,'请').replace(/謝/g,'谢').replace(/對/g,'对').replace(/沒/g,'没').replace(/兩/g,'两').replace(/點/g,'点').replace(/給/g,'给').replace(/當/g,'当').replace(/聽/g,'听').replace(/寫/g,'写').replace(/話/g,'话').replace(/幫/g,'帮').replace(/覺得/g,'觉得').replace(/應該/g,'应该').replace(/沒/g,'没').replace(/個/g,'个').replace(/比較/g,'比较').replace(/問題/g,'问题').replace(/還/g,'还').replace(/於/g,'于').replace(/爾/g,'尔').replace(/們/g,'们').replace(/它/g,'它').replace(/們/g,'们').replace(/紅/g,'红').replace(/黃/g,'黄').replace(/藍/g,'蓝').replace(/綠/g,'绿').replace(/紫/g,'紫').replace(/白/g,'白').replace(/黑/g,'黑').replace(/灰/g,'灰').replace(/強/g,'强').replace(/弱/g,'弱').replace(/熱/g,'热').replace(/冷/g,'冷').replace(/新/g,'新').replace(/舊/g,'旧').replace(/真/g,'真').replace(/假/g,'假').replace(/明/g,'明').replace(/暗/g,'暗').replace(/早/g,'早').replace(/晚/g,'晚').replace(/亮/g,'亮').replace(/老/g,'老').replace(/嫩/g,'嫩').replace(/美/g,'美').replace(/醜/g,'丑').replace(/胖/g,'胖').replace(/瘦/g,'瘦').replace(/高/g,'高').replace(/矮/g,'矮').replace(/方/g,'方').replace(/圓/g,'圆').replace(/甜/g,'甜').replace(/苦/g,'苦').replace(/辣/g,'辣').replace(/香/g,'香').replace(/臭/g,'臭').replace(/軟/g,'软').replace(/硬/g,'硬').replace(/濕/g,'湿').replace(/乾/g,'干').replace(/飽/g,'饱').replace(/餓/g,'饿').replace(/渴/g,'渴').replace(/累/g,'累').replace(/困/g,'困').replace(/醒/g,'醒').replace(/睡/g,'睡').replace(/醉/g,'醉').replace(/病/g,'病').replace(/死/g,'死').replace(/活/g,'活').replace(/樂/g,'乐').replace(/悲/g,'悲').replace(/憂/g,'忧').replace(/喜/g,'喜').replace(/怒/g,'怒').replace(/哀/g,'哀').replace(/懼/g,'惧').replace(/恨/g,'恨').replace(/怕/g,'怕').replace(/敢/g,'敢').replace(/能/g,'能').replace(/要/g,'要').replace(/想/g,'想').replace(/做/g,'做').replace(/成/g,'成').replace(/得/g,'得').replace(/去/g,'去').replace(/來/g,'来').replace(/走/g,'走').replace(/跑/g,'跑').replace(/跳/g,'跳').replace(/飛/g,'飞').replace(/游/g,'游').replace(/坐/g,'坐').replace(/站/g,'站').replace(/躺/g,'躺');
-    }
+    firebase.initializeApp({ apiKey: "AIzaSyC9ARCgaoXfLFRVQb3djEhxN7ephFTlZ-U", authDomain: "chicken-33a60.firebaseapp.com", projectId: "chicken-33a60", storageBucket: "chicken-33a60.firebasestorage.app", messagingSenderId: "646431742714", appId: "1:646431742714:web:47d9a7f456843a6b9bc743" });
+    const auth = firebase.auth(), db = firebase.firestore();
+    const ADMIN = 'jacob.frog.jacob@gmail.com', SPIN_COST = 100, CHECKIN = 50;
+    let me = null, meData = {};
+    const CARD_NAMES = [{name:'大圣',desc:'齐天大圣'}, {name:'天蓬',desc:'天河元帅'}, {name:'卷帘',desc:'卷帘大将'}, {name:'白龙',desc:'西海龙王'}, {name:'唐僧',desc:'金蝉子'}, {name:'悟空',desc:'斗战胜佛'}, {name:'八戒',desc:'净坛使者'}, {name:'沙僧',desc:'金身罗汉'}];
+    const CARD_QUALITIES = { gold:{name:'金',bg:'card-gold text-white'}, red:{name:'红',bg:'card-red text-white'}, pink:{name:'粉',bg:'card-pink text-white'}, gray:{name:'灰',bg:'card-gray text-white'} };
+    const CARD_TYPES = ['atk','def','hp','speed','lucky','crit','dodge','regen'];
+    function toSim(s) { if(!s)return''; return s.replace(/來/g,'来').replace(/說/g,'说').replace(/為/g,'为').replace(/與/g,'与').replace(/這/g,'这').replace(/裡/g,'里').replace(/問/g,'问').replace(/時/g,'时').replace(/國/g,'国').replace(/學/g,'学').replace(/愛/g,'爱').replace(/後/g,'后').replace(/從/g,'从').replace(/會/g,'会').replace(/長/g,'长').replace(/開/g,'开').replace(/門/g,'门').replace(/種/g,'种').replace(/樣/g,'样').replace(/點/g,'点').replace(/號/g,'号').replace(/嗎/g,'吗').replace(/沒/g,'没有').replace(/個/g,'个').replace(/請/g,'请').replace(/謝/g,'谢').replace(/對/g,'对').replace(/兩/g,'两').replace(/給/g,'给').replace(/當/g,'当').replace(/聽/g,'听').replace(/寫/g,'写').replace(/話/g,'话').replace(/幫/g,'帮').replace(/覺/g,'觉').replace(/應/g,'应').replace(/比較/g,'比较').replace(/問題/g,'问题').replace(/還/g,'还'); }
+    function fmtPts(n) { if(n>=1e9)return(n/1e9).toFixed(1)+'B'; if(n>=1e6)return(n/1e6).toFixed(1)+'M'; if(n>=1e4)return(n/1e4).toFixed(1)+'W'; if(n>=1e3)return(n/1e3).toFixed(1)+'K'; return n; }
+    function toast(msg) { const t=document.getElementById('toast'); t.textContent=toSim(msg); t.classList.remove('hide'); t.style.opacity='1'; setTimeout(()=>t.style.opacity='0',2500); }
+    function signIn() { const p=new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(p).catch(e=>toast('登录失败')); }
+    function logout() { auth.signOut(); }
+    auth.onAuthStateChanged(async u=>{ if(u){ const d=await db.collection('users').doc(u.uid).get(); if(d.exists){ me=u; meData=d.data(); onLogin(); }else{ document.getElementById('setupModal').classList.remove('hide'); } }else{ onLogout(); } });
+    function onLogin(){ document.getElementById('loginBox').classList.add('hide'); document.getElementById('userBox').classList.remove('hide'); document.getElementById('postBox').classList.remove('hide'); document.getElementById('welcomeBox').classList.remove('hide'); document.getElementById('welcomeName').textContent=meData.displayName; document.getElementById('userImg').src=meData.photoURL||''; document.getElementById('userName').textContent=meData.displayName; document.getElementById('userCoins').textContent=meData.coins||0; document.getElementById('userPoints').textContent=fmtPts(meData.points||0); document.getElementById('btnLogin').classList.add('hide'); document.getElementById('btnLogout').classList.remove('hide'); if(u.email===ADMIN||u.email===ADMIN.replace('frog','frog.')){ document.getElementById('btnAdmin').classList.remove('hide'); } loadChat(); loadRank(); }
+    function onLogout(){ document.getElementById('loginBox').classList.remove('hide'); document.getElementById('userBox').classList.add('hide'); document.getElementById('postBox').classList.add('hide'); document.getElementById('welcomeBox').classList.add('hide'); document.getElementById('btnLogin').classList.remove('hide'); document.getElementById('btnLogout').classList.add('hide'); document.getElementById('btnAdmin').classList.add('hide'); }
+    function completeSetup(){ const n=document.getElementById('setupName').value.trim(); const ig=document.getElementById('setupIG').value.trim(); if(!n||!ig){ toast('请填写完整'); return; } db.collection('users').doc(me.uid).set({ displayName:n, igAccount:ig, photoURL:me.photoURL, email:me.email, points:0, coins:500, inventory:[], time:Date.now() }); document.getElementById('setupModal').classList.add('hide'); location.reload(); }
+    async function loadChat(){ db.collection('messages').orderBy('time','desc').limit(50).onSnapshot(s=>{ const b=document.getElementById('chatBox'); b.innerHTML=''; s.forEach(d=>{ const m=d.data(); b.innerHTML+=`<div class="p-2 rounded paper"><div class="flex items-center gap-2"><img src="${m.userAvatar||''}" class="w-8 h-8 rounded-full"><span class="font-bold ink">${m.userName}</span></div><p class="ink">${m.content}</p></div>`; }); }); }
+    async function sendMsg(e){ e.preventDefault(); const i=document.getElementById('msgInput'); const c=i.value.trim(); if(!c)return; await db.collection('messages').add({ userId:me.uid, userName:meData.displayName, userAvatar:meData.photoURL, content:c, time:Date.now() }); await db.collection('users').doc(me.uid).update({ points:firebase.firestore.FieldValue.increment(1), coins:firebase.firestore.FieldValue.increment(1) }); i.value=''; }
+    function loadRank(){ db.collection('users').orderBy('points','desc').limit(10).onSnapshot(s=>{ const b=document.getElementById('rankBox'); b.innerHTML=''; let r=1; s.forEach(d=>{ const u=d.data(); if(u.points>0){ const ic=r===1?'👑':r===2?'🥈':r===3?'🥉':'🏆'; b.innerHTML+=`<div class="p-2 rounded paper flex items-center gap-2"><span class="text-xl">${ic}</span><span class="font-bold flex-1 ink">${u.displayName}</span><span class="ink">${fmtPts(u.points)}</span></div>`; r++; } }); }); }
+    async function doCheckIn(){ const last=meData.lastCheckIn||0; const now=Date.now(); if(now-last<86400000){ toast('明天再来'); return; } await db.collection('users').doc(me.uid).update({ coins:firebase.firestore.FieldValue.increment(CHECKIN), lastCheckIn:now }); toast('获得 '+CHECKIN+' 金币'); location.reload(); }
+    function showPage(p){ ['pageHome','pageShop','pageWheel','pageAdmin'].forEach(x=>document.getElementById(x).classList.add('hide')); document.getElementById('page'+p.charAt(0).toUpperCase()+p.slice(1)).classList.remove('hide'); if(p==='shop'){ loadShop(); loadMarket(); loadMyItems(); } if(p==='wheel'){ document.getElementById('wheelCoins').textContent=meData.coins||0; } }
+    function loadShop(){ db.collection('shopItems').orderBy('time','desc').onSnapshot(s=>{ const b=document.getElementById('shopList'); b.innerHTML=''; s.forEach(d=>{ const i=d.data(); b.innerHTML+=`<div class="p-4 rounded paper text-center"><div class="text-4xl">${i.emoji||'🎁'}</div><div class="font-bold ink">${i.name}</div><div class="ink">${i.price} 金币</div><button onclick="buyItem('${d.id}',${i.price},'${i.name}')" class="mt-2 px-4 py-1 rounded border-ink paper">购买</button></div>`; }); }); }
+    async function buyItem(id,price,name){ if((meData.coins||0)<price){ toast('金币不足'); return; } if(confirm('购买 '+name+' ?')){ await db.collection('users').doc(me.uid).update({ coins:firebase.firestore.FieldValue.increment(-price), inventory:firebase.firestore.FieldValue.arrayUnion({name:name,emoji:'🎁',time:Date.now()}) }); toast('购买成功'); } }
+    function loadMarket(){ db.collection('marketplace').where('status','==','selling').orderBy('time','desc').onSnapshot(s=>{ const b=document.getElementById('marketList'); b.innerHTML=s.empty?'<p class="ink text-center p-4">暂无商品</p>':''; s.forEach(d=>{ const i=d.data(); const own=i.sellerId===me?.uid; b.innerHTML+=`<div class="p-3 rounded paper"><div class="font-bold ink">${i.name}</div><div class="ink">${i.price} 金币 ${own?'(你的)':'<button onclick="buyMarket(\''+d.id+'\','+i.price+',\''+i.name+'\',\''+i.sellerId+'\')" class="px-2 py-1 rounded border-ink">购买</button>'}</div></div>`; }); }); }
+    async function buyMarket(id,price,name,seller){ if(seller===me?.uid){ toast('不能买自己的'); return; } if(confirm('购买 '+name+' ?')){ await db.collection('users').doc(me.uid).update({coins:firebase.firestore.FieldValue.increment(-price)}); await db.collection('users').doc(seller).update({coins:firebase.firestore.FieldValue.increment(price)}); await db.collection('marketplace').doc(id).update({status:'sold',buyerId:me.uid,buyerName:meData.displayName}); loadMarket(); toast('购买成功'); } }
+    function loadMyItems(){ const b=document.getElementById('myItems'); const inv=meData.inventory||[]; b.innerHTML=inv.length?'<p class="ink text-center">无物品</p>':''; inv.forEach((it,i)=>{ b.innerHTML+=`<div class="p-2 rounded paper flex items-center gap-2"><span>${it.emoji}</span><span class="flex-1 ink">${it.name}</span></div>`; }); }
   </script>
 </head>
-<body class="min-h-screen paper-bg">
+<body class="min-h-screen">
+<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl z-50 ink" style="background:#2d2d2d;color:#f5f0e6;"></div>
 
-<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl z-50 ink-text" style="background-color: #2d2d2d; color: #f5f0e6;"></div>
-
-<!-- Header -->
-<header class="shadow-lg" style="background-color: #f5f0e6; border-bottom: 3px solid #2d2d2d;">
-  <div class="max-w-6xl mx-auto px-4 py-3">
-    <div class="flex items-center justify-between">
-      <h1 class="text-3xl font-bold ink-text font-cc">小鸡手抄</h1>
-      <div class="flex gap-2">
-        <button onclick="showPage('home')" class="px-3 py-1 rounded ink-text hover:bg-amber-100 font-cc">首页</button>
-        <button onclick="showPage('admin')" id="btnAdmin" class="hide px-3 py-1 rounded ink-text font-cc">管理</button>
-        <button onclick="logout()" id="btnLogout" class="hide px-3 py-1 rounded ink-text font-cc">退出</button>
-        <button onclick="signIn()" id="btnLogin" class="px-3 py-1 rounded ink-text font-cc ink-border" style="background-color: #f5f0e6;">登录</button>
-      </div>
+<header class="shadow-lg paper">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <h1 class="text-2xl font-bold ink font-cc">小鸡手抄</h1>
+    <div class="flex gap-2">
+      <button onclick="showPage('home')" class="px-2 py-1 rounded ink hover:bg-gray-200 font-cc">首页</button>
+      <button onclick="showPage('shop')" class="px-2 py-1 rounded ink hover:bg-gray-200 font-cc">商店</button>
+      <button onclick="showPage('wheel')" class="px-2 py-1 rounded ink hover:bg-gray-200 font-cc">抽奖</button>
+      <button onclick="showPage('admin')" id="btnAdmin" class="hide px-2 py-1 rounded ink hover:bg-gray-200 font-cc">管理</button>
+      <button onclick="logout()" id="btnLogout" class="hide px-2 py-1 rounded ink hover:bg-gray-200 font-cc">退出</button>
+      <button onclick="signIn()" id="btnLogin" class="px-2 py-1 rounded ink border-ink paper font-cc">登录</button>
     </div>
   </div>
 </header>
 
-<main class="max-w-6xl mx-auto px-4 py-8">
-
-  <!-- 歡迎橫幅 -->
-  <div id="welcomeBox" class="hide bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 rounded-2xl p-6 mb-6 text-white text-center">
-    <h2 class="text-2xl font-bold font-cc">🎉 歡迎回來，<span id="welcomeName"></span>！</h2>
-  </div>
-
-  <!-- 初次設定彈窗 -->
-  <div id="setupModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-2xl p-8 w-full max-w-md mx-4">
-      <div class="text-center mb-6">
-        <div class="text-6xl mb-4">👋</div>
-        <h3 class="text-2xl font-bold font-cc">歡迎加入小雞手抄！</h3>
-        <p class="text-gray-600 font-cc">請先設定你的資料</p>
+<main class="max-w-6xl mx-auto px-4 py-6">
+  <!-- 首页 -->
+  <div id="pageHome">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div class="lg:col-span-2 space-y-4">
+        <div id="loginBox" class="p-6 rounded paper text-center">
+          <h2 class="text-xl font-bold ink mb-2 font-cc">欢迎来到小鸡手抄</h2>
+          <p class="ink mb-3 font-cc">登录后即可参与聊天互动</p>
+          <button onclick="signIn()" class="px-6 py-2 rounded border-ink paper font-cc">使用 Google 登录</button>
+        </div>
+        <div class="p-4 rounded paper">
+          <h3 class="text-lg font-bold ink mb-3 font-cc">即时聊天</h3>
+          <div id="chatBox" class="h-64 overflow-y-auto space-y-2"></div>
+          <form onsubmit="sendMsg(event)" class="mt-3 flex gap-2">
+            <input type="text" id="msgInput" placeholder="输入讯息..." class="flex-1 px-3 py-2 rounded border-ink paper ink" disabled>
+            <button type="submit" class="px-4 py-2 rounded border-ink paper ink font-cc">发送</button>
+          </form>
+        </div>
+        <div id="postBox" class="hide p-4 rounded paper">
+          <h3 class="text-lg font-bold ink mb-3 font-cc">粉丝投稿</h3>
+          <form onsubmit="submitPost(event)" class="space-y-2">
+            <input type="text" name="content" placeholder="投稿内容..." class="w-full px-3 py-2 rounded border-ink paper ink">
+            <button type="submit" class="px-4 py-2 rounded border-ink paper ink font-cc">投稿</button>
+          </form>
+        </div>
       </div>
       <div class="space-y-4">
-        <div>
-          <label class="block text-gray-700 font-cc mb-2">暱稱 *</label>
-          <input type="text" id="setupName" placeholder="你想要粉絲怎麼叫你？" class="w-full px-4 py-3 border rounded-xl font-cc text-lg">
-        </div>
-        <div>
-          <label class="block text-gray-700 font-cc mb-2">IG 帳號 *</label>
-          <input type="text" id="setupIG" placeholder="你的 IG 帳號" class="w-full px-4 py-3 border rounded-xl font-cc text-lg">
-        </div>
-      </div>
-      <button onclick="completeSetup()" class="w-full mt-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 rounded-xl font-cc text-xl">完成設定</button>
-    </div>
-  </div>
-
-  <!-- 首頁 -->
-  <div id="pageHome">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- 左側：聊天 -->
-      <div class="lg:col-span-2 space-y-6">
-        
-        <!-- 登入提示 -->
-        <div id="loginBox" class="bg-white rounded-2xl shadow-lg p-8 text-center">
-          <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center text-5xl">💬</div>
-          <h2 class="text-2xl font-bold font-cc mb-2">歡迎來到小雞手抄</h2>
-          <p class="text-gray-600 font-cc mb-4">登入後即可參與聊天互動</p>
-          <button onclick="signIn()" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 px-8 rounded-xl font-cc text-lg">使用 Google 登入</button>
-        </div>
-
-        <!-- 聊天區 -->
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
-            <h2 class="text-white font-bold text-xl font-cc">💬 即時聊天</h2>
-          </div>
-          <div id="chatBox" class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
-          <form onsubmit="sendMsg(event)" class="p-4 border-t bg-white">
-            <div class="flex gap-2">
-              <input type="text" id="msgInput" placeholder="輸入訊息..." class="flex-1 px-4 py-2 border rounded-xl font-cc" disabled>
-              <button type="submit" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 rounded-xl">傳送</button>
-            </div>
-          </form>
-        </div>
-
-        <!-- 投稿區 -->
-        <div id="postBox" class="hide bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div class="bg-yellow-50 border-b border-yellow-200 p-4">
-            <p class="text-yellow-700 font-cc">⚠️ 投稿前請先同意協作者邀請</p>
-          </div>
-          <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
-            <h2 class="text-white font-bold text-xl font-cc">📝 粉絲投稿</h2>
-          </div>
-          <form onsubmit="submitPost(event)" class="p-6 space-y-4">
+        <div id="userBox" class="hide p-4 rounded paper">
+          <div class="flex items-center gap-3 mb-3">
+            <img id="userImg" class="w-12 h-12 rounded-full border-ink">
             <div>
-              <label class="block font-cc mb-2">IG 帳號 *</label>
-              <input type="text" id="postIG" class="w-full px-4 py-2 border rounded-xl font-cc" required>
+              <div id="userName" class="font-bold ink"></div>
+              <div class="text-sm ink">金币: <span id="userCoins">0</span> | 积分: <span id="userPoints">0</span></div>
             </div>
-            <div>
-              <label class="block font-cc mb-2">投稿內容 *</label>
-              <textarea id="postContent" rows="4" class="w-full px-4 py-2 border rounded-xl font-cc" placeholder="至少 10 個字" required></textarea>
-            </div>
-            <button type="submit" class="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 rounded-xl font-cc text-lg">送出投稿</button>
-          </form>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="doCheckIn()" class="flex-1 px-3 py-2 rounded border-ink paper ink font-cc">每日签到</button>
+            <button onclick="showPage('wheel')" class="flex-1 px-3 py-2 rounded border-ink paper ink font-cc">抽奖</button>
+          </div>
         </div>
-      </div>
-
-      <!-- 右側：排行榜 -->
-      <div class="space-y-6">
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
-            <h2 class="text-white font-bold text-xl font-cc">🏆 粉絲排行榜</h2>
-          </div>
-          <div id="rankBox" class="p-4 space-y-3"></div>
-        </div>
-
-        <!-- 用戶資訊 -->
-        <div id="userBox" class="hide bg-white rounded-2xl shadow-lg p-6">
-          <div class="flex items-center gap-4 mb-4">
-            <img id="userImg" src="" class="w-16 h-16 rounded-full border-4 border-yellow-400">
-            <div>
-              <h3 id="userName" class="text-xl font-bold font-cc"></h3>
-              <span id="userTitle" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-sm font-cc"></span>
-            </div>
-          </div>
-          <div class="text-center font-cc">
-            <p>📊 <strong id="userPoints">0</strong> 積分</p>
-            <button onclick="showProfile()" class="mt-3 bg-gray-100 px-4 py-2 rounded-lg font-cc">編輯資料</button>
-          </div>
+        <div class="p-4 rounded paper">
+          <h3 class="text-lg font-bold ink mb-3 font-cc">粉丝排行榜</h3>
+          <div id="rankBox" class="space-y-2 max-h-48 overflow-y-auto"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 管理頁面 -->
+  <!-- 商店 -->
+  <div id="pageShop" class="hide">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="p-4 rounded paper">
+        <h3 class="text-lg font-bold ink mb-3 font-cc">官方商店</h3>
+        <div id="shopList" class="grid grid-cols-2 gap-2"></div>
+      </div>
+      <div class="p-4 rounded paper">
+        <h3 class="text-lg font-bold ink mb-3 font-cc">玩家市集</h3>
+        <div id="marketList" class="space-y-2"></div>
+      </div>
+      <div class="p-4 rounded paper">
+        <h3 class="text-lg font-bold ink mb-3 font-cc">我的物品</h3>
+        <div id="myItems" class="space-y-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 抽奖 -->
+  <div id="pageWheel" class="hide">
+    <div class="p-6 rounded paper text-center">
+      <h2 class="text-2xl font-bold ink mb-4 font-cc">幸运轮盘</h2>
+      <p class="ink mb-4 font-cc">金币: <span id="wheelCoins">0</span></p>
+      <div class="text-6xl mb-6">🎰</div>
+      <button onclick="spinWheel()" class="px-8 py-3 rounded border-ink paper ink font-cc text-xl">开始抽奖 (100金币)</button>
+    </div>
+  </div>
+
+  <!-- 管理 -->
   <div id="pageAdmin" class="hide">
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <div class="bg-gray-800 p-4">
-        <h2 class="text-white font-bold text-xl font-cc">⚙️ 管理員系統</h2>
-      </div>
-      
-      <div class="flex border-b">
-        <button onclick="adminTab('msgs')" id="tabMsgs" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500">訊息</button>
-        <button onclick="adminTab('users')" id="tabUsers" class="px-6 py-3 font-cc text-gray-500">用戶</button>
-        <button onclick="adminTab('posts')" id="tabPosts" class="px-6 py-3 font-cc text-gray-500">投稿</button>
-      </div>
-
-      <div id="adminMsgs" class="p-4 space-y-3"></div>
-      <div id="adminUsers" class="hide p-4 space-y-3"></div>
-      <div id="adminPosts" class="hide p-4 space-y-3"></div>
+    <div class="p-4 rounded paper">
+      <h3 class="text-lg font-bold ink mb-3 font-cc">管理员系统</h3>
+      <p class="ink font-cc">管理功能开发中...</p>
     </div>
   </div>
 </main>
 
-<!-- 編輯資料彈窗 -->
-<div id="profileModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-    <h3 class="text-xl font-bold font-cc mb-4">編輯個人資料</h3>
-    <div class="space-y-4">
-      <div>
-        <label class="block font-cc mb-2">暱稱</label>
-        <input type="text" id="editName" class="w-full px-4 py-2 border rounded-xl font-cc">
-      </div>
-      <div>
-        <label class="block font-cc mb-2">IG 帳號</label>
-        <input type="text" id="editIG" class="w-full px-4 py-2 border rounded-xl font-cc">
-      </div>
-    </div>
-    <div class="flex gap-2 mt-6">
-      <button onclick="saveProfile()" class="flex-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white py-2 rounded-xl font-cc">儲存</button>
-      <button onclick="closeProfile()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">取消</button>
-    </div>
+<!-- 设置弹窗 -->
+<div id="setupModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="p-6 rounded paper max-w-md w-full">
+    <h3 class="text-xl font-bold ink mb-3 font-cc">欢迎加入！</h3>
+    <input type="text" id="setupName" placeholder="昵称" class="w-full px-3 py-2 rounded border-ink paper ink mb-2">
+    <input type="text" id="setupIG" placeholder="IG账号" class="w-full px-3 py-2 rounded border-ink paper ink mb-2">
+    <button onclick="completeSetup()" class="w-full px-4 py-2 rounded border-ink paper ink font-cc">完成</button>
   </div>
 </div>
 
+<!-- 欢迎横幅 -->
+<div id="welcomeBox" class="hide p-4 rounded paper text-center mb-4">
+  <h2 class="text-xl font-bold ink font-cc">欢迎回来，<span id="welcomeName"></span>！</h2>
+</div>
+
 <script>
-// Firebase 設定
-firebase.initializeApp({
-  apiKey: "AIzaSyC9ARCgaoXfLFRVQb3djEhxN7ephFTlZ-U",
-  authDomain: "chicken-33a60.firebaseapp.com",
-  projectId: "chicken-33a60",
-  storageBucket: "chicken-33a60.firebasestorage.app",
-  messagingSenderId: "646431742714",
-  appId: "1:646431742714:web:47d9a7f456843a6b9bc743"
-});
-
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-let me = null;
-let meData = null;
-let unsubMsg = null;
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.remove('hide');
-  t.style.opacity = '1';
-  setTimeout(() => t.style.opacity = '0', 2000);
-}
-
-// 登入
-async function signIn() {
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
-  } catch (e) {
-    toast('登入失敗');
-  }
-}
-
-// 登出
-async function logout() {
-  await auth.signOut();
-}
-
-// 認證監聽
-auth.onAuthStateChanged(async (user) => {
-  me = user;
-  
-  if (user) {
-    const ref = db.collection('users').doc(user.uid);
-    const snap = await ref.get();
-    
-    if (snap.exists) {
-      meData = snap.data();
-    } else {
-      meData = {
-        displayName: user.displayName || '粉絲',
-        email: user.email,
-        photoURL: user.photoURL,
-        title: '新進粉絲',
-        igAccount: '',
-        points: 0,
-        isAdmin: false
-      };
-      await ref.set(meData);
-    }
-    
-    // 顯示用戶資訊
-    document.getElementById('loginBox').classList.add('hide');
-    document.getElementById('userBox').classList.remove('hide');
-    document.getElementById('postBox').classList.remove('hide');
-    document.getElementById('welcomeBox').classList.remove('hide');
-    document.getElementById('welcomeName').textContent = meData.displayName;
-    document.getElementById('userImg').src = meData.photoURL || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>';
-    document.getElementById('userName').textContent = meData.displayName;
-    document.getElementById('userTitle').textContent = meData.title;
-    document.getElementById('userPoints').textContent = meData.points || 0;
-    document.getElementById('postIG').value = meData.igAccount || '';
-    document.getElementById('msgInput').disabled = false;
-    document.getElementById('btnLogin').classList.add('hide');
-    document.getElementById('btnLogout').classList.remove('hide');
-    
-    if (meData.isAdmin) {
-      document.getElementById('btnAdmin').classList.remove('hide');
-    }
-    
-    // 檢查是否需要設定
-    if (!meData.igAccount) {
-      document.getElementById('setupModal').classList.remove('hide');
-      document.getElementById('setupName').value = meData.displayName;
-    }
-    
-    toast('登入成功！');
-  } else {
-    meData = null;
-    document.getElementById('loginBox').classList.remove('hide');
-    document.getElementById('userBox').classList.add('hide');
-    document.getElementById('postBox').classList.add('hide');
-    document.getElementById('welcomeBox').classList.add('hide');
-    document.getElementById('setupModal').classList.add('hide');
-    document.getElementById('btnLogin').classList.remove('hide');
-    document.getElementById('btnLogout').classList.add('hide');
-    document.getElementById('btnAdmin').classList.add('hide');
-    document.getElementById('msgInput').disabled = true;
-    
-    if (unsubMsg) unsubMsg();
-  }
-  
-  loadChat();
-  loadRank();
-});
-
-// 完成設定
-async function completeSetup() {
-  const name = document.getElementById('setupName').value.trim();
-  const ig = document.getElementById('setupIG').value.trim();
-  
-  if (!name || name.length < 2) { toast('暱稱需至少2字'); return; }
-  if (!ig) { toast('請填IG帳號'); return; }
-  
-  await db.collection('users').doc(me.uid).update({ displayName: name, igAccount: ig });
-  meData.displayName = name;
-  meData.igAccount = ig;
-  
-  document.getElementById('userName').textContent = name;
-  document.getElementById('welcomeName').textContent = name;
-  document.getElementById('postIG').value = ig;
-  document.getElementById('setupModal').classList.add('hide');
-  
-  toast('設定完成！');
-}
-
-// 發送訊息
-async function sendMsg(e) {
-  e.preventDefault();
-  if (!me || !meData) return;
-  
-  const content = document.getElementById('msgInput').value.trim();
-  if (!content) return;
-  
-  await db.collection('messages').add({
-    userId: me.uid,
-    userName: meData.displayName,
-    userAvatar: meData.photoURL,
-    content,
-    likes: 0,
-    time: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  
-  await db.collection('users').doc(me.uid).update({
-    points: firebase.firestore.FieldValue.increment(1)
-  });
-  
-  document.getElementById('msgInput').value = '';
-}
-
-// 載入聊天
-function loadChat() {
-  if (unsubMsg) unsubMsg();
-  
-  unsubMsg = db.collection('messages')
-    .orderBy('time', 'asc')
-    .onSnapshot(snap => {
-      const box = document.getElementById('chatBox');
-      box.innerHTML = '';
-      
-      snap.forEach(doc => {
-        const m = doc.data();
-        const isMe = m.userId === me?.uid;
-        const time = m.time?.toDate()?.toLocaleTimeString('zh-TW', {hour:'2-digit', minute:'2-digit'}) || '';
-        
-        box.innerHTML += `
-          <div class="flex gap-3 p-3 rounded-xl ${isMe ? 'bg-yellow-50' : 'bg-white'}">
-            <img src="${m.userAvatar || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>'}" class="w-10 h-10 rounded-full">
-            <div class="flex-1">
-              <div class="flex items-center gap-2">
-                <span class="font-bold font-cc text-sm">${m.userName}</span>
-                <span class="text-xs text-gray-400">${time}</span>
-              </div>
-              <p class="font-cc">${m.content}</p>
-            </div>
-          </div>
-        `;
-      });
-      
-      box.scrollTop = box.scrollHeight;
-    });
-}
-
-// 載入排行榜
-function loadRank() {
-  db.collection('users')
-    .orderBy('points', 'desc')
-    .limit(10)
-    .onSnapshot(snap => {
-      const box = document.getElementById('rankBox');
-      box.innerHTML = '';
-      let rank = 1;
-      
-      snap.forEach(doc => {
-        const u = doc.data();
-        if (u.points <= 0) return;
-        
-        const icon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🏆';
-        const title = rank === 1 ? '冠軍' : rank === 2 ? '亞軍' : rank === 3 ? '季軍' : '';
-        const bg = rank === 1 ? 'from-yellow-400 to-orange-400 text-white' : 'bg-gray-100';
-        
-        box.innerHTML += `
-          <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r ${bg}">
-            <span class="text-2xl">${icon}</span>
-            <img src="${u.photoURL || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>'}" class="w-10 h-10 rounded-full">
-            <div class="flex-1 font-cc">
-              <span class="font-bold">${u.displayName}</span>
-              ${title ? `<br><span class="text-sm opacity-80">${title}粉絲</span>` : ''}
-            </div>
-            <div class="text-right font-cc">
-              <span class="font-bold">${u.points}</span>分
-            </div>
-          </div>
-        `;
-        rank++;
-      });
-      
-      if (box.innerHTML === '') {
-        box.innerHTML = '<p class="text-center text-gray-500 font-cc py-8">還沒有人上榜，快去聊天吧！</p>';
-      }
-    });
-}
-
-// 頁面切換
-function showPage(page) {
-  document.getElementById('pageHome').classList.add('hide');
-  document.getElementById('pageAdmin').classList.add('hide');
-  document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.remove('hide');
-  
-  if (page === 'admin') loadAdmin();
-}
-
-// 管理員標籤
-function adminTab(tab) {
-  ['Msgs', 'Users', 'Posts'].forEach(t => {
-    document.getElementById('admin' + t).classList.add('hide');
-    document.getElementById('tab' + t).classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
-    document.getElementById('tab' + t).classList.add('text-gray-500');
-  });
-  document.getElementById('admin' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hide');
-  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('text-gray-500');
-  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
-}
-
-// 載入管理員資料
-function loadAdmin() {
-  db.collection('messages').orderBy('time', 'desc').get().then(snap => {
-    const box = document.getElementById('adminMsgs');
-    box.innerHTML = '';
-    snap.forEach(doc => {
-      const m = doc.data();
-      box.innerHTML += `
-        <div class="p-3 bg-gray-50 rounded-xl flex justify-between items-center">
-          <div>
-            <span class="font-bold font-cc">${m.userName}</span>
-            <p class="font-cc">${m.content}</p>
-          </div>
-          <button onclick="delMsg('${doc.id}')" class="text-red-500">刪除</button>
-        </div>
-      `;
-    });
-  });
-  
-  db.collection('users').get().then(snap => {
-    const box = document.getElementById('adminUsers');
-    box.innerHTML = '';
-    snap.forEach(doc => {
-      const u = doc.data();
-      box.innerHTML += `
-        <div class="p-3 bg-gray-50 rounded-xl flex justify-between items-center">
-          <div>
-            <span class="font-bold font-cc">${u.displayName}</span>
-            <span class="text-sm text-gray-500 ml-2">${u.points}分</span>
-          </div>
-          <input type="number" value="${u.points}" onchange="setPoints('${doc.id}', this.value)" class="w-20 px-2 py-1 border rounded font-cc">
-        </div>
-      `;
-    });
-  });
-  
-  db.collection('submissions').where('status', '==', 'pending').get().then(snap => {
-    const box = document.getElementById('adminPosts');
-    box.innerHTML = '';
-    if (snap.empty) {
-      box.innerHTML = '<p class="text-center text-gray-500 font-cc py-4">暫無待審核投稿</p>';
-      return;
-    }
-    snap.forEach(doc => {
-      const p = doc.data();
-      box.innerHTML += `
-        <div class="p-4 bg-gray-50 rounded-xl">
-          <div class="flex justify-between mb-2">
-            <span class="font-bold font-cc">${p.userName}</span>
-            <span class="text-gray-500">@${p.igAccount}</span>
-          </div>
-          <p class="font-cc mb-3">${p.content}</p>
-          <div class="flex gap-2">
-            <button onclick="apprPost('${doc.id}')" class="flex-1 bg-green-500 text-white py-2 rounded font-cc">核准</button>
-            <button onclick="rejectPost('${doc.id}')" class="flex-1 bg-red-500 text-white py-2 rounded font-cc">拒絕</button>
-          </div>
-        </div>
-      `;
-    });
-  });
-}
-
-async function delMsg(id) {
-  await db.collection('messages').doc(id).delete();
-  loadAdmin();
-}
-
-async function setPoints(id, pts) {
-  await db.collection('users').doc(id).update({ points: parseInt(pts) || 0 });
-}
-
-async function apprPost(id) {
-  await db.collection('submissions').doc(id).update({ status: 'approved' });
-  loadAdmin();
-}
-
-async function rejectPost(id) {
-  await db.collection('submissions').doc(id).update({ status: 'rejected' });
-  loadAdmin();
-}
-
-// 投稿
-async function submitPost(e) {
-  e.preventDefault();
-  if (!me || !meData) return;
-  
-  const ig = document.getElementById('postIG').value.trim();
-  const content = document.getElementById('postContent').value.trim();
-  
-  if (!ig) { toast('請填IG帳號'); return; }
-  if (content.length < 10) { toast('內容需至少10字'); return; }
-  
-  await db.collection('submissions').add({
-    userId: me.uid,
-    userName: meData.displayName,
-    igAccount: ig,
-    content,
-    status: 'pending',
-    time: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  
-  document.getElementById('postContent').value = '';
-  toast('投稿成功！');
-}
-
-// 個人資料
-function showProfile() {
-  document.getElementById('editName').value = meData.displayName;
-  document.getElementById('editIG').value = meData.igAccount || '';
-  document.getElementById('profileModal').classList.remove('hide');
-}
-
-function closeProfile() {
-  document.getElementById('profileModal').classList.add('hide');
-}
-
-async function saveProfile() {
-  const name = document.getElementById('editName').value.trim();
-  const ig = document.getElementById('editIG').value.trim();
-  
-  if (!name || name.length < 2) { toast('暱稱需至少2字'); return; }
-  
-  await db.collection('users').doc(me.uid).update({ displayName: name, igAccount: ig });
-  meData.displayName = name;
-  meData.igAccount = ig;
-  
-  document.getElementById('userName').textContent = name;
-  document.getElementById('welcomeName').textContent = name;
-  document.getElementById('userTitle').textContent = meData.title;
-  closeProfile();
-  toast('已更新');
-}
-
-// 初始載入
-loadChat();
-loadRank();
+  function spinWheel(){ if(!meData.coins||meData.coins<SPIN_COST){ toast('金币不足'); return; } db.collection('users').doc(me.uid).update({coins:firebase.firestore.FieldValue.increment(-SPIN_COST)}); const prizes=['10金币','20金币','50金币','100金币','谢谢参与']; const p=prizes[Math.floor(Math.random()*prizes.length)]; if(p!='谢谢参与'){ const amt=parseInt(p); db.collection('users').doc(me.uid).update({coins:firebase.firestore.FieldValue.increment(amt)}); toast('获得 '+p); }else{ toast('谢谢参与'); } document.getElementById('wheelCoins').textContent=meData.coins; }
+  function submitPost(e){ e.preventDefault(); const c=e.target.content.value.trim(); if(!c)return; db.collection('posts').add({userId:me.uid,userName:meData.displayName,content:c,time:Date.now(),status:'pending'}); toast('投稿成功'); e.target.content.value=''; }
 </script>
-
 </body>
 </html>
