@@ -160,7 +160,7 @@
           <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
             <h2 class="text-white font-bold text-2xl font-cc">🏆 粉丝排行榜</h2>
           </div>
-          <div id="rankBox" class="p-4 space-y-3"></div>
+          <div id="rankBox" class="p-4 space-y-3 max-h-64 overflow-y-auto"></div>
         </div>
 
         <!-- 用户资讯 -->
@@ -736,17 +736,19 @@ function loadRank() {
       const box = document.getElementById('rankBox');
       box.innerHTML = '';
       let rank = 1;
+      let hasData = false;
       
       snap.forEach(doc => {
         const u = doc.data();
         if (u.points <= 0 && !u.isTopFan) return;
+        hasData = true;
         
         const icon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🏆';
         const title = rank === 1 ? '冠军' : rank === 2 ? '亚军' : rank === 3 ? '季军' : '';
         const bg = rank === 1 ? 'from-yellow-400 to-orange-400 text-white' : 'bg-gray-100';
         
         const item = `
-          <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r ${bg}">
+          <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r ${bg} ${rank > 3 ? 'mt-2' : ''}">
             <span class="text-2xl flex-shrink-0">${icon}</span>
             <img src="${u.photoURL || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>'}" class="w-10 h-10 rounded-full flex-shrink-0">
             <div class="flex-1 min-w-0">
@@ -765,8 +767,10 @@ function loadRank() {
         rank++;
       });
       
-      if (box.innerHTML === '') {
+      if (!hasData) {
         box.innerHTML = '<p class="text-center text-gray-500 py-8 font-cc text-lg">还没有人上榜，快去聊天吧！</p>';
+      } else if (rank > 4) {
+        box.innerHTML += '<div class="text-center py-2"><span class="text-gray-400 text-sm font-cc">↓ 滑动查看更多</span></div>';
       }
     });
 }
