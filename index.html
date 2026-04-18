@@ -226,13 +226,11 @@
         <button onclick="shopTab('official')" id="shopTabOfficial" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">官方商店</button>
         <button onclick="shopTab('market')" id="shopTabMarket" class="px-6 py-3 font-cc text-gray-500 text-lg">玩家市集</button>
         <button onclick="shopTab('my')" id="shopTabMy" class="px-6 py-3 font-cc text-gray-500 text-lg">我的物品</button>
-        <button onclick="shopTab('apply')" id="shopTabApply" class="px-6 py-3 font-cc text-gray-500 text-lg">申请上架</button>
       </div>
 
       <div id="shopOfficial" class="p-4 space-y-3"></div>
       <div id="shopMarket" class="hide p-4 space-y-3"></div>
       <div id="shopMy" class="hide p-4 space-y-3"></div>
-      <div id="shopApply" class="hide p-4 space-y-3"></div>
     </div>
   </div>
 
@@ -1413,8 +1411,10 @@ async function loadCardBag(filter) {
   
   box.innerHTML = cards.map(card => {
     const q = CARD_QUALITIES[card.quality];
+    const locked = card.locked;
     return `
-      <div class="mini-card p-4 rounded-2xl ${q.bg} text-white text-center relative cursor-pointer hover:scale-105 transition-all shadow-lg" onclick="showCardDetail('${card.id}')">
+      <div class="mini-card p-4 rounded-2xl ${q.bg} text-white text-center relative cursor-pointer hover:scale-105 transition-all shadow-lg ${locked ? 'opacity-60' : ''}" onclick="showCardDetail('${card.id}')">
+        ${locked ? '<div class="absolute top-2 left-2 bg-black/60 px-2 py-1 rounded-full text-sm">🔒</div>' : ''}
         <div class="absolute top-2 right-2 bg-black/40 px-2 py-1 rounded-full text-sm font-bold">${qualityIcons[card.quality]}${q.name}</div>
         <img src="cards/${card.templateIdx}.png" class="big-card-img mx-auto object-contain my-3">
         <div class="text-lg font-bold truncate">${card.name}</div>
@@ -1455,8 +1455,11 @@ async function showCardDetail(cardId) {
   statsHtml += '</div>';
   
   const content = document.getElementById('cardDetailContent');
+  const locked = card.locked;
+  
   content.innerHTML = `
     <div class="text-center p-6 rounded-2xl ${q.bg} text-white shadow-xl">
+      ${locked ? '<div class="inline-block px-4 py-2 rounded-full bg-black/60 text-xl font-bold mb-2">🔒 已锁定</div>' : ''}
       <img src="cards/${card.templateIdx}.png" class="card-result-img mx-auto object-contain drop-shadow-2xl my-4">
       <div class="inline-block px-4 py-2 rounded-full bg-black/30 text-xl font-bold">${q.name}品质</div>
       <h3 class="text-3xl font-bold mt-3">${card.name}</h3>
@@ -1473,6 +1476,23 @@ async function showCardDetail(cardId) {
 function closeCardDetail() {
   document.getElementById('cardDetailModal').classList.add('hide');
   selectedCardForSale = null;
+}
+
+function initCustomModals() {
+  document.getElementById('customConfirmModal').onclick = (e) => {
+    if (e.target.id === 'customConfirmModal') closeCustomConfirm();
+  };
+  document.getElementById('customPromptModal').onclick = (e) => {
+    if (e.target.id === 'customPromptModal') closeCustomPrompt();
+  };
+}
+
+function closeCustomConfirm() {
+  document.getElementById('customConfirmModal').classList.add('hide');
+}
+
+function closeCustomPrompt() {
+  document.getElementById('customPromptModal').classList.add('hide');
 }
 
 let synthSelectedCards = [];
@@ -1493,10 +1513,11 @@ function closeSynthModal() {
 async function loadSynthCards() {
   const box = document.getElementById('synthSelectList');
   const snap = await db.collection('cards').where('ownerId', '==', me?.uid).get();
-  const cards = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  let cards = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  cards = cards.filter(c => !c.locked);
   
   if (cards.length === 0) {
-    box.innerHTML = '<p class="text-center text-gray-400 font-cc">没有卡牌可合成</p>';
+    box.innerHTML = '<p class="text-center text-gray-400 font-cc">没有可合成的卡牌</p>';
     return;
   }
   
@@ -1667,6 +1688,8 @@ async function sellCard() {
   const price = await showPrompt('上架出售', '请输入出售价格（金币）：', '💰', '100');
   if (!price || isNaN(parseInt(price))) return;
   
+  await db.collection('cards').doc(selectedCardForSale.id).update({ locked: true });
+  
   await db.collection('marketplace').add({
     name: selectedCardForSale.name,
     emoji: '🎴',
@@ -1693,6 +1716,7 @@ async function sellCard() {
   
   toast('已上架到玩家市集！');
   closeCardDetail();
+  loadCardBag('all');
 }
 
 // ============ 商店系统 ============
@@ -1996,19 +2020,18 @@ function loadMarket() {
   db.collection('marketplace').where('status', '==', 'selling').orderBy('time', 'desc').get().then(snap => {
     const box = document.getElementById('shopMarket');
     if (snap.empty) {
-      box.innerHTML = '<p class="text-center text-gray-500 py-8 font-cc text-lg">玩家市集暂无商品</p>';
+      box.innerHTML = '<p class="text-center text-gray-500 py-8 font-cc text-lg">🎪 玩家市集暂无商品</p>';
       return;
     }
-    box.innerHTML = '';
+    box.innerHTML = '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
     snap.forEach(doc => {
       const item = doc.data();
       const isOwner = item.sellerId === me?.uid;
       
       let cardInfo = '';
       if (item.type === 'card') {
-        const q = CARD_QUALITIES[item.quality] || {};
         cardInfo = `
-          <div class="flex gap-2 text-xs">
+          <div class="flex gap-2 text-xs mt-2">
             <span class="px-2 py-0.5 rounded bg-white/50">⚔️${item.atk}</span>
             <span class="px-2 py-0.5 rounded bg-white/50">🛡️${item.def}</span>
             <span class="px-2 py-0.5 rounded bg-white/50">❤️${item.hp}</span>
@@ -2016,29 +2039,23 @@ function loadMarket() {
         `;
       }
       
+      const icon = item.type === 'card' ? '🎴' : (item.emoji || '📦');
+      const itemBg = item.type === 'card' ? 'border-4 border-yellow-400' : 'bg-gradient-to-r from-purple-50 to-pink-50';
+      
       box.innerHTML += `
-        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl ${item.type === 'card' ? 'border-2 border-' + item.quality : ''}">
-          <div class="text-4xl">${item.type === 'card' ? '🎴' : (item.emoji || '📦')}</div>
-          <div class="flex-1 min-w-0">
-            <h3 class="font-bold text-lg font-cc truncate">${item.name}</h3>
-            <p class="text-gray-500 text-sm font-cc">卖家：${item.sellerName}</p>
-            ${cardInfo}
-            ${item.highestBid ? `<p class="text-purple-500 text-sm font-cc">当前最高出价：${item.highestBid} 💰</p>` : ''}
-          </div>
-          <div class="text-right flex-shrink-0">
-            <p class="font-bold text-lg text-orange-500">${item.price} 💰</p>
-            ${isOwner ? '<span class="text-sm text-gray-400">你的商品</span>' : `
-              ${item.type === 'card' ? `
-                <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}', 'card', '${item.cardId}')" class="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg font-cc text-sm">直接购买</button>
-              ` : `
-                <button onclick="bidItem('${doc.id}', ${item.price})" class="mt-2 bg-purple-500 text-white px-4 py-2 rounded-lg font-cc text-sm">出价</button>
-                <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}')" class="mt-1 bg-green-500 text-white px-4 py-2 rounded-lg font-cc text-sm">直接购买</button>
-              `}
-            `}
-          </div>
+        <div class="p-4 rounded-2xl ${itemBg} text-center">
+          <div class="text-5xl mb-2">${icon}</div>
+          <h3 class="font-bold text-lg font-cc">${item.name}</h3>
+          <p class="text-gray-500 text-sm font-cc mb-2">卖家：${item.sellerName}</p>
+          ${cardInfo}
+          <p class="font-bold text-2xl text-orange-500 mt-3">${item.price} 💰</p>
+          ${isOwner ? '<span class="block mt-2 text-sm text-gray-400">🔒 你的商品</span>' : `
+            <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}', '${item.type || 'item'}', '${item.cardId || ''}', ${item.inventoryIndex})" class="mt-3 w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white py-2 rounded-xl font-cc">🎫 购买</button>
+          `}
         </div>
       `;
     });
+    box.innerHTML += '</div>';
   });
 }
 
@@ -2063,7 +2080,7 @@ async function bidItem(itemId, currentPrice) {
   loadMarket();
 }
 
-async function buyNowItem(itemId, price, name, sellerId, type, cardId) {
+async function buyNowItem(itemId, price, name, sellerId, type, cardId, inventoryIndex) {
   if (sellerId === me?.uid) { toast('不能购买自己的商品'); return; }
   if ((meData.coins || 0) < price) {
     toast('金币不足！');
@@ -2082,8 +2099,26 @@ async function buyNowItem(itemId, price, name, sellerId, type, cardId) {
   if (type === 'card' && cardId) {
     await db.collection('cards').doc(cardId).update({
       ownerId: me.uid,
-      ownerName: meData.displayName
+      ownerName: meData.displayName,
+      locked: false
     });
+  } else if (inventoryIndex !== undefined && inventoryIndex !== '' && sellerId !== me?.uid) {
+    const snap = await db.collection('users').doc(sellerId).get();
+    const sellerInv = snap.data().inventory || [];
+    const mySnap = await db.collection('users').doc(me.uid).get();
+    const myInv = mySnap.data().inventory || [];
+    
+    const item = sellerInv[inventoryIndex];
+    if (item) {
+      item.locked = false;
+      item.marketId = null;
+      myInv.push(item);
+      sellerInv.splice(inventoryIndex, 1);
+      
+      await db.collection('users').doc(sellerId).update({ inventory: sellerInv });
+      await db.collection('users').doc(me.uid).update({ inventory: myInv });
+      meData.inventory = myInv;
+    }
   }
   
   await db.collection('marketplace').doc(itemId).update({
@@ -2093,13 +2128,17 @@ async function buyNowItem(itemId, price, name, sellerId, type, cardId) {
   });
   meData.coins -= price;
   document.getElementById('userCoins').textContent = meData.coins;
-  toast('购买成功！');
+  toast(`购买成功！获得「${name}」`);
   loadMarket();
+  loadMyItems();
 }
 
 function loadMyItems() {
   const box = document.getElementById('shopMy');
   const inv = meData.inventory || [];
+  
+  const availableItems = inv.filter((item, i) => !item.locked);
+  const lockedItems = inv.filter((item, i) => item.locked);
   
   if (inv.length === 0) {
     box.innerHTML = '<p class="text-center text-gray-500 py-8 font-cc text-lg">你还没有任何物品</p>';
@@ -2108,42 +2147,77 @@ function loadMyItems() {
   
   box.innerHTML = `
     <div class="mb-4 p-4 bg-green-50 rounded-xl">
-      <h3 class="font-bold font-cc">在仓物品</h3>
-      <p class="text-sm text-gray-500 font-cc">你拥有的物品可以上架到玩家市集出售</p>
+      <h3 class="font-bold font-cc">🎒 我的物品</h3>
+      <p class="text-sm text-gray-500 font-cc">选择物品上架到玩家市集</p>
     </div>
-    <div class="flex gap-4 mb-4">
-      <input type="text" id="sellName" placeholder="物品名称" class="flex-1 px-4 py-2 border rounded-xl">
-      <input type="number" id="sellPrice" placeholder="价格" class="w-24 px-4 py-2 border rounded-xl">
-      <button onclick="listOnMarket()" class="bg-purple-500 text-white px-4 py-2 rounded-xl font-cc">上架</button>
-    </div>
-    <div class="space-y-3">
   `;
   
-  inv.forEach((item, i) => {
-    box.innerHTML += `
-      <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-xl">
-        <span class="text-2xl">📦</span>
-        <div class="flex-1">
-          <span class="font-cc">${item.name}</span>
+  if (availableItems.length > 0) {
+    box.innerHTML += '<h4 class="font-bold font-cc mb-2">可上架</h4>';
+    box.innerHTML += '<div class="space-y-2 mb-4">';
+    availableItems.forEach((item, i) => {
+      const realIdx = inv.findIndex((_, idx) => !inv[idx].locked && idx === i);
+      box.innerHTML += `
+        <div class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200">
+          <span class="text-2xl">${item.emoji || '📦'}</span>
+          <div class="flex-1">
+            <span class="font-cc font-bold">${item.name}</span>
+          </div>
+          <input type="number" id="price-${i}" placeholder="价格" class="w-20 px-2 py-1 border rounded text-center">
+          <button onclick="listMyItemOnMarket(${realIdx})" class="bg-purple-500 text-white px-3 py-1 rounded text-sm font-cc">上架</button>
         </div>
-        <button onclick="useItem(${i})" class="bg-green-500 text-white px-3 py-1 rounded text-sm font-cc">使用</button>
-        <button onclick="giftItem(${i})" class="bg-blue-500 text-white px-3 py-1 rounded text-sm font-cc">送礼</button>
-      </div>
-    `;
-  });
-  box.innerHTML += '</div>';
+      `;
+    });
+    box.innerHTML += '</div>';
+  }
+  
+  if (lockedItems.length > 0) {
+    box.innerHTML += '<h4 class="font-bold font-cc mb-2 text-gray-500">已上架（锁定）</h4>';
+    box.innerHTML += '<div class="space-y-2">';
+    lockedItems.forEach((item, i) => {
+      box.innerHTML += `
+        <div class="flex items-center gap-3 p-3 bg-gray-100 rounded-xl opacity-60">
+          <span class="text-2xl">${item.emoji || '📦'}</span>
+          <div class="flex-1">
+            <span class="font-cc">${item.name}</span>
+            <span class="text-xs text-gray-400 ml-2">🔒 已锁定</span>
+          </div>
+        </div>
+      `;
+    });
+    box.innerHTML += '</div>';
+  }
 }
 
-async function listOnMarket() {
-  const name = document.getElementById('sellName').value.trim();
-  const price = parseInt(document.getElementById('sellPrice').value);
-  if (!name || !price || price <= 0) { toast('请填写正确的物品名称和价格'); return; }
+async function listMyItemOnMarket(index) {
+  const inv = meData.inventory || [];
+  if (index >= inv.length) return;
+  const item = inv[index];
+  if (item.locked) { toast('该物品已上架'); return; }
   
-  const item = { name, emoji: '📦', price, sellerId: me.uid, sellerName: meData.displayName, time: Date.now(), status: 'selling' };
-  await db.collection('marketplace').add(item);
+  const price = document.getElementById('price-' + index)?.value;
+  if (!price || price <= 0) { toast('请填写正确的价格'); return; }
+  
+  inv[index].locked = true;
+  inv[index].marketId = Date.now().toString();
+  
+  await db.collection('users').doc(me.uid).update({ inventory: inv });
+  meData.inventory = inv;
+  
+  await db.collection('marketplace').add({
+    name: item.name,
+    emoji: item.emoji || '📦',
+    price: parseInt(price),
+    sellerId: me.uid,
+    sellerName: meData.displayName,
+    inventoryIndex: index,
+    time: Date.now(),
+    status: 'selling'
+  });
+  
   toast('已上架到玩家市集！');
-  document.getElementById('sellName').value = '';
-  document.getElementById('sellPrice').value = '';
+  loadMyItems();
+  loadMarket();
 }
 
 async function useItem(index) {
@@ -2637,6 +2711,7 @@ function loadAdminWheel() {
 loadChat();
 loadRank();
 initDefaultShop();
+initCustomModals();
 
 async function initDefaultShop() {
   const snap = await db.collection('shopItems').limit(1).get();
