@@ -64,7 +64,7 @@
 </head>
 <body class="min-h-screen" style="background-color: #f5f0e6;">
 
-<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-xl z-50 font-cc text-xl"></div>
+<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 bg-gray-800 text-black px-6 py-3 rounded-xl z-50 font-cc text-xl"></div>
 
 <!-- Header -->
 <header class="shadow-lg" style="background-color: #f5f0e6; border-bottom: 3px solid #2d2d2d;">
@@ -112,7 +112,7 @@
           <input type="text" id="setupIG" placeholder="你的 IG 账号" class="w-full px-4 py-3 border rounded-xl text-lg">
         </div>
       </div>
-      <button onclick="completeSetup()" class="w-full mt-6 bg-amber-50 to-amber-100 text-white font-bold py-3 rounded-xl font-cc text-xl">完成设定</button>
+      <button onclick="completeSetup()" class="w-full mt-6 bg-amber-50 to-amber-100 text-black font-bold py-3 rounded-xl font-cc text-xl">完成设定</button>
     </div>
   </div>
 
@@ -166,7 +166,7 @@
           <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-amber-100 to-amber-100 rounded-full flex items-center justify-center text-6xl">💬</div>
           <h2 class="text-3xl font-bold font-cc mb-2">欢迎来到小鸡手抄</h2>
           <p class="text-gray-600 font-cc mb-4">登录后即可参与聊天互动</p>
-          <button onclick="signIn()" class="bg-amber-50 to-amber-100 text-white font-bold py-3 px-8 rounded-xl font-cc text-lg">使用 Google 登录</button>
+          <button onclick="signIn()" class="bg-amber-100 text-black font-bold py-3 px-8 rounded-xl font-cc text-lg" style="color: #2d2d2d; border: 2px solid #2d2d2d;">使用 Google 登录</button>
         </div>
 
         <!-- 聊天区 -->
@@ -176,7 +176,7 @@
           <form onsubmit="sendMsg(event)" class="p-4 border-t bg-white">
             <div class="flex gap-2">
               <input type="text" id="msgInput" placeholder="输入讯息..." class="flex-1 px-4 py-2 border rounded-xl text-lg" disabled>
-              <button type="submit" class="bg-amber-50 to-amber-100 text-white px-6 py-2 rounded-xl font-cc text-lg">传送</button>
+              <button type="submit" class="bg-amber-50 to-amber-100 text-black px-6 py-2 rounded-xl font-cc text-lg">传送</button>
             </div>
           </form>
         </div>
@@ -187,7 +187,7 @@
             <p class="text-amber-700 font-cc text-lg">⚠️ 投稿前请先同意协作者邀请</p>
           </div>
           <div class="bg-amber-50 to-amber-100 p-4">
-            <h2 class="text-white font-bold text-2xl font-cc">📝 粉丝投稿</h2>
+            <h2 class="text-black font-bold text-2xl font-cc">📝 粉丝投稿</h2>
           </div>
           <form onsubmit="submitPost(event)" class="p-6 space-y-4">
             <div>
@@ -198,7 +198,7 @@
               <label class="block font-cc text-lg mb-2">投稿内容 *</label>
               <textarea id="postContent" rows="4" class="w-full px-4 py-2 border rounded-xl text-lg" placeholder="至少 10 个字" required></textarea>
             </div>
-            <button type="submit" class="w-full bg-amber-50 to-amber-100 text-white font-bold py-3 rounded-xl font-cc text-lg">送出投稿</button>
+            <button type="submit" class="w-full bg-amber-50 to-amber-100 text-black font-bold py-3 rounded-xl font-cc text-lg">送出投稿</button>
           </form>
         </div>
       </div>
@@ -207,7 +207,7 @@
       <div class="space-y-6">
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div class="bg-amber-50 to-amber-100 p-4">
-            <h2 class="text-white font-bold text-2xl font-cc">🏆 粉丝排行榜</h2>
+            <h2 class="text-black font-bold text-2xl font-cc">🏆 粉丝排行榜</h2>
           </div>
           <div id="rankBox" class="p-4 space-y-3 max-h-64 overflow-y-auto"></div>
         </div>
@@ -218,15 +218,15 @@
             <img id="userImg" src="" class="w-16 h-16 rounded-full border-4 border-yellow-400">
             <div>
               <h3 id="userName" class="text-xl font-bold font-cc"></h3>
-              <span id="userTitle" class="bg-amber-50 to-amber-100 text-white px-3 py-1 rounded-full text-sm font-cc"></span>
+              <span id="userTitle" class="bg-amber-50 to-amber-100 text-black px-3 py-1 rounded-full text-sm font-cc"></span>
             </div>
           </div>
           <div class="text-center font-cc text-lg space-y-2">
             <p>💰 金币：<strong id="userCoins">0</strong></p>
             <p>📊 积分：<strong id="userPoints">0</strong></p>
             <div class="flex gap-2 justify-center">
-              <button onclick="doCheckIn()" id="btnCheckIn" class="bg-green-500 text-white px-4 py-2 rounded-lg font-cc">每日签到</button>
-              <button onclick="showPage('wheel')" class="bg-purple-500 text-white px-4 py-2 rounded-lg font-cc">🎰 抽奖</button>
+              <button onclick="doCheckIn()" id="btnCheckIn" class="bg-green-500 text-black px-4 py-2 rounded-lg font-cc">每日签到</button>
+              <button onclick="showPage('wheel')" class="bg-purple-500 text-black px-4 py-2 rounded-lg font-cc">🎰 抽奖</button>
             </div>
             <button onclick="showProfile()" class="mt-2 bg-gray-100 px-4 py-2 rounded-lg font-cc">编辑资料</button>
           </div>
@@ -239,7 +239,7 @@
   <div id="pageAdmin" class="hide">
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
       <div class="bg-gray-800 p-4">
-        <h2 class="text-white font-bold text-2xl font-cc">⚙️ 管理员系统</h2>
+        <h2 class="text-black font-bold text-2xl font-cc">⚙️ 管理员系统</h2>
       </div>
       
       <div class="flex border-b flex-wrap">
@@ -297,7 +297,7 @@
             <div id="wheelLabels" class="absolute inset-0">
               <div class="absolute inset-0 flex flex-wrap content-start justify-center" style="transform: rotate(0deg);">
                 <div class="absolute top-2 left-1/2 -translate-x-1/2 -translate-y-1/2" style="transform: rotate(22.5deg);">
-                  <span class="text-xs font-bold text-white drop-shadow">50💰</span>
+                  <span class="text-xs font-bold text-black drop-shadow">50💰</span>
                 </div>
               </div>
             </div>
@@ -311,7 +311,7 @@
       </div>
 
       <div class="text-center">
-        <button onclick="spinWheel()" id="btnSpin" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-white font-bold py-4 px-12 rounded-full font-cc text-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:transform-none disabled:hover:scale-100">
+        <button onclick="spinWheel()" id="btnSpin" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 text-black font-bold py-4 px-12 rounded-full font-cc text-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all disabled:opacity-50 disabled:transform-none disabled:hover:scale-100">
           🎲 开始抽奖！
         </button>
       </div>
@@ -322,7 +322,7 @@
           <p class="font-cc text-2xl mt-2 text-gray-700">恭喜获得</p>
           <p id="wheelPrize" class="font-bold text-4xl mt-2" style="color: #2d2d2d;"></p>
           <p id="wheelPrizeSub" class="font-cc text-lg mt-2 text-gray-600"></p>
-          <button onclick="closeWheelResult()" class="mt-4 bg-amber-50 to-amber-100 text-white px-8 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+          <button onclick="closeWheelResult()" class="mt-4 bg-amber-50 to-amber-100 text-black px-8 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
             太棒了！
           </button>
         </div>
@@ -337,16 +337,16 @@
     <div id="cardReveal" class="relative" style="perspective: 1000px;">
       <div id="cardFront" class="bg-gradient-to-br from-amber-100 via-pink-400 to-purple-500 rounded-2xl p-4 shadow-2xl transform transition-all duration-700" style="transform-style: preserve-3d;">
         <div class="text-center">
-          <div id="cardQualityBadge" class="inline-block px-4 py-1 rounded-full text-white font-bold mb-2">传奇</div>
+          <div id="cardQualityBadge" class="inline-block px-4 py-1 rounded-full text-black font-bold mb-2">传奇</div>
           <img id="cardRevealImg" src="" class="w-48 h-48 mx-auto object-contain drop-shadow-lg">
-          <h3 id="cardRevealName" class="text-2xl font-bold text-white font-cc drop-shadow mt-2"></h3>
-          <p id="cardRevealDesc" class="text-white/80 text-sm font-cc mt-1"></p>
+          <h3 id="cardRevealName" class="text-2xl font-bold text-black font-cc drop-shadow mt-2"></h3>
+          <p id="cardRevealDesc" class="text-black/80 text-sm font-cc mt-1"></p>
           <div id="cardRevealStats" class="mt-3 flex justify-center gap-2 flex-wrap"></div>
-          <p id="cardRevealSerial" class="mt-2 text-white/60 text-sm font-cc">#000000</p>
+          <p id="cardRevealSerial" class="mt-2 text-black/60 text-sm font-cc">#000000</p>
         </div>
       </div>
     </div>
-    <button onclick="closeCardResult()" class="mt-4 w-full bg-amber-50 to-amber-100 text-white py-3 rounded-xl font-cc text-xl shadow-lg hover:scale-105 transition-all">
+    <button onclick="closeCardResult()" class="mt-4 w-full bg-amber-50 to-amber-100 text-black py-3 rounded-xl font-cc text-xl shadow-lg hover:scale-105 transition-all">
       收下卡牌
     </button>
   </div>
@@ -376,8 +376,8 @@
   <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden">
     <div id="cardDetailContent" class="p-6"></div>
     <div id="cardDetailButtons" class="p-4 border-t flex gap-2">
-      <button onclick="openSynthWithCard()" class="flex-1 bg-purple-500 text-white py-2 rounded-xl font-cc">🔮 合成</button>
-      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-white py-2 rounded-xl font-cc">💰 上架</button>
+      <button onclick="openSynthWithCard()" class="flex-1 bg-purple-500 text-black py-2 rounded-xl font-cc">🔮 合成</button>
+      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-black py-2 rounded-xl font-cc">💰 上架</button>
       <button onclick="closeCardDetail()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">关闭</button>
     </div>
   </div>
@@ -387,8 +387,8 @@
 <div id="synthModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
     <div class="bg-gradient-to-r from-purple-400 to-pink-400 p-4 flex justify-between items-center">
-      <h3 class="text-white font-bold text-2xl font-cc">🔮 卡牌合成系统</h3>
-      <button onclick="closeSynthModal()" class="text-white text-2xl hover:scale-110 transition-all">✕</button>
+      <h3 class="text-black font-bold text-2xl font-cc">🔮 卡牌合成系统</h3>
+      <button onclick="closeSynthModal()" class="text-black text-2xl hover:scale-110 transition-all">✕</button>
     </div>
     <div class="p-4 card-modal-content">
       <div class="bg-purple-50 p-4 rounded-xl mb-4">
@@ -410,7 +410,7 @@
         </div>
       </div>
       <div class="text-center mt-4">
-        <button onclick="doSynth()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-8 rounded-xl font-cc text-xl">🔮 开始合成</button>
+        <button onclick="doSynth()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-black font-bold py-3 px-8 rounded-xl font-cc text-xl">🔮 开始合成</button>
       </div>
     </div>
   </div>
@@ -431,7 +431,7 @@
       </div>
     </div>
     <div class="flex gap-2 mt-6">
-      <button onclick="saveProfile()" class="flex-1 bg-amber-50 to-amber-100 text-white py-2 rounded-xl font-cc text-lg">储存</button>
+      <button onclick="saveProfile()" class="flex-1 bg-amber-50 to-amber-100 text-black py-2 rounded-xl font-cc text-lg">储存</button>
       <button onclick="closeProfile()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc text-lg">取消</button>
     </div>
   </div>
@@ -447,7 +447,7 @@
     </div>
     <div class="flex gap-3">
       <button id="confirmCancelBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-cc text-lg transition-all">取消</button>
-      <button id="confirmOkBtn" class="flex-1 bg-amber-50 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
+      <button id="confirmOkBtn" class="flex-1 bg-amber-50 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-black py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
     </div>
   </div>
 </div>
@@ -463,7 +463,7 @@
     <input type="text" id="promptInput" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-lg focus:border-yellow-400 focus:outline-none transition-all mb-4">
     <div class="flex gap-3">
       <button onclick="closePromptModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-cc text-lg transition-all">取消</button>
-      <button onclick="submitPrompt()" class="flex-1 bg-amber-50 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
+      <button onclick="submitPrompt()" class="flex-1 bg-amber-50 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-black py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
     </div>
   </div>
 </div>
@@ -801,7 +801,7 @@ function loadRank() {
         
         const icon = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🏆';
         const title = rank === 1 ? '冠军' : rank === 2 ? '亚军' : rank === 3 ? '季军' : '';
-        const bg = rank === 1 ? 'from-amber-100 to-amber-100 text-white' : 'bg-gray-100';
+        const bg = rank === 1 ? 'from-amber-100 to-amber-100 text-black' : 'bg-gray-100';
         
         const item = `
           <div class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r ${bg} ${rank > 3 ? 'mt-2' : ''}">
@@ -875,7 +875,7 @@ function loadAdmin() {
           ${m.reply ? `<div class="mt-2 p-2 bg-blue-50 rounded text-sm">💬 回复：${m.reply}</div>` : ''}
           <div class="mt-2 flex gap-2">
             <input type="text" id="r-${doc.id}" placeholder="回复..." class="flex-1 px-3 py-1 border rounded text-sm">
-            <button onclick="sendReplyAdmin('${doc.id}')" class="bg-blue-500 text-white px-3 py-1 rounded text-sm">送出</button>
+            <button onclick="sendReplyAdmin('${doc.id}')" class="bg-blue-500 text-black px-3 py-1 rounded text-sm">送出</button>
           </div>
         </div>
       `;
@@ -905,12 +905,12 @@ function loadAdmin() {
             <div class="flex items-center gap-2">
               <label class="text-sm font-cc">金币：</label>
               <input type="number" id="coins-${doc.id}" value="${u.coins || 0}" class="w-20 px-2 py-1 border rounded text-center">
-              <button onclick="setCoins('${doc.id}')" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm">更新</button>
+              <button onclick="setCoins('${doc.id}')" class="bg-yellow-500 text-black px-3 py-1 rounded text-sm">更新</button>
             </div>
             <div class="flex items-center gap-2">
               <label class="text-sm font-cc">积分：</label>
               <input type="number" id="pts-${doc.id}" value="${u.points || 0}" class="w-20 px-2 py-1 border rounded text-center">
-              <button onclick="setPoints('${doc.id}')" class="bg-green-500 text-white px-3 py-1 rounded text-sm">更新</button>
+              <button onclick="setPoints('${doc.id}')" class="bg-green-500 text-black px-3 py-1 rounded text-sm">更新</button>
             </div>
             <button onclick="toggleTopFan('${doc.id}', ${u.isTopFan})" class="${u.isTopFan ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'} px-3 py-1 rounded text-sm">
               ${u.isTopFan ? '取消置顶' : '设为置顶'}
@@ -942,8 +942,8 @@ function loadAdmin() {
           </div>
           <p class="text-lg font-cc mb-3">${p.content}</p>
           <div class="flex gap-2">
-            <button onclick="apprPostWithReward('${doc.id}', 100)" class="flex-1 bg-green-500 text-white py-2 rounded font-cc text-lg">✅ 核准 (+100💰)</button>
-            <button onclick="rejectPost('${doc.id}')" class="flex-1 bg-red-500 text-white py-2 rounded font-cc text-lg">❌ 拒绝</button>
+            <button onclick="apprPostWithReward('${doc.id}', 100)" class="flex-1 bg-green-500 text-black py-2 rounded font-cc text-lg">✅ 核准 (+100💰)</button>
+            <button onclick="rejectPost('${doc.id}')" class="flex-1 bg-red-500 text-black py-2 rounded font-cc text-lg">❌ 拒绝</button>
           </div>
         </div>
       `;
@@ -1155,7 +1155,7 @@ function initWheel() {
   
   container.innerHTML = WHEEL_ITEMS.map((item, i) => `
     <div class="absolute inset-0 flex items-center justify-center" style="transform: rotate(${i * sliceAngle + sliceAngle / 2}deg);">
-      <div class="absolute top-4 text-white text-sm font-bold drop-shadow-lg" style="transform: rotate(-${i * sliceAngle + sliceAngle / 2}deg);">
+      <div class="absolute top-4 text-black text-sm font-bold drop-shadow-lg" style="transform: rotate(-${i * sliceAngle + sliceAngle / 2}deg);">
         ${item.label}
       </div>
     </div>
@@ -1381,7 +1381,7 @@ function showCardResult(card) {
                            'linear-gradient(135deg, #A0A0A0 0%, #707070 50%, #A0A0A0 100%)';
   
   badge.textContent = q.name + '品质';
-  badge.className = `inline-block px-4 py-1 rounded-full text-white font-bold mb-2`;
+  badge.className = `inline-block px-4 py-1 rounded-full text-black font-bold mb-2`;
   badge.style.background = 'rgba(0,0,0,0.4)';
   
   if (cardImg) {
@@ -1402,7 +1402,7 @@ function showCardResult(card) {
     if (card[type] !== undefined) {
       const icons = { atk: '⚔️', def: '🛡️', hp: '❤️', speed: '💨', lucky: '🍀', crit: '💥', dodge: '👻', regen: '💚' };
       const value = card[type] * (card.lv || 1);
-      statsHtml += `<div class="bg-white/20 px-2 py-1 rounded text-sm text-white font-bold">${icons[type]}${TYPE_NAMES[type]}: ${value}</div>`;
+      statsHtml += `<div class="bg-white/20 px-2 py-1 rounded text-sm text-black font-bold">${icons[type]}${TYPE_NAMES[type]}: ${value}</div>`;
     }
   });
   statsHtml += '</div>';
@@ -1471,7 +1471,7 @@ async function loadCardBag(filter) {
     const q = CARD_QUALITIES[card.quality];
     const locked = card.locked;
     return `
-      <div class="mini-card p-4 rounded-2xl ${q.bg} text-white text-center relative cursor-pointer hover:scale-105 transition-all shadow-lg ${locked ? 'opacity-60' : ''}" onclick="showCardDetail('${card.id}')">
+      <div class="mini-card p-4 rounded-2xl ${q.bg} text-black text-center relative cursor-pointer hover:scale-105 transition-all shadow-lg ${locked ? 'opacity-60' : ''}" onclick="showCardDetail('${card.id}')">
         ${locked ? '<div class="absolute top-2 left-2 bg-black/60 px-2 py-1 rounded-full text-sm">🔒</div>' : ''}
         <div class="absolute top-2 right-2 bg-black/40 px-2 py-1 rounded-full text-sm font-bold">${qualityIcons[card.quality]}${q.name}</div>
         <img src="cards/${card.templateIdx}.png" class="big-card-img mx-auto object-contain my-3">
@@ -1516,7 +1516,7 @@ async function showCardDetail(cardId) {
   const locked = card.locked;
   
   content.innerHTML = `
-    <div class="text-center p-6 rounded-2xl ${q.bg} text-white shadow-xl">
+    <div class="text-center p-6 rounded-2xl ${q.bg} text-black shadow-xl">
       ${locked ? '<div class="inline-block px-4 py-2 rounded-full bg-black/60 text-xl font-bold mb-2">🔒 已锁定</div>' : ''}
       <img src="cards/${card.templateIdx}.png" class="card-result-img mx-auto object-contain drop-shadow-2xl my-4">
       <div class="inline-block px-4 py-2 rounded-full bg-black/30 text-xl font-bold">${q.name}品质</div>
@@ -1535,8 +1535,8 @@ async function showCardDetail(cardId) {
     btns.innerHTML = '<button onclick="closeCardDetail()" class="w-full bg-gray-200 py-2 rounded-xl font-cc">关闭</button>';
   } else {
     btns.innerHTML = `
-      <button onclick="openSynthWithCard()" class="flex-1 bg-purple-500 text-white py-2 rounded-xl font-cc">🔮 合成</button>
-      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-white py-2 rounded-xl font-cc">💰 上架</button>
+      <button onclick="openSynthWithCard()" class="flex-1 bg-purple-500 text-black py-2 rounded-xl font-cc">🔮 合成</button>
+      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-black py-2 rounded-xl font-cc">💰 上架</button>
       <button onclick="closeCardDetail()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">关闭</button>
     `;
   }
@@ -1596,7 +1596,7 @@ async function loadSynthCards() {
     const q = CARD_QUALITIES[card.quality];
     const isSelected = synthSelectedCards.some(c => c.id === card.id);
     return `
-      <div class="p-2 rounded-lg ${q.bg} text-white cursor-pointer ${isSelected ? 'ring-2 ring-white' : ''}" onclick="toggleSynthCard('${card.id}')">
+      <div class="p-2 rounded-lg ${q.bg} text-black cursor-pointer ${isSelected ? 'ring-2 ring-white' : ''}" onclick="toggleSynthCard('${card.id}')">
         <div class="flex items-center gap-2">
           <img src="cards/${card.templateIdx}.png" class="w-10 h-10 object-contain">
           <div class="flex-1 min-w-0">
@@ -1658,7 +1658,7 @@ function updateSynthPreview() {
   
   const q = CARD_QUALITIES[resultQuality];
   preview.innerHTML = `
-    <div class="p-4 rounded-xl ${q.bg} text-white">
+    <div class="p-4 rounded-xl ${q.bg} text-black">
       <div class="text-lg font-bold mb-2">合成结果预览</div>
       <div class="text-4xl mb-2">${resultQuality === 'gold' ? '👑' : resultQuality === 'red' ? '🔥' : resultQuality === 'pink' ? '🌸' : '⬜'}</div>
       <div class="font-bold text-xl">${q.name}品质</div>
@@ -1839,7 +1839,7 @@ function loadShopApply() {
           <input type="text" id="applyEmoji" class="w-full px-4 py-2 border rounded-xl text-center text-2xl" placeholder="🎁" maxlength="2">
         </div>
       </div>
-      <button onclick="submitShopApply()" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 rounded-xl font-cc text-lg">提交申请</button>
+      <button onclick="submitShopApply()" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-black font-bold py-3 rounded-xl font-cc text-lg">提交申请</button>
     </div>
     <div id="applyStatus" class="mt-4"></div>
   `;
@@ -1914,7 +1914,7 @@ function loadOfficialShop() {
             <p class="text-sm text-gray-500 font-cc mb-2">有机会获得粉/灰色品质卡牌</p>
             <p class="text-2xl font-bold text-pink-500 font-cc">50 💰</p>
             <div class="flex justify-center gap-2 mt-2">
-              <button onclick="drawCardFromShop('single')" class="bg-gradient-to-r from-pink-400 to-purple-400 text-white px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+              <button onclick="drawCardFromShop('single')" class="bg-gradient-to-r from-pink-400 to-purple-400 text-black px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
                 🎲 抽卡
               </button>
             </div>
@@ -1932,7 +1932,7 @@ function loadOfficialShop() {
             <p class="text-sm text-gray-500 font-cc mb-2">保底1张粉色以上卡牌！</p>
             <p class="text-2xl font-bold text-orange-500 font-cc">400 💰</p>
             <div class="flex justify-center gap-2 mt-2">
-              <button onclick="drawCardFromShop('ten')" class="bg-amber-50 to-amber-100 text-white px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+              <button onclick="drawCardFromShop('ten')" class="bg-amber-50 to-amber-100 text-black px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
                 🎁 十连抽
               </button>
             </div>
@@ -1970,7 +1970,7 @@ function loadOfficialShop() {
           </div>
           <div class="text-right">
             <p class="font-bold text-lg text-orange-500">${item.price} 💰</p>
-            <button onclick="buyOfficialItem('${doc.id}', ${item.price}, '${item.name}')" class="mt-2 bg-amber-50 to-amber-100 text-white px-4 py-2 rounded-lg font-cc text-sm">购买</button>
+            <button onclick="buyOfficialItem('${doc.id}', ${item.price}, '${item.name}')" class="mt-2 bg-amber-50 to-amber-100 text-black px-4 py-2 rounded-lg font-cc text-sm">购买</button>
           </div>
         </div>
       `;
@@ -2032,15 +2032,15 @@ function showTenDrawResult(cards) {
   modal.innerHTML = `
     <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-hidden">
       <div class="bg-amber-50 to-amber-100 p-4 text-center">
-        <h3 class="text-white font-bold text-2xl font-cc">🎁 十连抽结果</h3>
-        <p class="text-white/80 font-cc">保底 ${pinkOrBetter >= 1 ? '✅ 已触发' : '❌ 未触发'}</p>
+        <h3 class="text-black font-bold text-2xl font-cc">🎁 十连抽结果</h3>
+        <p class="text-black/80 font-cc">保底 ${pinkOrBetter >= 1 ? '✅ 已触发' : '❌ 未触发'}</p>
       </div>
       <div class="p-4 overflow-y-auto max-h-[60vh]">
         <div class="grid grid-cols-5 gap-2">
           ${cards.map((card, i) => {
             const q = CARD_QUALITIES[card.quality];
             return `
-              <div class="text-center p-2 rounded-lg ${q.bg} text-white cursor-pointer hover:scale-110 transition-all" onclick="showCardDetail('${card.id}')">
+              <div class="text-center p-2 rounded-lg ${q.bg} text-black cursor-pointer hover:scale-110 transition-all" onclick="showCardDetail('${card.id}')">
                 <img src="cards/${card.templateIdx}.png" class="w-12 h-12 mx-auto object-contain">
                 <div class="text-xs font-bold mt-1">${q.name}</div>
               </div>
@@ -2055,7 +2055,7 @@ function showTenDrawResult(cards) {
         </div>
       </div>
       <div class="p-4 border-t">
-        <button onclick="closeTenDraw()" class="w-full bg-amber-50 to-amber-100 text-white py-3 rounded-xl font-cc text-lg">收下所有卡牌</button>
+        <button onclick="closeTenDraw()" class="w-full bg-amber-50 to-amber-100 text-black py-3 rounded-xl font-cc text-lg">收下所有卡牌</button>
       </div>
     </div>
   `;
@@ -2122,7 +2122,7 @@ function loadMarket() {
           ${cardInfo}
           <p class="font-bold text-2xl text-orange-500 mt-3">${item.price} 💰</p>
           ${isOwner ? '<span class="block mt-2 text-sm text-gray-400">🔒 你的商品</span>' : `
-            <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}', '${item.type || 'item'}', '${item.cardId || ''}', ${item.inventoryIndex})" class="mt-3 w-full bg-gradient-to-r from-green-400 to-emerald-500 text-white py-2 rounded-xl font-cc">🎫 购买</button>
+            <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}', '${item.type || 'item'}', '${item.cardId || ''}', ${item.inventoryIndex})" class="mt-3 w-full bg-gradient-to-r from-green-400 to-emerald-500 text-black py-2 rounded-xl font-cc">🎫 购买</button>
           `}
         </div>
       `;
@@ -2236,7 +2236,7 @@ function loadMyItems() {
             <span class="font-cc font-bold">${item.name}</span>
           </div>
           <input type="number" id="price-${i}" placeholder="价格" class="w-20 px-2 py-1 border rounded text-center">
-          <button onclick="listMyItemOnMarket(${realIdx})" class="bg-purple-500 text-white px-3 py-1 rounded text-sm font-cc">上架</button>
+          <button onclick="listMyItemOnMarket(${realIdx})" class="bg-purple-500 text-black px-3 py-1 rounded text-sm font-cc">上架</button>
         </div>
       `;
     });
@@ -2337,7 +2337,7 @@ function loadAdminShop() {
             <input type="text" id="shopName" placeholder="物品名称" class="flex-1 px-3 py-2 border rounded">
             <input type="text" id="shopEmoji" placeholder="表情" class="w-16 px-3 py-2 border rounded">
             <input type="number" id="shopPrice" placeholder="价格" class="w-24 px-3 py-2 border rounded">
-            <button onclick="addShopItem()" class="bg-green-500 text-white px-4 py-2 rounded font-cc">添加</button>
+            <button onclick="addShopItem()" class="bg-green-500 text-black px-4 py-2 rounded font-cc">添加</button>
           </div>
         </div>
       `;
@@ -2359,8 +2359,8 @@ function loadAdminShop() {
                 ${a.desc ? `<div class="text-sm text-gray-400 font-cc">${a.desc}</div>` : ''}
               </div>
               <div class="flex gap-2">
-                <button onclick="approveApply('${doc.id}', '${a.name}', '${a.emoji}', ${a.price})" class="bg-green-500 text-white px-4 py-2 rounded font-cc text-sm">通过</button>
-                <button onclick="rejectApply('${doc.id}')" class="bg-red-500 text-white px-4 py-2 rounded font-cc text-sm">拒绝</button>
+                <button onclick="approveApply('${doc.id}', '${a.name}', '${a.emoji}', ${a.price})" class="bg-green-500 text-black px-4 py-2 rounded font-cc text-sm">通过</button>
+                <button onclick="rejectApply('${doc.id}')" class="bg-red-500 text-black px-4 py-2 rounded font-cc text-sm">拒绝</button>
               </div>
             </div>
           `;
@@ -2381,7 +2381,7 @@ function loadAdminShop() {
               ${item.applicant ? `<span class="ml-2 text-sm text-gray-400 font-cc">by ${item.applicant}</span>` : ''}
             </div>
             <input type="number" id="price-${doc.id}" value="${item.price}" class="w-20 px-2 py-1 border rounded text-center">
-            <button onclick="updateShopPrice('${doc.id}')" class="bg-blue-500 text-white px-3 py-1 rounded font-cc text-sm">改价</button>
+            <button onclick="updateShopPrice('${doc.id}')" class="bg-blue-500 text-black px-3 py-1 rounded font-cc text-sm">改价</button>
             <button onclick="toggleShopItem('${doc.id}', '${item.status}')" class="${item.status === 'active' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'} px-3 py-1 rounded text-sm font-cc">
               ${item.status === 'active' ? '下架' : '上架'}
             </button>
@@ -2441,7 +2441,7 @@ function loadAdminCoins() {
           <option value="">选择用户...</option>
         </select>
         <input type="number" id="coinAmount" placeholder="数量" class="w-32 px-4 py-2 border rounded-xl">
-        <button onclick="giveCoins()" class="bg-amber-50 to-amber-100 text-white px-6 py-2 rounded-xl font-cc">发放</button>
+        <button onclick="giveCoins()" class="bg-amber-50 to-amber-100 text-black px-6 py-2 rounded-xl font-cc">发放</button>
       </div>
       <div class="flex gap-2 mt-3">
         <button onclick="quickCoin(100)" class="bg-yellow-100 text-amber-700 px-4 py-1 rounded-lg font-cc text-sm">+100</button>
@@ -2578,7 +2578,7 @@ function loadAdminCards() {
               <option value="">给自己</option>
             </select>
           </div>
-          <button onclick="createCustomCard()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-xl font-cc">创建卡牌</button>
+          <button onclick="createCustomCard()" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-black py-2 rounded-xl font-cc">创建卡牌</button>
         </div>
       </div>
       
@@ -2595,7 +2595,7 @@ function loadAdminCards() {
     <div class="p-4 bg-gray-50 rounded-xl">
       <h3 class="font-bold font-cc text-lg mb-3">📜 所有玩家卡牌</h3>
       <div class="flex flex-wrap gap-2 mb-4">
-        <button onclick="filterAdminCards('all')" class="admin-card-filter px-4 py-1 rounded-full bg-yellow-400 text-white font-cc text-sm" data-filter="all">全部</button>
+        <button onclick="filterAdminCards('all')" class="admin-card-filter px-4 py-1 rounded-full bg-yellow-400 text-black font-cc text-sm" data-filter="all">全部</button>
         <button onclick="filterAdminCards('gold')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="gold">👑 金</button>
         <button onclick="filterAdminCards('red')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="red">🔥 红</button>
         <button onclick="filterAdminCards('pink')" class="admin-card-filter px-4 py-1 rounded-full bg-gray-200 font-cc text-sm" data-filter="pink">🌸 粉</button>
@@ -2648,7 +2648,7 @@ function filterAdminCards(filter) {
     box.innerHTML = cards.map(card => {
       const q = CARD_QUALITIES[card.quality] || CARD_QUALITIES.gray;
       return `
-        <div class="p-3 rounded-xl ${q.bg} text-white text-center">
+        <div class="p-3 rounded-xl ${q.bg} text-black text-center">
           <div class="flex justify-between items-start">
             <span class="text-xs bg-black/20 px-2 rounded">${q.name}</span>
             <button onclick="deleteCard('${card.id}')" class="text-xs bg-red-500 px-2 rounded hover:bg-red-600">删除</button>
