@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🐤 小鸡手抄</title>
+  <title>小鸡手抄</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -26,6 +26,11 @@
   <style>
     body { font-family: 'Ma Shan Zheng', 'Noto Sans SC', cursive; }
     .font-cc { font-family: 'Ma Shan Zheng', cursive; font-size: 1.2em !important; }
+    .dark-bg { background-color: #2d2d2d !important; color: #f5f0e6 !important; }
+    .dark-bg button, .dark-bg span, .dark-bg p, .dark-bg h2, .dark-bg h3, .dark-bg h4 { color: #f5f0e6 !important; }
+    .light-text { color: #2d2d2d !important; }
+    .bg-dark { background-color: #2d2d2d !important; }
+    .text-light { color: #f5f0e6 !important; }
     input, textarea { font-family: 'Noto Sans SC', sans-serif !important; }
     .hide { display: none !important; }
     ::-webkit-scrollbar { width: 8px; }
@@ -65,9 +70,8 @@
 <header class="shadow-lg" style="background-color: #f5f0e6; border-bottom: 3px solid #2d2d2d;">
   <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
     <h1 class="text-4xl font-bold" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">
-      🐤 小鸡手抄
+      小鸡手抄
     </h1>
-    <div class="flex gap-2">
     <div class="flex gap-2">
 <button onclick="showPage('home')" class="px-4 py-2 rounded-lg text-lg font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">首页</button>
         <button onclick="showPage('shop')" id="btnShop" class="hide px-4 py-2 rounded-lg text-lg font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">商店</button>
@@ -180,7 +184,7 @@
         <!-- 投稿区 -->
         <div id="postBox" class="hide bg-white rounded-2xl shadow-lg overflow-hidden">
           <div class="bg-yellow-50 border-b border-yellow-200 p-4">
-            <p class="text-yellow-700 font-cc text-lg">⚠️ 投稿前请先同意协作者邀请</p>
+            <p class="text-amber-700 font-cc text-lg">⚠️ 投稿前请先同意协作者邀请</p>
           </div>
           <div class="bg-amber-50 to-amber-100 p-4">
             <h2 class="text-white font-bold text-2xl font-cc">📝 粉丝投稿</h2>
@@ -239,7 +243,7 @@
       </div>
       
       <div class="flex border-b flex-wrap">
-        <button onclick="adminTab('msgs')" id="tabMsgs" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">讯息</button>
+        <button onclick="adminTab('msgs')" id="tabMsgs" class="px-6 py-3 font-cc text-amber-500 border-b-2 border-yellow-500 text-lg">讯息</button>
         <button onclick="adminTab('users')" id="tabUsers" class="px-6 py-3 font-cc text-gray-500 text-lg">用户</button>
         <button onclick="adminTab('coins')" id="tabCoins" class="px-6 py-3 font-cc text-gray-500 text-lg">💰 金币</button>
         <button onclick="adminTab('posts')" id="tabPosts" class="px-6 py-3 font-cc text-gray-500 text-lg">投稿</button>
@@ -266,7 +270,7 @@
       <div class="p-4 rounded-t-xl text-center text-2xl font-bold" style="background-color: #f5f0e6; border-bottom: 2px solid #2d2d2d; color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">🛒 商店</div>
       
       <div class="flex border-b flex-wrap">
-        <button onclick="shopTab('official')" id="shopTabOfficial" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">官方商店</button>
+        <button onclick="shopTab('official')" id="shopTabOfficial" class="px-6 py-3 font-cc text-amber-500 border-b-2 border-yellow-500 text-lg">官方商店</button>
         <button onclick="shopTab('market')" id="shopTabMarket" class="px-6 py-3 font-cc text-gray-500 text-lg">玩家市集</button>
         <button onclick="shopTab('my')" id="shopTabMy" class="px-6 py-3 font-cc text-gray-500 text-lg">我的物品</button>
       </div>
@@ -316,7 +320,7 @@
         <div class="relative p-6 bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 rounded-3xl text-center shadow-2xl border-4 border-yellow-300">
           <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl animate-bounce">🎉</div>
           <p class="font-cc text-2xl mt-2 text-gray-700">恭喜获得</p>
-          <p id="wheelPrize" class="font-bold text-4xl mt-2 bg-gradient-to-r from-amber-600 via-pink-500 to-purple-500 text-transparent bg-clip-text"></p>
+          <p id="wheelPrize" class="font-bold text-4xl mt-2" style="color: #2d2d2d;"></p>
           <p id="wheelPrizeSub" class="font-cc text-lg mt-2 text-gray-600"></p>
           <button onclick="closeWheelResult()" class="mt-4 bg-amber-50 to-amber-100 text-white px-8 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
             太棒了！
@@ -356,7 +360,7 @@
       <button onclick="closeCardBag()" class="px-3 py-1 rounded hover:bg-amber-100 text-2xl font-bold" style="color: #2d2d2d;">✕</button>
     </div>
     <div class="flex border-b flex-wrap">
-      <button onclick="cardBagTab('all')" id="cardBagTabAll" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">全部</button>
+      <button onclick="cardBagTab('all')" id="cardBagTabAll" class="px-6 py-3 font-cc text-amber-500 border-b-2 border-yellow-500 text-lg">全部</button>
       <button onclick="cardBagTab('gold')" id="cardBagTabGold" class="px-6 py-3 font-cc text-gray-500 text-lg">👑 金</button>
       <button onclick="cardBagTab('red')" id="cardBagTabRed" class="px-6 py-3 font-cc text-gray-500 text-lg">🔥 红</button>
       <button onclick="cardBagTab('pink')" id="cardBagTabPink" class="px-6 py-3 font-cc text-gray-500 text-lg">🌸 粉</button>
@@ -734,7 +738,7 @@ function loadChat() {
                 <div class="min-w-0 flex-1">
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-lg">${m.userName}</span>
-                    ${m.isPinned ? '<span class="text-yellow-500 text-sm">📌</span>' : ''}
+                    ${m.isPinned ? '<span class="text-amber-500 text-sm">📌</span>' : ''}
                     <span class="text-xs text-gray-400">${time}</span>
                   </div>
                   <p class="text-lg font-cc">${m.content}</p>
@@ -742,7 +746,7 @@ function loadChat() {
                   <div class="flex items-center gap-4 mt-2">
                     ${meData?.isAdmin ? `
                       <button onclick="replyMsg('${doc.id}')" class="text-blue-500 text-sm">回复</button>
-                      <button onclick="pinMsg('${doc.id}', ${m.isPinned})" class="text-sm ${m.isPinned ? 'text-yellow-500' : 'text-gray-400'}">${m.isPinned ? '📌' : '置顶'}</button>
+                      <button onclick="pinMsg('${doc.id}', ${m.isPinned})" class="text-sm ${m.isPinned ? 'text-amber-500' : 'text-gray-400'}">${m.isPinned ? '📌' : '置顶'}</button>
                       <button onclick="delMsg('${doc.id}')" class="text-red-500 text-sm">删除</button>
                     ` : ''}
                   </div>
@@ -840,12 +844,12 @@ function showPage(page) {
 function adminTab(tab) {
   ['Msgs', 'Users', 'Posts'].forEach(t => {
     document.getElementById('admin' + t).classList.add('hide');
-    document.getElementById('tab' + t).classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+    document.getElementById('tab' + t).classList.remove('text-amber-500', 'border-yellow-500', 'border-b-2');
     document.getElementById('tab' + t).classList.add('text-gray-500');
   });
   document.getElementById('admin' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hide');
   document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('text-gray-500');
-  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('text-amber-500', 'border-b-2', 'border-yellow-500');
 }
 
 function loadAdmin() {
@@ -860,7 +864,7 @@ function loadAdmin() {
           <div class="flex justify-between items-start mb-2">
             <div>
               <span class="font-bold text-lg">${m.userName}</span>
-              ${m.isPinned ? '<span class="ml-2 text-yellow-500 text-sm">📌</span>' : ''}
+              ${m.isPinned ? '<span class="ml-2 text-amber-500 text-sm">📌</span>' : ''}
             </div>
             <div class="flex gap-2">
               <button onclick="pinMsg('${doc.id}', ${m.isPinned})" class="${m.isPinned ? 'bg-yellow-100' : 'bg-gray-200'} px-3 py-1 rounded text-sm">${m.isPinned ? '取消置顶' : '置顶'}</button>
@@ -1105,7 +1109,7 @@ function adminTab(tab) {
     const tabEl = document.getElementById('tab' + t);
     if (contentEl) contentEl.classList.add('hide');
     if (tabEl) {
-      tabEl.classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+      tabEl.classList.remove('text-amber-500', 'border-yellow-500', 'border-b-2');
       tabEl.classList.add('text-gray-500');
     }
   });
@@ -1114,7 +1118,7 @@ function adminTab(tab) {
   const tabEl = document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1));
   if (tabEl) {
     tabEl.classList.remove('text-gray-500');
-    tabEl.classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+    tabEl.classList.add('text-amber-500', 'border-b-2', 'border-yellow-500');
   }
   
   if (tab === 'shop') loadAdminShop();
@@ -1427,14 +1431,14 @@ function cardBagTab(filter) {
   ['Gold', 'Red', 'Pink', 'Gray', 'All'].forEach(q => {
     const tab = document.getElementById('cardBagTab' + q);
     if (tab) {
-      tab.classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+      tab.classList.remove('text-amber-500', 'border-yellow-500', 'border-b-2');
       tab.classList.add('text-gray-500');
     }
   });
   const activeTab = document.getElementById('cardBagTab' + filter.charAt(0).toUpperCase() + filter.slice(1));
   if (activeTab) {
     activeTab.classList.remove('text-gray-500');
-    activeTab.classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+    activeTab.classList.add('text-amber-500', 'border-b-2', 'border-yellow-500');
   }
   
   loadCardBag(filter);
@@ -1794,7 +1798,7 @@ function shopTab(tab) {
     const tabEl = document.getElementById('shopTab' + t);
     if (el) el.classList.add('hide');
     if (tabEl) {
-      tabEl.classList.remove('text-yellow-500', 'border-yellow-500', 'border-b-2');
+      tabEl.classList.remove('text-amber-500', 'border-yellow-500', 'border-b-2');
       tabEl.classList.add('text-gray-500');
     }
   });
@@ -1803,7 +1807,7 @@ function shopTab(tab) {
   const showTabEl = document.getElementById('shopTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
   if (showTabEl) {
     showTabEl.classList.remove('text-gray-500');
-    showTabEl.classList.add('text-yellow-500', 'border-b-2', 'border-yellow-500');
+    showTabEl.classList.add('text-amber-500', 'border-b-2', 'border-yellow-500');
   }
   
   if (tab === 'apply') loadShopApply();
@@ -1876,7 +1880,7 @@ function loadMyApplys() {
     box.innerHTML = '<h4 class="font-bold font-cc mb-2">我的申请记录</h4>';
     snap.forEach(doc => {
       const a = doc.data();
-      const statusColor = a.status === 'approved' ? 'bg-green-100 text-green-700' : a.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700';
+      const statusColor = a.status === 'approved' ? 'bg-green-100 text-green-700' : a.status === 'rejected' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-amber-700';
       const statusText = a.status === 'approved' ? '已通过' : a.status === 'rejected' ? '已拒绝' : '审核中';
       box.innerHTML += `
         <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
@@ -2044,7 +2048,7 @@ function showTenDrawResult(cards) {
           }).join('')}
         </div>
         <div class="mt-4 text-center flex justify-center gap-4">
-          <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 font-cc">金:${cards.filter(c=>c.quality==='gold').length}</span>
+          <span class="px-3 py-1 rounded-full bg-yellow-100 text-amber-700 font-cc">金:${cards.filter(c=>c.quality==='gold').length}</span>
           <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 font-cc">红:${cards.filter(c=>c.quality==='red').length}</span>
           <span class="px-3 py-1 rounded-full bg-pink-100 text-pink-700 font-cc">粉:${cards.filter(c=>c.quality==='pink').length}</span>
           <span class="px-3 py-1 rounded-full bg-gray-200 text-gray-600 font-cc">灰:${cards.filter(c=>c.quality==='gray').length}</span>
@@ -2440,10 +2444,10 @@ function loadAdminCoins() {
         <button onclick="giveCoins()" class="bg-amber-50 to-amber-100 text-white px-6 py-2 rounded-xl font-cc">发放</button>
       </div>
       <div class="flex gap-2 mt-3">
-        <button onclick="quickCoin(100)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+100</button>
-        <button onclick="quickCoin(500)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+500</button>
-        <button onclick="quickCoin(1000)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+1K</button>
-        <button onclick="quickCoin(5000)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+5K</button>
+        <button onclick="quickCoin(100)" class="bg-yellow-100 text-amber-700 px-4 py-1 rounded-lg font-cc text-sm">+100</button>
+        <button onclick="quickCoin(500)" class="bg-yellow-100 text-amber-700 px-4 py-1 rounded-lg font-cc text-sm">+500</button>
+        <button onclick="quickCoin(1000)" class="bg-yellow-100 text-amber-700 px-4 py-1 rounded-lg font-cc text-sm">+1K</button>
+        <button onclick="quickCoin(5000)" class="bg-yellow-100 text-amber-700 px-4 py-1 rounded-lg font-cc text-sm">+5K</button>
       </div>
     </div>
     <div id="coinList" class="space-y-2"></div>
