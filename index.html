@@ -574,10 +574,17 @@ function fmtPts(n) {
 // 登录
 async function signIn() {
   try {
+    console.log('Starting Google login...');
     const provider = new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
+    provider.setCustomParameters({
+      prompt: 'select_account'
+    });
+    auth.setLanguageCode('zh-CN');
+    const result = await auth.signInWithPopup(provider);
+    console.log('Login result:', result.user);
   } catch (e) {
-    toast('登录失败');
+    console.error('Login error:', e);
+    alert('登录失败: ' + e.message);
   }
 }
 
