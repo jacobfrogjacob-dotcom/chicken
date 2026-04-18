@@ -18,12 +18,15 @@
     .hide { display: none !important; }
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-thumb { background: #8b4513; border-radius: 4px; }
-    .paper { background-color: #f5f0e6; border: 2px solid #2d2d2d; }
+    .paper { background-color: #f5f0e6; border: 2px solid #2d2d2d; box-shadow: 4px 4px 0 #2d2d2d; }
+    .paper-light { background-color: #faf8f3; border: 2px solid #2d2d2d; box-shadow: 3px 3px 0 #2d2d2d; }
     .ink { color: #2d2d2d; }
     .border-ink { border: 2px solid #2d2d2d; }
-    .card-gold { background: linear-gradient(135deg, #ffd700, #ffb800); }
-    .card-red { background: linear-gradient(135deg, #ff4444, #cc0000); }
-    .card-pink { background: linear-gradient(135deg, #ff69b4, #ff1493); }
+    .btn-ink { background-color: #f5f0e6; border: 2px solid #2d2d2d; box-shadow: 2px 2px 0 #2d2d2d; transition: all 0.1s; }
+    .btn-ink:active { box-shadow: 0 0 0 #2d2d2d; transform: translate(2px,2px); }
+    .card-gold { background: linear-gradient(135deg, #ffd700, #ffb800); box-shadow: 0 0 20px #ffd700; }
+    .card-red { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px #ff4444; }
+    .card-pink { background: linear-gradient(135deg, #ff69b4, #ff1493); box-shadow: 0 0 15px #ff69b4; }
     .card-gray { background: linear-gradient(135deg, #999, #666); }
   </style>
   <script>
@@ -45,7 +48,7 @@
     function completeSetup(){ const n=document.getElementById('setupName').value.trim(); const ig=document.getElementById('setupIG').value.trim(); if(!n||!ig){ toast('请填写完整'); return; } db.collection('users').doc(me.uid).set({ displayName:n, igAccount:ig, photoURL:me.photoURL, email:me.email, points:0, coins:500, inventory:[], time:Date.now() }); document.getElementById('setupModal').classList.add('hide'); location.reload(); }
     async function loadChat(){ db.collection('messages').orderBy('time','desc').limit(50).onSnapshot(s=>{ const b=document.getElementById('chatBox'); b.innerHTML=''; s.forEach(d=>{ const m=d.data(); b.innerHTML+=`<div class="p-2 rounded paper"><div class="flex items-center gap-2"><img src="${m.userAvatar||''}" class="w-8 h-8 rounded-full"><span class="font-bold ink">${m.userName}</span></div><p class="ink">${m.content}</p></div>`; }); }); }
     async function sendMsg(e){ e.preventDefault(); const i=document.getElementById('msgInput'); const c=i.value.trim(); if(!c)return; await db.collection('messages').add({ userId:me.uid, userName:meData.displayName, userAvatar:meData.photoURL, content:c, time:Date.now() }); await db.collection('users').doc(me.uid).update({ points:firebase.firestore.FieldValue.increment(1), coins:firebase.firestore.FieldValue.increment(1) }); i.value=''; }
-    function loadRank(){ db.collection('users').orderBy('points','desc').limit(10).onSnapshot(s=>{ const b=document.getElementById('rankBox'); b.innerHTML=''; let r=1; s.forEach(d=>{ const u=d.data(); if(u.points>0){ const ic=r===1?'👑':r===2?'🥈':r===3?'🥉':'🏆'; b.innerHTML+=`<div class="p-2 rounded paper flex items-center gap-2"><span class="text-xl">${ic}</span><span class="font-bold flex-1 ink">${u.displayName}</span><span class="ink">${fmtPts(u.points)}</span></div>`; r++; } }); }); }
+    function loadRank(){ db.collection('users').orderBy('points','desc').limit(20).onSnapshot(s=>{ const b=document.getElementById('rankBox'); b.innerHTML=''; let r=1; let has=false; s.forEach(d=>{ const u=d.data(); if(u.points>0){ has=true; const ic=r===1?'👑':r===2?'🥈':r===3?'🥉':r===4?'4':r===5?'5':r===6?'6':r===7?'7':r===8?'8':r===9?'9':r===10?'10':'🏆'; b.innerHTML+=`<div class="p-2 rounded paper-light flex items-center gap-2"><span class="text-lg">${ic}</span><img src="${u.photoURL||''}" class="w-8 h-8 rounded-full"><span class="font-bold flex-1 ink">${toSim(u.displayName)}</span><span class="ink font-bold">${fmtPts(u.points)}</span></div>`; r++; }}); if(!has){b.innerHTML='<p class="ink text-center p-4">暂无排行榜数据</p>';} }); }
     async function doCheckIn(){ const last=meData.lastCheckIn||0; const now=Date.now(); if(now-last<86400000){ toast('明天再来'); return; } await db.collection('users').doc(me.uid).update({ coins:firebase.firestore.FieldValue.increment(CHECKIN), lastCheckIn:now }); toast('获得 '+CHECKIN+' 金币'); location.reload(); }
     function showPage(p){ ['pageHome','pageShop','pageWheel','pageAdmin'].forEach(x=>document.getElementById(x).classList.add('hide')); document.getElementById('page'+p.charAt(0).toUpperCase()+p.slice(1)).classList.remove('hide'); if(p==='shop'){ loadShop(); loadMarket(); loadMyItems(); } if(p==='wheel'){ document.getElementById('wheelCoins').textContent=meData.coins||0; } }
     function loadShop(){ db.collection('shopItems').orderBy('time','desc').onSnapshot(s=>{ const b=document.getElementById('shopList'); b.innerHTML=''; s.forEach(d=>{ const i=d.data(); b.innerHTML+=`<div class="p-4 rounded paper text-center"><div class="text-4xl">${i.emoji||'🎁'}</div><div class="font-bold ink">${i.name}</div><div class="ink">${i.price} 金币</div><button onclick="buyItem('${d.id}',${i.price},'${i.name}')" class="mt-2 px-4 py-1 rounded border-ink paper">购买</button></div>`; }); }); }
@@ -77,10 +80,22 @@
   <div id="pageHome">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <div class="lg:col-span-2 space-y-4">
-        <div id="loginBox" class="p-6 rounded paper text-center">
-          <h2 class="text-xl font-bold ink mb-2 font-cc">欢迎来到小鸡手抄</h2>
-          <p class="ink mb-3 font-cc">登录后即可参与聊天互动</p>
-          <button onclick="signIn()" class="px-6 py-2 rounded border-ink paper font-cc">使用 Google 登录</button>
+        <div id="loginBox" class="p-8 rounded paper text-center">
+          <h2 class="text-2xl font-bold ink mb-2 font-cc">欢迎来到小鸡手抄</h2>
+          <p class="ink mb-4 font-cc">登录后即可参与聊天互动</p>
+          <button onclick="signIn()" class="px-8 py-3 rounded border-ink paper font-cc text-lg btn-ink">使用 Google 登录</button>
+        </div>
+        
+        <!-- 新手教学 -->
+        <div class="p-4 rounded paper mt-4">
+          <h3 class="text-lg font-bold ink mb-3 font-cc">📖 玩法指南</h3>
+          <div class="space-y-2 ink text-sm">
+            <p>💬 聊天互动 - 发送消息可获得积分和金币</p>
+            <p>📝 每日签到 - 每天签到获得50金币</p>
+            <p>🎰 幸运轮盘 - 100金币抽一次</p>
+            <p>🛒 商店系统 - 购买物品和卡牌</p>
+            <p>🏆 排行榜 - 积分越高排名越前</p>
+          </div>
         </div>
         <div class="p-4 rounded paper">
           <h3 class="text-lg font-bold ink mb-3 font-cc">即时聊天</h3>
