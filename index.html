@@ -581,9 +581,11 @@ function toSim(str) {
 }
 
 // 登录
-async function signIn() {
+function signIn() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  await auth.signInWithRedirect(provider);
+  auth.signInWithRedirect(provider).catch(e => {
+    alert('登录失败: ' + e.message);
+  });
 }
 
 // 登出
