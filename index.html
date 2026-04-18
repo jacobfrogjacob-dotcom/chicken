@@ -107,9 +107,47 @@
   <div id="pageHome">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- 左侧：聊天 -->
+<!-- 左侧：聊天 -->
       <div class="lg:col-span-2 space-y-6">
         
+        <!-- 教学手册 -->
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 shadow-lg">
+          <div class="flex items-center justify-between cursor-pointer" onclick="toggleHelp()">
+            <h3 class="font-bold text-xl font-cc">📖 教学手册</h3>
+            <span id="helpToggleIcon" class="text-2xl">▼</span>
+          </div>
+          <div id="helpContent" class="hide mt-4 space-y-3 text-gray-700 font-cc">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">💬</span>
+              <div><strong>聊天互动</strong>：发送讯息可获得积分和金币</div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">📝</span>
+              <div><strong>每日签到</strong>：每天签到获得50金币</div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">🎰</span>
+              <div><strong>幸运轮盘</strong>：100金币抽一次</div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">🎴</span>
+              <div><strong>卡牌系统</strong>：抽卡牌可在商店或玩家市集交易</div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">🛒</span>
+              <div><strong>商店</strong>：官方商店抽卡，玩家市集买卖物品</div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">🔮</span>
+              <div><strong>卡牌合成</strong>：3张同品质卡牌有机会合成更高品质</div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">🏆</span>
+              <div><strong>排行榜</strong>：积分越高，排名越靠前</div>
+            </div>
+          </div>
+        </div>
+         
         <!-- 登录提示 -->
         <div id="loginBox" class="bg-white rounded-2xl shadow-lg p-8 text-center">
           <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full flex items-center justify-center text-6xl">💬</div>
@@ -450,6 +488,13 @@ function toast(msg) {
   t.classList.remove('hide');
   t.style.opacity = '1';
   setTimeout(() => t.style.opacity = '0', 2500);
+}
+
+function toggleHelp() {
+  const content = document.getElementById('helpContent');
+  const icon = document.getElementById('helpToggleIcon');
+  content.classList.toggle('hide');
+  icon.textContent = content.classList.contains('hide') ? '▼' : '▲';
 }
 
 // 美化确认对话框
@@ -1726,8 +1771,11 @@ async function sellCard() {
   });
   
   toast('已上架到玩家市集！');
-  closeCardDetail();
-  loadCardBag('all');
+  setTimeout(() => {
+    closeCardDetail();
+    loadCardBag('all');
+    loadMarket();
+  }, 500);
 }
 
 // ============ 商店系统 ============
