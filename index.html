@@ -3,45 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🐤 小雞手抄</title>
+  <title>小鸡手抄</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          colors: { primary: '#FFB800', secondary: '#FF6B35' }
+          colors: { paper: '#f5f0e6', ink: '#2d2d2d' }
         }
       }
     }
   </script>
   <style>
-    * { font-family: 'Noto Sans TC', sans-serif; }
+    body { font-family: 'Noto Sans SC', sans-serif; background-color: #f5f0e6; }
     .font-cc { font-family: 'Ma Shan Zheng', cursive; }
     .hide { display: none !important; }
     ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-thumb { background: #FFB800; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: #8b4513; border-radius: 4px; }
+    .paper-bg { background-color: #f5f0e6; border: 2px solid #2d2d2d; }
+    .ink-text { color: #2d2d2d; }
+    .ink-border { border: 2px solid #2d2d2d; }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
   </style>
+  <script>
+    function toSim(s) {
+      if(!s)return''; return s.replace(/來/g,'来').replace(/說/g,'说').replace(/為/g,'为').replace(/與/g,'与').replace(/這/g,'这').replace(/裡/g,'里').replace(/問/g,'问').replace(/時/g,'时').replace(/國/g,'国').replace(/學/g,'学').replace(/愛/g,'爱').replace(/後/g,'后').replace(/從/g,'从').replace(/會/g,'会').replace(/長/g,'长').replace(/開/g,'开').replace(/門/g,'门').replace(/關/g,'关').replace(/種/g,'种').replace(/樣/g,'样').replace(/點/g,'点').replace(/號/g,'号').replace(/嗎/g,'吗').replace(/誰/g,'什么').replace(/沒有/g,'没有').replace(/這個/g,'这个').replace(/那個/g,'那个').replace(/已經/g,'已经').replace(/可以/g,'可以').replace(/因為/g,'因为').replace(/所以/g,'所以').replace(/通過/g,'通过').replace(/選擇/g,'选择').replace(/進行/g,'进行').replace(/開始/g,'开始').replace(/讓/g,'让').replace(/請/g,'请').replace(/謝/g,'谢').replace(/對/g,'对').replace(/沒/g,'没').replace(/兩/g,'两').replace(/點/g,'点').replace(/給/g,'给').replace(/當/g,'当').replace(/聽/g,'听').replace(/寫/g,'写').replace(/話/g,'话').replace(/幫/g,'帮').replace(/覺得/g,'觉得').replace(/應該/g,'应该').replace(/沒/g,'没').replace(/個/g,'个').replace(/比較/g,'比较').replace(/問題/g,'问题').replace(/還/g,'还').replace(/於/g,'于').replace(/爾/g,'尔').replace(/們/g,'们').replace(/它/g,'它').replace(/們/g,'们').replace(/紅/g,'红').replace(/黃/g,'黄').replace(/藍/g,'蓝').replace(/綠/g,'绿').replace(/紫/g,'紫').replace(/白/g,'白').replace(/黑/g,'黑').replace(/灰/g,'灰').replace(/強/g,'强').replace(/弱/g,'弱').replace(/熱/g,'热').replace(/冷/g,'冷').replace(/新/g,'新').replace(/舊/g,'旧').replace(/真/g,'真').replace(/假/g,'假').replace(/明/g,'明').replace(/暗/g,'暗').replace(/早/g,'早').replace(/晚/g,'晚').replace(/亮/g,'亮').replace(/老/g,'老').replace(/嫩/g,'嫩').replace(/美/g,'美').replace(/醜/g,'丑').replace(/胖/g,'胖').replace(/瘦/g,'瘦').replace(/高/g,'高').replace(/矮/g,'矮').replace(/方/g,'方').replace(/圓/g,'圆').replace(/甜/g,'甜').replace(/苦/g,'苦').replace(/辣/g,'辣').replace(/香/g,'香').replace(/臭/g,'臭').replace(/軟/g,'软').replace(/硬/g,'硬').replace(/濕/g,'湿').replace(/乾/g,'干').replace(/飽/g,'饱').replace(/餓/g,'饿').replace(/渴/g,'渴').replace(/累/g,'累').replace(/困/g,'困').replace(/醒/g,'醒').replace(/睡/g,'睡').replace(/醉/g,'醉').replace(/病/g,'病').replace(/死/g,'死').replace(/活/g,'活').replace(/樂/g,'乐').replace(/悲/g,'悲').replace(/憂/g,'忧').replace(/喜/g,'喜').replace(/怒/g,'怒').replace(/哀/g,'哀').replace(/懼/g,'惧').replace(/恨/g,'恨').replace(/怕/g,'怕').replace(/敢/g,'敢').replace(/能/g,'能').replace(/要/g,'要').replace(/想/g,'想').replace(/做/g,'做').replace(/成/g,'成').replace(/得/g,'得').replace(/去/g,'去').replace(/來/g,'来').replace(/走/g,'走').replace(/跑/g,'跑').replace(/跳/g,'跳').replace(/飛/g,'飞').replace(/游/g,'游').replace(/坐/g,'坐').replace(/站/g,'站').replace(/躺/g,'躺');
+    }
+  </script>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-yellow-50 to-orange-50">
+<body class="min-h-screen paper-bg">
 
-<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-xl z-50"></div>
+<div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl z-50 ink-text" style="background-color: #2d2d2d; color: #f5f0e6;"></div>
 
 <!-- Header -->
-<header class="bg-gradient-to-r from-yellow-400 to-orange-400 shadow-lg">
-  <div class="max-w-6xl mx-auto px-4 py-6">
+<header class="shadow-lg" style="background-color: #f5f0e6; border-bottom: 3px solid #2d2d2d;">
+  <div class="max-w-6xl mx-auto px-4 py-3">
     <div class="flex items-center justify-between">
-      <h1 class="text-4xl font-bold text-white font-cc">
-        <span class="text-5xl">🐤</span> 小雞手抄
-      </h1>
+      <h1 class="text-3xl font-bold ink-text font-cc">小鸡手抄</h1>
       <div class="flex gap-2">
-        <button onclick="showPage('home')" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">首頁</button>
-        <button onclick="showPage('admin')" id="btnAdmin" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">管理</button>
-        <button onclick="logout()" id="btnLogout" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">登出</button>
-        <button onclick="signIn()" id="btnLogin" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white">登入</button>
+        <button onclick="showPage('home')" class="px-3 py-1 rounded ink-text hover:bg-amber-100 font-cc">首页</button>
+        <button onclick="showPage('admin')" id="btnAdmin" class="hide px-3 py-1 rounded ink-text font-cc">管理</button>
+        <button onclick="logout()" id="btnLogout" class="hide px-3 py-1 rounded ink-text font-cc">退出</button>
+        <button onclick="signIn()" id="btnLogin" class="px-3 py-1 rounded ink-text font-cc ink-border" style="background-color: #f5f0e6;">登录</button>
       </div>
     </div>
   </div>
