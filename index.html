@@ -579,7 +579,6 @@ async function signIn() {
     provider.setCustomParameters({
       prompt: 'select_account'
     });
-    auth.setLanguageCode('zh-CN');
     const result = await auth.signInWithPopup(provider);
     console.log('Login result:', result.user);
   } catch (e) {
