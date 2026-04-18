@@ -1815,8 +1815,7 @@ function shopTab(tab) {
     showTabEl.classList.add('text-amber-500', 'border-b-2', 'border-yellow-500');
   }
   
-  if (tab === 'apply') loadShopApply();
-}
+  }
 
 function loadShopApply() {
   const box = document.getElementById('shopApply');
@@ -2117,17 +2116,19 @@ function loadMarket() {
       }
       
       const icon = item.type === 'card' ? '🎴' : (item.emoji || '📦');
-      const itemBg = item.type === 'card' ? 'border-4 border-yellow-400' : 'bg-gradient-to-r from-purple-50 to-pink-50';
+      const itemBg = item.type === 'card' ? 'border-4 border-gray-400' : 'bg-gray-50';
       
       box.innerHTML += `
-        <div class="p-4 rounded-2xl ${itemBg} text-center">
+        <div class="p-4 rounded-2xl ${itemBg} text-center" style="border: 2px solid #2d2d2d;">
           <div class="text-5xl mb-2">${icon}</div>
           <h3 class="font-bold text-lg font-cc">${item.name}</h3>
           <p class="text-gray-500 text-sm font-cc mb-2">卖家：${item.sellerName}</p>
           ${cardInfo}
-          <p class="font-bold text-2xl text-orange-500 mt-3">${item.price} 💰</p>
-          ${isOwner ? '<span class="block mt-2 text-sm text-gray-400">🔒 你的商品</span>' : `
-            <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}', '${item.type || 'item'}', '${item.cardId || ''}', ${item.inventoryIndex})" class="mt-3 w-full bg-gradient-to-r from-green-400 to-emerald-500 text-black py-2 rounded-xl font-cc">🎫 购买</button>
+          <p class="font-bold text-2xl mt-3" style="color: #2d2d2d;">${item.price} 💰</p>
+          ${isOwner ? `
+            <button onclick="unlistItem('${doc.id}')" class="mt-2 w-full bg-red-100 text-black py-2 rounded-xl font-cc">下架</button>
+          ` : `
+            <button onclick="buyNowItem('${doc.id}', ${item.price}, '${item.name}', '${item.sellerId}', '${item.type || 'item'}', '${item.cardId || ''}', ${item.inventoryIndex})" class="mt-3 w-full bg-gray-200 text-black py-2 rounded-xl font-cc">购买</button>
           `}
         </div>
       `;
@@ -2759,7 +2760,15 @@ async function changeMarketStatus(id, status) {
   loadAdminMarket();
 }
 
-async function delMarketItem(id) {
+async async function unlistItem(id) {
+  const ok = await showConfirm('下架商品', '确定要下架此商品吗？', '📦', '下架');
+  if (!ok) return;
+  await db.collection('marketplace').doc(id).update({ status: 'inactive' });
+  toast('已下架');
+  loadMarket();
+}
+
+function delMarketItem(id) {
   const ok = await showConfirm('删除商品', '确定要删除此商品吗？', '🗑️', '删除');
   if (!ok) return;
   await db.collection('marketplace').doc(id).delete();
