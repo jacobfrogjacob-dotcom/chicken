@@ -328,7 +328,7 @@
 <div id="cardDetailModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden">
     <div id="cardDetailContent" class="p-6"></div>
-    <div class="p-4 border-t flex gap-2">
+    <div id="cardDetailButtons" class="p-4 border-t flex gap-2">
       <button onclick="openSynthWithCard()" class="flex-1 bg-purple-500 text-white py-2 rounded-xl font-cc">🔮 合成</button>
       <button onclick="sellCard()" class="flex-1 bg-orange-400 text-white py-2 rounded-xl font-cc">💰 上架</button>
       <button onclick="closeCardDetail()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">关闭</button>
@@ -1471,6 +1471,17 @@ async function showCardDetail(cardId) {
   `;
   
   document.getElementById('cardDetailModal').classList.remove('hide');
+  
+  const btns = document.getElementById('cardDetailButtons');
+  if (locked) {
+    btns.innerHTML = '<button onclick="closeCardDetail()" class="w-full bg-gray-200 py-2 rounded-xl font-cc">关闭</button>';
+  } else {
+    btns.innerHTML = `
+      <button onclick="openSynthWithCard()" class="flex-1 bg-purple-500 text-white py-2 rounded-xl font-cc">🔮 合成</button>
+      <button onclick="sellCard()" class="flex-1 bg-orange-400 text-white py-2 rounded-xl font-cc">💰 上架</button>
+      <button onclick="closeCardDetail()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc">关闭</button>
+    `;
+  }
 }
 
 function closeCardDetail() {
