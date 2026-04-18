@@ -57,20 +57,23 @@
     .card-item-img { width: 120px !important; height: 120px !important; }
   </style>
 </head>
-<body class="min-h-screen" style="background-color: #f5f0e6; background-image: url('images/bg.png'); background-size: cover; background-attachment: fixed;">
+<body class="min-h-screen" style="background-color: #f5f0e6;">
 
 <div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-xl z-50 font-cc text-xl"></div>
 
 <!-- Header -->
-<header class="shadow-lg bg-amber-50">
-  <img src="images/header.png" class="w-full max-h-24 object-contain" alt="小鸡手抄">
-  <div class="max-w-6xl mx-auto px-2 py-1 flex justify-end -mt-8">
+<header class="shadow-lg" style="background-color: #f5f0e6; border-bottom: 3px solid #2d2d2d;">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+    <h1 class="text-4xl font-bold" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">
+      🐤 小鸡手抄
+    </h1>
     <div class="flex gap-2">
-      <button onclick="showPage('home')" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">首页</button>
-      <button onclick="showPage('shop')" id="btnShop" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">商店</button>
-      <button onclick="showPage('admin')" id="btnAdmin" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">管理</button>
-      <button onclick="logout()" id="btnLogout" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">退出</button>
-      <button onclick="signIn()" id="btnLogin" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">登录</button>
+    <div class="flex gap-2">
+<button onclick="showPage('home')" class="px-4 py-2 rounded-lg text-lg font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">首页</button>
+        <button onclick="showPage('shop')" id="btnShop" class="hide px-4 py-2 rounded-lg text-lg font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">商店</button>
+        <button onclick="showPage('admin')" id="btnAdmin" class="hide px-4 py-2 rounded-lg text-lg font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">管理</button>
+        <button onclick="logout()" id="btnLogout" class="hide px-4 py-2 rounded-lg text-lg font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">退出</button>
+        <button onclick="signIn()" id="btnLogin" class="px-4 py-2 rounded-lg text-lg font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">登录</button>
     </div>
     </div>
   </div>
@@ -80,9 +83,10 @@
 
   <!-- 欢迎弹窗 -->
   <div id="welcomeModal" class="hide fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-3xl p-4 w-full max-w-sm text-center shadow-2xl">
-      <img src="images/header.png" class="w-full mx-auto mb-4" alt="欢迎">
-      <button onclick="closeWelcomeModal()" class="mt-2 bg-gradient-to-r from-amber-100 to-amber-100 text-white font-bold py-3 px-10 rounded-xl font-cc text-xl">开始玩！</button>
+<div class="bg-white rounded-3xl p-8 w-full max-w-sm text-center shadow-xl" style="border: 2px solid #2d2d2d;">
+      <h2 class="text-4xl font-bold mb-4" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">🎉 欢迎回来</h2>
+      <p class="text-xl mb-4" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">和小鸡一起玩吧～</p>
+      <button onclick="closeWelcomeModal()" class="mt-2 px-8 py-3 rounded-xl text-xl font-bold hover:bg-amber-100 transition-all" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive; border: 2px solid #2d2d2d;">开始玩！</button>
     </div>
   </div>
 
@@ -104,7 +108,7 @@
           <input type="text" id="setupIG" placeholder="你的 IG 账号" class="w-full px-4 py-3 border rounded-xl text-lg">
         </div>
       </div>
-      <button onclick="completeSetup()" class="w-full mt-6 bg-gradient-to-r from-amber-100 to-amber-100 text-white font-bold py-3 rounded-xl font-cc text-xl">完成设定</button>
+      <button onclick="completeSetup()" class="w-full mt-6 bg-amber-50 to-amber-100 text-white font-bold py-3 rounded-xl font-cc text-xl">完成设定</button>
     </div>
   </div>
 
@@ -158,17 +162,17 @@
           <div class="w-24 h-24 mx-auto mb-4 bg-gradient-to-br from-amber-100 to-amber-100 rounded-full flex items-center justify-center text-6xl">💬</div>
           <h2 class="text-3xl font-bold font-cc mb-2">欢迎来到小鸡手抄</h2>
           <p class="text-gray-600 font-cc mb-4">登录后即可参与聊天互动</p>
-          <button onclick="signIn()" class="bg-gradient-to-r from-amber-100 to-amber-100 text-white font-bold py-3 px-8 rounded-xl font-cc text-lg">使用 Google 登录</button>
+          <button onclick="signIn()" class="bg-amber-50 to-amber-100 text-white font-bold py-3 px-8 rounded-xl font-cc text-lg">使用 Google 登录</button>
         </div>
 
         <!-- 聊天区 -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <img src="images/chat.png" class="w-full" alt="即时聊天">
+          <div class="p-4 rounded-t-xl text-center text-2xl font-bold" style="background-color: #f5f0e6; border-bottom: 2px solid #2d2d2d; color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">💬 即时聊天</div>
           <div id="chatBox" class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
           <form onsubmit="sendMsg(event)" class="p-4 border-t bg-white">
             <div class="flex gap-2">
               <input type="text" id="msgInput" placeholder="输入讯息..." class="flex-1 px-4 py-2 border rounded-xl text-lg" disabled>
-              <button type="submit" class="bg-gradient-to-r from-amber-100 to-amber-100 text-white px-6 py-2 rounded-xl font-cc text-lg">传送</button>
+              <button type="submit" class="bg-amber-50 to-amber-100 text-white px-6 py-2 rounded-xl font-cc text-lg">传送</button>
             </div>
           </form>
         </div>
@@ -178,7 +182,7 @@
           <div class="bg-yellow-50 border-b border-yellow-200 p-4">
             <p class="text-yellow-700 font-cc text-lg">⚠️ 投稿前请先同意协作者邀请</p>
           </div>
-          <div class="bg-gradient-to-r from-amber-100 to-amber-100 p-4">
+          <div class="bg-amber-50 to-amber-100 p-4">
             <h2 class="text-white font-bold text-2xl font-cc">📝 粉丝投稿</h2>
           </div>
           <form onsubmit="submitPost(event)" class="p-6 space-y-4">
@@ -190,7 +194,7 @@
               <label class="block font-cc text-lg mb-2">投稿内容 *</label>
               <textarea id="postContent" rows="4" class="w-full px-4 py-2 border rounded-xl text-lg" placeholder="至少 10 个字" required></textarea>
             </div>
-            <button type="submit" class="w-full bg-gradient-to-r from-amber-100 to-amber-100 text-white font-bold py-3 rounded-xl font-cc text-lg">送出投稿</button>
+            <button type="submit" class="w-full bg-amber-50 to-amber-100 text-white font-bold py-3 rounded-xl font-cc text-lg">送出投稿</button>
           </form>
         </div>
       </div>
@@ -198,7 +202,7 @@
       <!-- 右侧：排行榜 -->
       <div class="space-y-6">
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div class="bg-gradient-to-r from-amber-100 to-amber-100 p-4">
+          <div class="bg-amber-50 to-amber-100 p-4">
             <h2 class="text-white font-bold text-2xl font-cc">🏆 粉丝排行榜</h2>
           </div>
           <div id="rankBox" class="p-4 space-y-3 max-h-64 overflow-y-auto"></div>
@@ -210,7 +214,7 @@
             <img id="userImg" src="" class="w-16 h-16 rounded-full border-4 border-yellow-400">
             <div>
               <h3 id="userName" class="text-xl font-bold font-cc"></h3>
-              <span id="userTitle" class="bg-gradient-to-r from-amber-100 to-amber-100 text-white px-3 py-1 rounded-full text-sm font-cc"></span>
+              <span id="userTitle" class="bg-amber-50 to-amber-100 text-white px-3 py-1 rounded-full text-sm font-cc"></span>
             </div>
           </div>
           <div class="text-center font-cc text-lg space-y-2">
@@ -259,7 +263,7 @@
   <!-- 商店页面 -->
   <div id="pageShop" class="hide">
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <img src="images/shop.png" class="w-full" alt="商店">
+      <div class="p-4 rounded-t-xl text-center text-2xl font-bold" style="background-color: #f5f0e6; border-bottom: 2px solid #2d2d2d; color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">🛒 商店</div>
       
       <div class="flex border-b flex-wrap">
         <button onclick="shopTab('official')" id="shopTabOfficial" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">官方商店</button>
@@ -314,7 +318,7 @@
           <p class="font-cc text-2xl mt-2 text-gray-700">恭喜获得</p>
           <p id="wheelPrize" class="font-bold text-4xl mt-2 bg-gradient-to-r from-amber-600 via-pink-500 to-purple-500 text-transparent bg-clip-text"></p>
           <p id="wheelPrizeSub" class="font-cc text-lg mt-2 text-gray-600"></p>
-          <button onclick="closeWheelResult()" class="mt-4 bg-gradient-to-r from-amber-100 to-amber-100 text-white px-8 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+          <button onclick="closeWheelResult()" class="mt-4 bg-amber-50 to-amber-100 text-white px-8 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
             太棒了！
           </button>
         </div>
@@ -338,7 +342,7 @@
         </div>
       </div>
     </div>
-    <button onclick="closeCardResult()" class="mt-4 w-full bg-gradient-to-r from-amber-100 to-amber-100 text-white py-3 rounded-xl font-cc text-xl shadow-lg hover:scale-105 transition-all">
+    <button onclick="closeCardResult()" class="mt-4 w-full bg-amber-50 to-amber-100 text-white py-3 rounded-xl font-cc text-xl shadow-lg hover:scale-105 transition-all">
       收下卡牌
     </button>
   </div>
@@ -346,10 +350,10 @@
 
 <!-- 卡牌背包弹窗 -->
 <div id="cardBagModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-    <img src="images/cardbag.png" class="w-full" alt="卡牌背包">
-    <div class="flex justify-end pr-4 -mt-10">
-      <button onclick="closeCardBag()" class="text-white text-2xl hover:scale-110 transition-all">✕</button>
+  <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col" style="border: 2px solid #2d2d2d;">
+    <div class="p-3 flex justify-between items-center" style="background-color: #f5f0e6; border-bottom: 2px solid #2d2d2d;">
+      <h3 class="text-2xl font-bold" style="color: #2d2d2d; font-family: 'Ma Shan Zheng', cursive;">🎴 我的卡牌背包</h3>
+      <button onclick="closeCardBag()" class="px-3 py-1 rounded hover:bg-amber-100 text-2xl font-bold" style="color: #2d2d2d;">✕</button>
     </div>
     <div class="flex border-b flex-wrap">
       <button onclick="cardBagTab('all')" id="cardBagTabAll" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">全部</button>
@@ -423,7 +427,7 @@
       </div>
     </div>
     <div class="flex gap-2 mt-6">
-      <button onclick="saveProfile()" class="flex-1 bg-gradient-to-r from-amber-100 to-amber-100 text-white py-2 rounded-xl font-cc text-lg">储存</button>
+      <button onclick="saveProfile()" class="flex-1 bg-amber-50 to-amber-100 text-white py-2 rounded-xl font-cc text-lg">储存</button>
       <button onclick="closeProfile()" class="flex-1 bg-gray-200 py-2 rounded-xl font-cc text-lg">取消</button>
     </div>
   </div>
@@ -439,7 +443,7 @@
     </div>
     <div class="flex gap-3">
       <button id="confirmCancelBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-cc text-lg transition-all">取消</button>
-      <button id="confirmOkBtn" class="flex-1 bg-gradient-to-r from-amber-100 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
+      <button id="confirmOkBtn" class="flex-1 bg-amber-50 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
     </div>
   </div>
 </div>
@@ -455,7 +459,7 @@
     <input type="text" id="promptInput" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-lg focus:border-yellow-400 focus:outline-none transition-all mb-4">
     <div class="flex gap-3">
       <button onclick="closePromptModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-xl font-cc text-lg transition-all">取消</button>
-      <button onclick="submitPrompt()" class="flex-1 bg-gradient-to-r from-amber-100 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
+      <button onclick="submitPrompt()" class="flex-1 bg-amber-50 to-amber-100 hover:from-amber-600 hover:to-amber-600 text-white py-3 rounded-xl font-cc text-lg transition-all shadow-lg">确定</button>
     </div>
   </div>
 </div>
@@ -1924,7 +1928,7 @@ function loadOfficialShop() {
             <p class="text-sm text-gray-500 font-cc mb-2">保底1张粉色以上卡牌！</p>
             <p class="text-2xl font-bold text-orange-500 font-cc">400 💰</p>
             <div class="flex justify-center gap-2 mt-2">
-              <button onclick="drawCardFromShop('ten')" class="bg-gradient-to-r from-amber-100 to-amber-100 text-white px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
+              <button onclick="drawCardFromShop('ten')" class="bg-amber-50 to-amber-100 text-white px-6 py-2 rounded-full font-cc text-lg shadow-lg hover:scale-105 transition-all">
                 🎁 十连抽
               </button>
             </div>
@@ -1962,7 +1966,7 @@ function loadOfficialShop() {
           </div>
           <div class="text-right">
             <p class="font-bold text-lg text-orange-500">${item.price} 💰</p>
-            <button onclick="buyOfficialItem('${doc.id}', ${item.price}, '${item.name}')" class="mt-2 bg-gradient-to-r from-amber-100 to-amber-100 text-white px-4 py-2 rounded-lg font-cc text-sm">购买</button>
+            <button onclick="buyOfficialItem('${doc.id}', ${item.price}, '${item.name}')" class="mt-2 bg-amber-50 to-amber-100 text-white px-4 py-2 rounded-lg font-cc text-sm">购买</button>
           </div>
         </div>
       `;
@@ -2023,7 +2027,7 @@ function showTenDrawResult(cards) {
   
   modal.innerHTML = `
     <div class="bg-white rounded-2xl max-w-lg w-full max-h-[80vh] overflow-hidden">
-      <div class="bg-gradient-to-r from-amber-100 to-amber-100 p-4 text-center">
+      <div class="bg-amber-50 to-amber-100 p-4 text-center">
         <h3 class="text-white font-bold text-2xl font-cc">🎁 十连抽结果</h3>
         <p class="text-white/80 font-cc">保底 ${pinkOrBetter >= 1 ? '✅ 已触发' : '❌ 未触发'}</p>
       </div>
@@ -2047,7 +2051,7 @@ function showTenDrawResult(cards) {
         </div>
       </div>
       <div class="p-4 border-t">
-        <button onclick="closeTenDraw()" class="w-full bg-gradient-to-r from-amber-100 to-amber-100 text-white py-3 rounded-xl font-cc text-lg">收下所有卡牌</button>
+        <button onclick="closeTenDraw()" class="w-full bg-amber-50 to-amber-100 text-white py-3 rounded-xl font-cc text-lg">收下所有卡牌</button>
       </div>
     </div>
   `;
@@ -2433,7 +2437,7 @@ function loadAdminCoins() {
           <option value="">选择用户...</option>
         </select>
         <input type="number" id="coinAmount" placeholder="数量" class="w-32 px-4 py-2 border rounded-xl">
-        <button onclick="giveCoins()" class="bg-gradient-to-r from-amber-100 to-amber-100 text-white px-6 py-2 rounded-xl font-cc">发放</button>
+        <button onclick="giveCoins()" class="bg-amber-50 to-amber-100 text-white px-6 py-2 rounded-xl font-cc">发放</button>
       </div>
       <div class="flex gap-2 mt-3">
         <button onclick="quickCoin(100)" class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg font-cc text-sm">+100</button>
@@ -2553,7 +2557,7 @@ function loadAdminCards() {
   box.innerHTML = `
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
       <!-- 创建自定义卡牌 -->
-      <div class="p-4 bg-gradient-to-br from-purple-100 to-amber-50 rounded-xl">
+      <div class="p-4 bg-gradient-to-br from-amber-50 to-amber-50 rounded-xl">
         <h3 class="font-bold font-cc text-lg mb-3">✨ 创建自定义卡牌</h3>
         <div class="space-y-3">
           <select id="customCardTemplate" class="w-full px-3 py-2 border rounded-xl">
