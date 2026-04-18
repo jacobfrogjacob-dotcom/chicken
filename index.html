@@ -57,28 +57,30 @@
 <div id="toast" class="hide fixed top-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-xl z-50 font-cc text-xl"></div>
 
 <!-- Header -->
-<header class="bg-gradient-to-r from-yellow-400 to-orange-400 shadow-lg">
-  <div class="max-w-6xl mx-auto px-4 py-6">
-    <div class="flex items-center justify-between">
-      <h1 class="text-4xl font-bold text-white font-cc">
-        <span class="text-5xl">🐤</span> 小鸡手抄
-      </h1>
-      <div class="flex gap-2">
-        <button onclick="showPage('home')" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">首页</button>
-        <button onclick="showPage('shop')" id="btnShop" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">商店</button>
-        <button onclick="showPage('admin')" id="btnAdmin" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">管理</button>
-        <button onclick="logout()" id="btnLogout" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">退出</button>
-        <button onclick="signIn()" id="btnLogin" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">登录</button>
-      </div>
+<header class="shadow-lg">
+  <img src="images/header.png" class="w-full" alt="小鸡手抄">
+  <div class="max-w-6xl mx-auto px-2 py-2 flex justify-end -mt-12">
+    <div class="flex gap-2">
+      <button onclick="showPage('home')" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">首页</button>
+      <button onclick="showPage('shop')" id="btnShop" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">商店</button>
+      <button onclick="showPage('admin')" id="btnAdmin" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">管理</button>
+      <button onclick="logout()" id="btnLogout" class="hide p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">退出</button>
+      <button onclick="signIn()" id="btnLogin" class="p-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-cc text-lg">登录</button>
+    </div>
     </div>
   </div>
 </header>
 
 <main class="max-w-6xl mx-auto px-4 py-8">
 
-  <!-- 欢迎横幅 -->
-  <div id="welcomeBox" class="hide bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 rounded-2xl p-6 mb-6 text-white text-center font-cc text-2xl">
-    🎉 欢迎回来，<span id="welcomeName"></span>！
+  <!-- 欢迎弹窗 -->
+  <div id="welcomeModal" class="hide fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-3xl p-8 w-full max-w-sm text-center shadow-2xl">
+      <img src="images/welcome.png" class="w-full mx-auto mb-4">
+      <h3 class="text-3xl font-bold font-cc">欢迎回来，<span id="welcomeName"></span>！</h3>
+      <p class="text-gray-600 font-cc mt-2">和小鸡一起玩吧～</p>
+      <button onclick="closeWelcomeModal()" class="mt-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold py-3 px-10 rounded-xl font-cc text-xl">开始！</button>
+    </div>
   </div>
 
   <!-- 初次设定弹窗 -->
@@ -158,9 +160,7 @@
 
         <!-- 聊天区 -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
-            <h2 class="text-white font-bold text-2xl font-cc">💬 即时聊天</h2>
-          </div>
+          <img src="images/chat.png" class="w-full" alt="即时聊天">
           <div id="chatBox" class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50"></div>
           <form onsubmit="sendMsg(event)" class="p-4 border-t bg-white">
             <div class="flex gap-2">
@@ -256,9 +256,7 @@
   <!-- 商店页面 -->
   <div id="pageShop" class="hide">
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-      <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4">
-        <h2 class="text-white font-bold text-2xl font-cc">🛒 商店</h2>
-      </div>
+      <img src="images/shop.png" class="w-full" alt="商店">
       
       <div class="flex border-b flex-wrap">
         <button onclick="shopTab('official')" id="shopTabOfficial" class="px-6 py-3 font-cc text-yellow-500 border-b-2 border-yellow-500 text-lg">官方商店</button>
@@ -346,8 +344,8 @@
 <!-- 卡牌背包弹窗 -->
 <div id="cardBagModal" class="hide fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
-    <div class="bg-gradient-to-r from-yellow-400 to-orange-400 p-4 flex justify-between items-center">
-      <h3 class="text-white font-bold text-2xl font-cc">🎴 我的卡牌背包</h3>
+    <img src="images/cardbag.png" class="w-full" alt="卡牌背包">
+    <div class="flex justify-end pr-4 -mt-10">
       <button onclick="closeCardBag()" class="text-white text-2xl hover:scale-110 transition-all">✕</button>
     </div>
     <div class="flex border-b flex-wrap">
@@ -497,6 +495,10 @@ function toggleHelp() {
   icon.textContent = content.classList.contains('hide') ? '▼' : '▲';
 }
 
+function closeWelcomeModal() {
+  document.getElementById('welcomeModal').classList.add('hide');
+}
+
 // 美化确认对话框
 let confirmCallback = null;
 function showConfirm(title, message, icon = '❓', okText = '确定') {
@@ -609,7 +611,7 @@ auth.onAuthStateChanged(async (user) => {
     document.getElementById('loginBox').classList.add('hide');
     document.getElementById('userBox').classList.remove('hide');
     document.getElementById('postBox').classList.remove('hide');
-    document.getElementById('welcomeBox').classList.remove('hide');
+    document.getElementById('welcomeModal').classList.remove('hide');
     document.getElementById('welcomeName').textContent = meData.displayName;
     document.getElementById('userImg').src = meData.photoURL || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ddd"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 00-16 0"/></svg>';
     document.getElementById('userName').textContent = meData.displayName;
@@ -639,7 +641,7 @@ auth.onAuthStateChanged(async (user) => {
     document.getElementById('loginBox').classList.remove('hide');
     document.getElementById('userBox').classList.add('hide');
     document.getElementById('postBox').classList.add('hide');
-    document.getElementById('welcomeBox').classList.add('hide');
+    document.getElementById('welcomeModal').classList.add('hide');
     document.getElementById('setupModal').classList.add('hide');
     document.getElementById('btnLogin').classList.remove('hide');
     document.getElementById('btnLogout').classList.add('hide');
